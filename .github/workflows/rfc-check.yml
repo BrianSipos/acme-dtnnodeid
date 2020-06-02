@@ -20,4 +20,7 @@ jobs:
     - uses: actions/upload-artifact@v2
       with:
         name: spec
-        path: spec/build/draft-*.html
+        path: |
+          spec/build/draft-*.html
+          spec/build/draft-*.txt
+          spec/build/misspelling.txt
