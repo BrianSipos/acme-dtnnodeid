@@ -4,7 +4,7 @@
 <?rfc toc="yes"?>
 <rfc ipr="trust200902" category="std" docName="draft-sipos-acme-dtnnodeid-00">
   <front>
-    <title abbrev="ACME DTN NODEID">
+    <title abbrev="ACME DTN Node ID">
 Automated Certificate Management Environment (ACME)
 Delay-Tolerant Networking (DTN) Node ID Validation Extension
     </title>
@@ -239,7 +239,7 @@ Any of the failures above SHOULD be indicated as subproblems to the ACME client.
     </section>
     <section title="Implementation Status">
       <t>
-[NOTE to the RFC Editor: please remove this section before publication, as well as the reference to <xref target="RFC7942" /> and <xref target="github-dtn-acme-dtnnodeid" />.]
+[NOTE to the RFC Editor: please remove this section before publication, as well as the reference to <xref target="RFC7942" /> and <xref target="github-acme-dtnnodeid" />.]
       </t>
       <t>
 This section records the status of known implementations of the protocol defined by this specification at the time of posting of this Internet-Draft, and is based on a proposal described in <xref target="RFC7942" />.
@@ -250,7 +250,7 @@ This is not intended as, and must not be construed to be, a catalog of available
 Readers are advised to note that other implementations can exist.
       </t>
       <t>
-An example implementation of the this draft of ACME has been created as a GitHub project <xref target="github-dtn-acme-dtnnodeid" /> and is intended to use as a proof-of-concept and as a possible source of interoperability testing.
+An example implementation of the this draft of ACME has been created as a GitHub project <xref target="github-acme-dtnnodeid" /> and is intended to use as a proof-of-concept and as a possible source of interoperability testing.
 This example implementation only constructs encoded bundles and does not attempt to provide a full BP Agent interface.
       </t>
     </section>
@@ -374,7 +374,7 @@ This specification is based on
     </references>
     <references title="Informative References">
       <?rfc include="reference.I-D.ietf-dtn-bibect.xml"?>
-      <reference anchor="github-dtn-acme-dtnnodeid" target="https://github.com/BSipos-RKF/dtn-acme-dtnnodeid/">
+      <reference anchor="github-acme-dtnnodeid" target="https://github.com/BSipos-RKF/acme-dtnnodeid/">
         <front>
           <title>ACME Node ID Example Implementation</title>
           <author initials="B." surname="Sipos" fullname="Brian Sipos">
