@@ -17,3 +17,7 @@ jobs:
         mkdir -p spec/build
         (cd spec/build && cmake ..)
         cmake --build spec/build
+    - uses: actions/upload-artifact@v2
+      with:
+        name: spec
+        path: spec/build/draft-*.html
