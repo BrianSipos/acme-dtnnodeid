@@ -1,2 +1,3 @@
 # acme-dtnnodeid
-ACME DTN Node ID Validation Extension
+
+There is not yet an example implementation of ACME validation bundles.
