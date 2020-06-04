@@ -1,6 +1,4 @@
 <?xml version="1.0"?>
-<!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
-]>
 <?rfc toc="yes"?>
 <rfc ipr="trust200902" category="std" docName="draft-sipos-acme-dtnnodeid-00">
   <front>
@@ -22,37 +20,64 @@ Delay-Tolerant Networking (DTN) Node ID Validation Extension
         <email>BSipos@rkf-eng.com</email>
       </address>
     </author>
-    <date year="2020" month="June" day="1" />
+    <date year="2020" month="June" day="4" />
     <area>Transport</area>
     <workgroup>Delay Tolerant Networking</workgroup>
     <abstract>
       <t>
-This document specifies an extension to the Automated Certificate Management Environment (ACME) protocol which allows validating the Delay-Tolerant Networking (DTN) Node ID of an ACME client.
-The use of a Uniform Resource Identifier (URI) ACME identifier is also specified.
+This document specifies an extension to the Automated Certificate Management Environment (ACME) protocol which allows validating the Delay-Tolerant Networking (DTN) Node ID for an ACME client.
+The use of a Uniform Resource Identifier (URI) as ACME identifier is also specified.
       </t>
     </abstract>
   </front>
   <middle>
     <section anchor="sec-intro" title="Introduction">
       <t>
-Although the original purpose of the Automatic Certificate Management Environment (ACME) <xref target="RFC8555" />
-was to allow PKI certificate authorities to validate network domain names of clients, the same mechanism can be used to validate any of the subject claims supported by the PKIX profile <xref target="RFC5280" />.
-In the case of this specification, the claim being validated is a Subject Alternative Name (SAN) of type URI used to represent the Node ID of a Delay-Tolerant Networking (DTN) Node.
+Although the original purpose of the Automatic Certificate Management Environment (ACME) <xref target="RFC8555" /> was to allow PKI certificate authorities to validate network domain names of clients, the same mechanism can be used to validate any of the subject claims supported by the PKIX profile <xref target="RFC5280" />.
+In the case of this specification, the claim being validated is a Subject Alternative Name (SAN) of type Uniform Resource Identifier (URI) used to represent the Node ID of a Delay-Tolerant Networking (DTN) Node.
       </t>
       <t>
 The basic unit of data exchange in a DTN is a Bundle <xref target="I-D.ietf-dtn-bpbis" />, which consists of a data payload with accompanying metadata.
-The DTN Node ID is a URI with a specific set of allowed schemes <xref target="I-D.ietf-dtn-bpbis" /> which determines how bundles are routed within a DTN.
+A DTN Node ID is a URI with a specific set of allowed schemes <xref target="I-D.ietf-dtn-bpbis" /> which determines how bundles are routed within a DTN.
+A Node ID is used to identify the source and destination of a Bundle and is used for routing through intermediate nodes.
 More detailed descriptions of the rationale and capabilities of these networks can be found in &quot;Delay-Tolerant Network Architecture&quot; <xref target="RFC4838" />.
       </t>
       <t>
-In order to validate a Node ID, the ACME server sends an ACME Node ID Validation Challenge Bundle ("Challenge Bundle") with a destination of the Node ID being validated.
-The BP agent on that node receives the Challenge Bundle, generates an ACME signature, and sends an ACME Node ID Validation Response Bundle ("Response Bundle") with the signature.
-Finally, the ACME server receives the Response Bundle and checks that the signature came from the private key being validated.
+When a certificate request contains a SAN URI which could be used as a DTN Node ID, the ACME server offers a challenge type to validate that Node ID.
+In order to validate a Node ID, the ACME server sends an ACME Node ID Validation Challenge Bundle with a destination of the Node ID being validated.
+The BP agent on that node receives the Challenge Bundle, generates an ACME signature, and sends an ACME Node ID Validation Response Bundle with the signature.
+Finally, the ACME server receives the Response Bundle and checks that the signature came from the client account key associated with the original request.
+      </t>
+      <t>
+Because the DTN Node ID is used both for routing bundles between BP agents and for multiplexing services within a BP agent, there is no possibility to separate the ACME validation of a Node ID from normal bundle handling on that same Node ID.
+This leaves Bundle administrative records as a way to leave the Node ID unchanged while disambiguating from normal service data bundles.
       </t>
     </section>
     <section anchor="sec-terminology" title="Terminology">
       <t>
 The key words &quot;MUST&quot;, &quot;MUST NOT&quot;, &quot;REQUIRED&quot;, &quot;SHALL&quot;, &quot;SHALL NOT&quot;, &quot;SHOULD&quot;, &quot;SHOULD NOT&quot;, &quot;RECOMMENDED&quot;, &quot;NOT RECOMMENDED&quot;, &quot;MAY&quot;, and &quot;OPTIONAL&quot; in this document are to be interpreted as described in BCP 14 <xref target="RFC2119" /> <xref target="RFC8174" /> when, and only when, they appear in all capitals, as shown here.
+      </t>
+      <t>
+In this document, several terms are shortened for the sake of terseness.
+These terms are:
+        <list style="hanging">
+            <t hangText="Challenge Request:">
+This is a shortened form of the full "DTN Node ID Challenge Request Object".
+It is a JSON object created by the ACME server for challenge type "dtn-nodeid-01".
+            </t>
+            <t hangText="Challenge Response:">
+This is a shortened form of the full "DTN Node ID Challenge Response Object".
+It is a JSON object created by the ACME client to authorize a challenge type "dtn-nodeid-01".
+            </t>
+            <t hangText="Challenge Bundle:">
+This is a shortened form of the full "ACME Node ID Validation Challenge Bundle".
+It is a Bundle created by the ACME server to challenge a Node ID claim.
+            </t>
+            <t hangText="Response Bundle:">
+This is a shortened form of the full "ACME Node ID Validation Response Bundle".
+It is a Bundle created by the BP agent managed by the ACME client to validate a Node ID claim.
+            </t>
+        </list>
       </t>
     </section>
     <section anchor="sec-acme-uri" title="URI Identifier">
@@ -70,11 +95,11 @@ The value field of the identifier SHALL contain the textual form of the URI as d
 The ACME server SHALL NOT decode or attempt to dereference the URI value on its own.
 It is the responsibility of a validation method to ensure the URI ownership via scheme-specific means authorized by the ACME client.
       </t>
-      <t>
-An identifier for the URL "dtn://example/service" would be formatted as in:
-      </t>
       <figure>
-        <artwork>
+        <preamble>
+An identifier for the URL "dtn://example/service" would be formatted as:
+        </preamble>
+        <artwork type="application/json">
 {"type": "uri", "value": "dtn://example/service"}
 </artwork>
       </figure>
@@ -82,40 +107,53 @@ An identifier for the URL "dtn://example/service" would be formatted as in:
     <section anchor="sec-validate-nodeid" title="DTN Node ID Validation">
       <t>
 The DTN Node ID validation method proves control over a Node ID by requiring the ACME client to configure a BP agent to respond to specific Challenge Bundles sent from the ACME server.
-The ACME server validates control of the Node ID URI by verifying that received Response Bundles correspond with the BP Node and private key being validated.
+The ACME server validates control of the Node ID URI by verifying that received Response Bundles correspond with the BP Node and client account key being validated.
       </t>
       <t>
-When requesting Node ID validation, the ACME client SHALL define a challenge object in accordance with <xref target="sec-nodeid-challenge" />.
-The only data required by ACME for a challenge is a nonce token, but the BP agent responding to an ACME challenge also needs the private key identifier used to sign a corresponding response.
-The ACME client requesting the validation uses the desired private key to generate the certificate signing request (CSR) so this key identifier is known before the challenge will be authorized.
-Immediately before authorizing a Node ID validation, the ACME client SHALL indicate to the BP agent the validation token and the private key used for the validation.
-Immediately after a Node ID validation has been observed to be finished, the ACME client SHALL indicate to the BP agent that the validation token is no longer usable.
-Once the ACME client has informed the BP agent that a challenge is expected, the ACME client POSTs an empty JSON object ("{}") to the challenge URL on the ACME server to indicate that the challenge is ready to be validated by the BP agent.
+The DTN Node ID Challenge SHALL only be allowed for URIs usable as a DTN Node ID, which are currently the schemes "dtn" and "ipn" as defined in <xref target="I-D.ietf-dtn-bpbis" />.
+When an ACME server supports Node ID validation, the ACME server SHALL define a challenge object in accordance with <xref target="sec-nodeid-challenge-request" />.
       </t>
       <t>
-Because the DTN Node ID is used both for routing bundles and for multiplexing services within a BP agent, there is no possibility to separate the ACME validation of a Node ID from normal bundle handling on that same Node ID.
-This leaves Bundle administrative records as a way to keep the same Node ID while disambiguating from normal service data bundles.
-      </t>
-      <t>
-On receiving a Node ID validation request from an ACME client, the ACME server constructs and stores the Key Authorization from the challenge "token" value and the current client account key.
-The client
-The server then verifies the client's control over the Node ID by performing the following steps:
+To authorize a Node ID validation, the ACME client performs the following steps:
         <list style="numbers">
           <t>
-The ACME server computes the expected Key Authorization in accordance with Section 8.1 of <xref target="RFC8555" />.
+The ACME client computes the Key Authorization in accordance with Section 8.1 of <xref target="RFC8555" /> using the challenge token and client account key.
+          </t>
+          <t>
+The ACME client indicates to the BP agent the validation token and the key authorization used for the validation.
+          </t>
+          <t>
+The ACME client POSTs a challenge response to the challenge URL on the ACME server accordance with Section 7.5.1 of <xref target="RFC8555" />.
+The payload object is constructed in accordance with <xref target="sec-nodeid-challenge-response" />.
+          </t>
+          <t>
+The ACME client waits for the authorization to be finalized on the ACME server in accordance with Section 7.5.1 of <xref target="RFC8555" />.
+          </t>
+          <t>
+Once the challenge is completed (successfully or not), the ACME client indicates to the BP agent that the validation token is no longer usable.
+          </t>
+        </list>
+      </t>
+      <t>
+Upon receiving a challenge response from an ACME client, the ACME server verifies the client's control over the Node ID by performing the following steps:
+        <list style="numbers">
+          <t>
+The ACME server computes the expected Key Authorization in accordance with Section 8.1 of <xref target="RFC8555" /> using the challenge token and client account key.
           </t>
           <t>
 The ACME server sends one or more Challenge Bundles in accordance with <xref target="sec-bundle-challenge" />.
           </t>
           <t>
 The ACME server waits for Response Bundle(s) for a limited interval of time.
-Responses are encoded in accordance with <xref target="sec-bundle-response" />.
-If the ACME client indicated an RTT value in the challenge object, the response interval SHOULD be twice the RTT.
 A default response interval, used when the challenge does not contain an RTT, SHOULD be a configurable parameter of the ACME server.
-The upper limit on a response waiting time is network-specific, but SHOULD be no longer than one minute (60 seconds) for a terrestrial-only DTN.
+If the ACME client indicated an RTT value in the challenge object, the response interval SHOULD be twice the RTT (with limiting logic applied as described below).
+The lower limit on response waiting time is network-specific, but SHOULD be no shorter than one second.
+The upper limit on response waiting time is network-specific, but SHOULD be no longer than one minute (60 seconds) for a terrestrial-only DTN.
+Responses are encoded in accordance with <xref target="sec-bundle-response" />.
           </t>
           <t>
 Once received and decoded, the ACME server checks the contents of each Response Bundle in accordance with <xref target="sec-response-check" />.
+After all Challenge Bundles have either been responded to or timed-out, the validation procedure is successful only if all responses are successful.
           </t>
         </list>
 An ACME server MAY send multiple challenges from different origins in the DTN network to avoid possible man-in-the-middle (MitM) attacks, as recommended in Section 10.2 of <xref target="RFC8555" />.
@@ -124,16 +162,16 @@ Each response failure MAY be indicated to the ACME client as a validation subpro
       </t>
       <t>
 When responding to a Challenge Bundle, a BP agent SHALL send a single Response Bundle in accordance with <xref target="sec-bundle-response" />.
-A BP agent SHALL respond to ACME challenges only within the interval of time between when an ACME client requests a Node ID validation and when the ACME client observes that the validation has finished (either success or failure), only for the Node ID requested for validation, and only for the validation token given by the ACME server.
+A BP agent SHALL respond to ACME challenges only within the interval of time, only for the Node ID, and only for the validation token indicated by the ACME client.
 A BP agent SHALL respond to multiple challenges with the same parameters.
-These correspond with the ACME server attempting multiple routing paths.
+These correspond with the ACME server validating via multiple routing paths.
       </t>
-      <section anchor="sec-nodeid-challenge" title="DTN Node ID Challenge">
+      <section anchor="sec-nodeid-challenge-request" title="DTN Node ID Challenge Request Object">
         <t>
-The DTN Node ID Challenge SHALL only be allowed for URIs usable as a DTN Node ID, which are currently the schemes "dtn" and "ipn" as defined in <xref target="I-D.ietf-dtn-bpbis" />.
+The DTN Node ID Challenge request object is defined by the ACME server when it supports validating Node IDs.
         </t>
         <t>
-The DTN Node ID Challenge object has the following format:
+The DTN Node ID Challenge request object has the following content:
           <list style="hanging">
             <t hangText="type (required, string):">
 The string "dtn-nodeid-01".
@@ -145,11 +183,49 @@ It MUST NOT contain any characters outside the base64url alphabet as described i
 Trailing '=' padding characters MUST be stripped.
 See <xref target="RFC4086" /> for additional information on randomness requirements.
             </t>
+          </list>
+        </t>
+      <figure>
+        <artwork type="application/json">
+{
+  "type": "dtn-nodeid-01",
+  "url": "https://example.com/acme/chall/prV_B7yEyA4",
+  "status": "pending",
+  "token": "LoqXcYV8q5ONbJQxbmR7SCTNo3tiAXDfowyjxAjEuX0"
+}
+</artwork>
+      </figure>
+        <t>
+The only over-the-wire data required by ACME for a Challenge Bundle is a nonce token, but the response data needs a client account key to generate the Key Authorization.
+The client account key is kept within the ACME client, the BP agent needs only the derived Key Authorization for its Response Bundle.
+        </t>
+      </section>
+      <section anchor="sec-nodeid-challenge-response" title="DTN Node ID Challenge Response Object">
+        <t>
+The DTN Node ID Challenge response object is defined by the ACME client when it authorizes validation of a Node ID.
+Because a DTN has the potential for significantly longer delays than a non-DTN network, the ACME client is able to inform the ACME server if a particular validation round-trip is expected to take longer than normal network delays (on the order of seconds).
+        </t>
+        <t>
+The DTN Node ID Challenge response object has the following content:
+          <list style="hanging">
             <t hangText="rtt (optional, number):">
-An expected round-trip time (RTT), in seconds, between sending a challenge and receiving a response.
+An expected round-trip time (RTT), in seconds, between sending a Challenge Bundle and receiving a Response Bundle.
 This value is a hint to the ACME server for how long to wait for responses but is not authoritative.
+The minimum RTT value SHALL be zero.
+There is no special significance to zero-value RTT, it simply indicates the response is expected in less than the least significant unit used by the ACME client.
             </t>
           </list>
+        </t>
+      <figure>
+        <artwork type="application/json">
+{
+  "rtt": 300.0
+}
+</artwork>
+      </figure>
+        <t>
+A challenge response is not sent until the BP agent has been configured to properly respond to the challenge, so the RTT value is meant to indicate any node-specific path delays expected to encountered from the ACME server.
+Because there is no requirement on the path (or paths) which bundles may traverse between the ACME server and the BP agent, and the ACME server is likely to attempt some path diversity, the RTT value SHOULD be pessimistic.
         </t>
       </section>
       <section anchor="sec-bundle-challenge" title="ACME Node ID Validation Challenge Bundles">
@@ -186,7 +262,7 @@ BP agents MAY refuse to respond to a Challenge Bundle which is signed by a known
 Challenge Bundles SHOULD NOT be BCB-encrypted in accordance with <xref target="I-D.ietf-dtn-bpsec" />.
         </t>
       </section>
-      <section anchor="sec-bundle-response" title="ACME Node ID Response Bundles">
+      <section anchor="sec-bundle-response" title="ACME Node ID Validation Response Bundles">
         <t>
 Each ACME Node ID Validation Response Bundle has parameters as listed here:
           <list style="hanging">
@@ -261,8 +337,11 @@ This section separates security considerations into threat categories based on g
       <section title="Threat: Passive Leak of Bundle Data">
         <t>
 Because this challenge mechanism is used to bootstrap security between DTN Nodes, the challenge and its response are likely to be transferred in plaintext.
-The ACME data itself is a random token (nonce) and a cryptographic signature, so there is no sensitive data to be leaked within the 
-This allows passive eavesdroppers on a network to observe bundle metadata
+The ACME data itself is a random token (nonce) and a cryptographic signature, so there is no sensitive data to be leaked within the Node ID Validation bundle exchange.
+        </t>
+        <t>
+Under certain circumstances, when BPSEC key material is available to the BP agent managed by the ACME client, the use of a BCB for the Request Bundle and/or Response Bundle can give additional confidentiality to the bundle metadata.
+This is not expected to be a general use case, as the whole point of ACME is to validate identifiers of untrusted client services.
         </t>
       </section>
       <section title="Threat: BP Node Impersonation">
@@ -274,7 +353,7 @@ One way to mitigate single-path MitM attacks is to attempt validation of the sam
 It is not a trivial task to guarantee bundle routing though, so more advanced techniques such as onion routing (using bundle-in-bundle encapsulation <xref target="I-D.ietf-dtn-bibect" />) could be employed.
         </t>
         <t>
-Under certain circumstances, when BPSEC key material is available to the agent managed by the ACME client, the use of a BIB signature on the Response Bundle can give additional assurance that the response is coming from a valid BP agent.
+Under certain circumstances, when BPSEC key material is available to the BP agent managed by the ACME client, the use of a BIB signature on the Response Bundle can give additional assurance that the response is coming from a valid BP agent.
         </t>
       </section>
       <section title="Threat: Denial of Service">
@@ -286,11 +365,23 @@ A malicious entity can continually send ACME Node ID challenges to a BP agent.
 The victim BP agent can ignore ACME challenges which do not conform to the specific time interval and challenge token for which the ACME client has informed the BP agent that challenges are expected.
 The victim BP agent can require all Challenge Bundles to be BIB-signed to ensure authenticity of the challenge.
         </t>
+        <t>
+Similar to other validation methods, an ACME server validating a DTN Node ID could be used as a denial of service amplifier.
+For this reason any ACME server can rate-limit validation activities for individual clients and individual certificate requests.
+        </t>
+      </section>
+      <section title="Multiple Certificate Claims">
+        <t>
+A single certificate request can contain a mixed set of SAN claims, including combinations of "dns" and "uri" claims.
+There is no restriction on how a certificate combines these claims, but each claim needs to be validated to issue such a certificate.
+This is no different than the existing behavior of <xref target="RFC8555" /> but is mentioned here to make sure that CA policy handles such situations.
+The specific use case of <xref target="I-D.ietf-dtn-tcpclv4" /> allows, and for some network policies requires, that a certificate authenticate both the DNS name of an entity as well as the Node ID of the entity.
+        </t>
       </section>
     </section>
     <section anchor="sec-iana" title="IANA Considerations">
       <t>
-Some of the registries used in this section come from ACME and some from BP.
+This specification adds to the ACME registry and BP registry for this behavior.
       </t>
       <section anchor="sec-iana-acme-identifier" title="ACME Identifier Type">
         <t>
@@ -321,6 +412,7 @@ Within the "Automated Certificate Management Environment (ACME) Protocol" regist
       <section anchor="sec-iana-bp-admin-type" title="BP Bundle Administrative Record Types">
         <t>
 Within the "Bundle Protocol" registry <xref target="IANA-BP" />, the following entry has been added to the "Bundle Administrative Record Types" sub-registry.
+[NOTE to the RFC Editor: For RFC5050 compatibility this value needs to be no larger than 15, but such compatibility is not needed. BPbis has no upper limit on this code point value.]
         </t>
         <texttable>
           <ttcol>Value</ttcol>
@@ -334,7 +426,7 @@ Within the "Bundle Protocol" registry <xref target="IANA-BP" />, the following e
     </section>
     <section anchor="sec-doc-ack" title="Acknowledgments">
       <t>
-This specification is based on 
+This specification is based on DTN use cases related to PKIX certificate generation.
       </t>
     </section>
   </middle>
@@ -374,6 +466,7 @@ This specification is based on
     </references>
     <references title="Informative References">
       <?rfc include="reference.I-D.ietf-dtn-bibect.xml"?>
+      <?rfc include="reference.I-D.ietf-dtn-tcpclv4.xml"?>
       <reference anchor="github-acme-dtnnodeid" target="https://github.com/BSipos-RKF/acme-dtnnodeid/">
         <front>
           <title>ACME Node ID Example Implementation</title>

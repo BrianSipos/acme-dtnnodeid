@@ -35,15 +35,35 @@ set(MISSPELLING_TXT "misspelling.txt")
 add_custom_command(
     OUTPUT "dictionary.cwl"
     DEPENDS "${DICTIONARY_TXT}"
-    COMMAND cat "${DICTIONARY_TXT}" | ${ASPELL} --lang=en create master "./dictionary.cwl"
+    COMMAND cat "${DICTIONARY_TXT}" | 
+        ${ASPELL} --lang=en create master "./dictionary.cwl"
 )
 add_custom_command(
     OUTPUT "${MISSPELLING_TXT}"
     DEPENDS "${DRAFT_NAME_XML}" "dictionary.cwl"
-    COMMAND cat "${DRAFT_NAME_XML}" | ${ASPELL} --mode=sgml --lang=EN_US --extra-dicts=./dictionary.cwl list | sort | uniq >misspelling.txt
+    COMMAND cat "${DRAFT_NAME_XML}" | 
+        ${ASPELL} --mode=sgml --lang=EN_US --extra-dicts=./dictionary.cwl list | 
+        sort | uniq > "${MISSPELLING_TXT}"
+)
+
+find_program(XMLSTARLET xmlstarlet)
+if(XMLSTARLET_NOTFOUND)
+    message(FATAL_ERROR "Program xmlstarlet not found")
+endif()
+find_program(JSONVERIFY json_verify)
+if(JSONVERIFY_NOTFOUND)
+    message(FATAL_ERROR "Program json_verify not found")
+endif()
+set(JSONERRORS_TXT "jsonerrors.txt")
+add_custom_command(
+    OUTPUT "${JSONERRORS_TXT}"
+    DEPENDS "${DRAFT_NAME_XML}"
+    COMMAND cat "${DRAFT_NAME_XML}" | 
+        ${XMLSTARLET} sel --text -t -v "//artwork[@type=\\\"application/json\\\"]" - |
+        ${JSONVERIFY} -s 2> "${JSONERRORS_TXT}" || true
 )
 
 add_custom_target(
     specs ALL
-    DEPENDS "${DRAFT_NAME_TXT}" "${DRAFT_NAME_HTML}" "${MISSPELLING_TXT}"
+    DEPENDS "${DRAFT_NAME_TXT}" "${DRAFT_NAME_HTML}" "${MISSPELLING_TXT}" "${JSONERRORS_TXT}"
 )
