@@ -7,7 +7,7 @@ project(
 set(DRAFT_NAME "${PROJECT_NAME}")
 
 find_program(XML2RFC xml2rfc)
-if(XML2RFC_NOTFOUND)
+if(NOT XML2RFC)
     message(FATAL_ERROR "Program xml2rfc not found")
 endif()
 
@@ -26,7 +26,7 @@ add_custom_command(
 )
 
 find_program(ASPELL aspell)
-if(ASPELL_NOTFOUND)
+if(NOT ASPELL)
     message(FATAL_ERROR "Program aspell not found")
 endif()
 
@@ -47,11 +47,11 @@ add_custom_command(
 )
 
 find_program(XMLSTARLET xmlstarlet)
-if(XMLSTARLET_NOTFOUND)
+if(NOT XMLSTARLET)
     message(FATAL_ERROR "Program xmlstarlet not found")
 endif()
 find_program(JSONVERIFY json_verify)
-if(JSONVERIFY_NOTFOUND)
+if(NOT JSONVERIFY)
     message(FATAL_ERROR "Program json_verify not found")
 endif()
 set(JSONERRORS_TXT "jsonerrors.txt")
