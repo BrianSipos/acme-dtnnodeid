@@ -4,6 +4,7 @@ BP
 BPbis
 BPSEC
 CBOR
+CDDL
 cryptographic
 CSR
 dereference

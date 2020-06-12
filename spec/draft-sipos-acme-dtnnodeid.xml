@@ -20,9 +20,9 @@ Delay-Tolerant Networking (DTN) Node ID Validation Extension
         <email>BSipos@rkf-eng.com</email>
       </address>
     </author>
-    <date year="2020" month="June" day="4" />
+    <date year="2020" month="June" day="9" />
     <area>Transport</area>
-    <workgroup>Delay Tolerant Networking</workgroup>
+    <workgroup>Delay-Tolerant Networking</workgroup>
     <abstract>
       <t>
 This document specifies an extension to the Automated Certificate Management Environment (ACME) protocol which allows validating the Delay-Tolerant Networking (DTN) Node ID for an ACME client.
@@ -99,7 +99,7 @@ It is the responsibility of a validation method to ensure the URI ownership via 
         <preamble>
 An identifier for the URL "dtn://example/service" would be formatted as:
         </preamble>
-        <artwork type="application/json">
+        <artwork type="json">
 {"type": "uri", "value": "dtn://example/service"}
 </artwork>
       </figure>
@@ -186,7 +186,7 @@ See <xref target="RFC4086" /> for additional information on randomness requireme
           </list>
         </t>
       <figure>
-        <artwork type="application/json">
+        <artwork type="json">
 {
   "type": "dtn-nodeid-01",
   "url": "https://example.com/acme/chall/prV_B7yEyA4",
@@ -216,13 +216,13 @@ There is no special significance to zero-value RTT, it simply indicates the resp
             </t>
           </list>
         </t>
-      <figure>
-        <artwork type="application/json">
+        <figure>
+          <artwork type="json">
 {
   "rtt": 300.0
 }
 </artwork>
-      </figure>
+        </figure>
         <t>
 A challenge response is not sent until the BP agent has been configured to properly respond to the challenge, so the RTT value is meant to indicate any node-specific path delays expected to encountered from the ACME server.
 Because there is no requirement on the path (or paths) which bundles may traverse between the ACME server and the BP agent, and the ACME server is likely to attempt some path diversity, the RTT value SHOULD be pessimistic.
@@ -256,10 +256,18 @@ The second element SHALL be the ACME challenge token as specified in the challen
             </t>
           </list>
         </t>
+        <figure>
+          <preamble>
+An ACME challenge administrative record would have CBOR diagnostic notation as:
+        </preamble>
+        <artwork type="cbor">
+[1, "LoqXcYV8q5ONbJQxbmR7SCTNo3tiAXDfowyjxAjEuX0"]
+</artwork>
+        </figure>
         <t>
 Challenge Bundles SHOULD be BIB-signed in accordance with <xref target="I-D.ietf-dtn-bpsec" /> if the ACME server is capable of signing bundles.
 BP agents MAY refuse to respond to a Challenge Bundle which is signed by a known ACME server but has an invalid signature.
-Challenge Bundles SHOULD NOT be BCB-encrypted in accordance with <xref target="I-D.ietf-dtn-bpsec" />.
+Challenge Bundles SHOULD NOT be directly encrypted (by BCB or any other method).
         </t>
       </section>
       <section anchor="sec-bundle-response" title="ACME Node ID Validation Response Bundles">
@@ -288,9 +296,19 @@ The first element SHALL be a response indicator value 2, represented as a CBOR u
 The second element SHALL be the ACME Key Authorization in accordance with Section 8.1 of <xref target="RFC8555" />, represented as a CBOR text string.
             </t>
           </list>
-Response Bundles MAY be BIB-signed in accordance with <xref target="I-D.ietf-dtn-bpsec" />.
+        </t>
+        <figure>
+          <preamble>
+An ACME response administrative record would have CBOR diagnostic notation (truncated for terseness) as:
+        </preamble>
+        <artwork type="cbor">
+[1, "LoqXcYV8...jxAjEuX0.9jg46WB3...fm21mqTI"]
+</artwork>
+        </figure>
+        <t>
+Response Bundles MAY be BIB-signed in accordance with <xref target="I-D.ietf-dtn-bpsec" /> if the BP agent is capable of signing bundles.
 A BIB on the bundle gives no more security than the Key Authorization itself.
-Response Bundles SHOULD NOT be BCB-encrypted in accordance with <xref target="I-D.ietf-dtn-bpsec" />.
+Response Bundles SHOULD NOT be directly encrypted (by BCB or any other method).
         </t>
       </section>
       <section anchor="sec-response-check" title="Response Bundle Checks">
@@ -477,5 +495,37 @@ This specification is based on DTN use cases related to PKIX certificate generat
         </front>
       </reference>
     </references>
+    <section title="Administrative Record Types CDDL">
+      <t>
+[NOTE to the RFC Editor: The "TBD" in this CDDL is replaced by the "ACME Node ID Validation" administrative record type code.]
+      </t>
+      <figure>
+        <preamble>
+The CDDL extension of BP <xref target="I-D.ietf-dtn-bpbis" /> for the ACME bundles is:
+        </preamble>
+        <artwork type="cddl">
+; All ACME records have the same structure
+$admin-record /= [TBD, acme-record]
+acme-record = $acme-record .within acme-record-structure
+acme-record-structure = [
+  type-code: uint,
+  acme-content: tstr
+]
+; The type code distinguishes the purpose
+$acme-record /= [
+  1,
+  challenge-token: tstr
+]
+$acme-record /= [
+  2,
+  key-authorization: tstr
+]
+</artwork>
+      </figure>
+    </section>
+    <section title="Example Bundles">
+      <t>
+      </t>
+    </section>
   </back>
 </rfc>
