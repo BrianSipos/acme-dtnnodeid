@@ -14,10 +14,6 @@ find_program(ASPELL aspell)
 if(NOT ASPELL)
     message(FATAL_ERROR "Program aspell not found")
 endif()
-find_program(XSLTPROC xsltproc)
-if(NOT XSLTPROC)
-    message(FATAL_ERROR "Program xsltproc not found")
-endif()
 
 set(DRAFT_NAME_XML "${CMAKE_CURRENT_SOURCE_DIR}/${DRAFT_NAME}.xml")
 set(DRAFT_NAME_TXT "${DRAFT_NAME}.txt")
@@ -45,7 +41,7 @@ add_custom_command(
 add_custom_command(
     OUTPUT "${MISSPELLING_TXT}"
     DEPENDS "${DRAFT_NAME_XML}" "${SPELLCHECK_XSL}" "dictionary.cwl"
-    COMMAND ${XSLTPROC} "${SPELLCHECK_XSL}" "${DRAFT_NAME_XML}" | 
+    COMMAND ${XMLSTARLET} tr "${SPELLCHECK_XSL}" "${DRAFT_NAME_XML}" | 
         ${ASPELL} --mode=sgml --lang=EN_US --extra-dicts=./dictionary.cwl list | 
         sort | uniq > "${MISSPELLING_TXT}"
 )
