@@ -10,10 +10,19 @@ find_program(XML2RFC xml2rfc)
 if(NOT XML2RFC)
     message(FATAL_ERROR "Program xml2rfc not found")
 endif()
+find_program(XMLSTARLET xmlstarlet)
+if(NOT XMLSTARLET)
+    message(FATAL_ERROR "Program xmlstarlet not found")
+endif()
 find_program(ASPELL aspell)
 if(NOT ASPELL)
     message(FATAL_ERROR "Program aspell not found")
 endif()
+find_program(PYTHON python)
+if(NOT PYTHON)
+    message(FATAL_ERROR "Program python not found")
+endif()
+set(SPLIT_ARTWORK "${CMAKE_CURRENT_SOURCE_DIR}/split_artwork.py")
 
 set(DRAFT_NAME_XML "${CMAKE_CURRENT_SOURCE_DIR}/${DRAFT_NAME}.xml")
 set(DRAFT_NAME_TXT "${DRAFT_NAME}.txt")
@@ -45,11 +54,12 @@ add_custom_command(
         ${ASPELL} --mode=sgml --lang=EN_US --extra-dicts=./dictionary.cwl list | 
         sort | uniq > "${MISSPELLING_TXT}"
 )
+add_custom_target(
+    specs ALL
+    DEPENDS "${DRAFT_NAME_TXT}" "${DRAFT_NAME_HTML}" "${MISSPELLING_TXT}"
+)
 
-find_program(XMLSTARLET xmlstarlet)
-if(NOT XMLSTARLET)
-    message(FATAL_ERROR "Program xmlstarlet not found")
-endif()
+
 find_program(JSONVERIFY json_verify)
 if(NOT JSONVERIFY)
     message(FATAL_ERROR "Program json_verify not found")
@@ -57,13 +67,10 @@ endif()
 set(JSONERRORS_TXT "jsonerrors.txt")
 add_custom_command(
     OUTPUT "${JSONERRORS_TXT}"
-    DEPENDS "${DRAFT_NAME_XML}"
-    COMMAND cat "${DRAFT_NAME_XML}" | 
-        ${XMLSTARLET} sel --text -t -v "//artwork[@type=\\\"json\\\"]" - |
-        ${JSONVERIFY} -s 2> "${JSONERRORS_TXT}" || true
+    DEPENDS "${DRAFT_NAME_XML}" "${SPLIT_ARTWORK}"
+    COMMAND ${PYTHON} "${SPLIT_ARTWORK}" "${DRAFT_NAME_XML}" '//artwork[@type="json"]' "${JSONVERIFY}" >/dev/null 2>"${JSONERRORS_TXT}"
 )
-
 add_custom_target(
-    specs ALL
-    DEPENDS "${DRAFT_NAME_TXT}" "${DRAFT_NAME_HTML}" "${MISSPELLING_TXT}" "${JSONERRORS_TXT}"
+    jsonerrors ALL
+    DEPENDS "${JSONERRORS_TXT}"
 )
