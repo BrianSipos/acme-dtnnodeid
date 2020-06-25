@@ -11,7 +11,7 @@ jobs:
     - uses: actions/checkout@v1
     - name: dependencies
       run: |
-        sudo apt-get install cmake libxml2-utils xml2rfc xmlstarlet yajl-tools
+        sudo apt-get install cmake xml2rfc xmlstarlet python3 yajl-tools
     - name: xml2rfc
       run: |
         mkdir -p spec/build
