@@ -16,7 +16,7 @@ jobs:
       run: |
         mkdir -p spec/build
         (cd spec/build && cmake ..)
-        cmake --build spec/build
+        cmake --build spec/build -v
     - uses: actions/upload-artifact@v2
       with:
         name: spec
