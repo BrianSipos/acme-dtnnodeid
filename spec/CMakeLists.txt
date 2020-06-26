@@ -61,16 +61,30 @@ add_custom_target(
 
 
 find_program(JSONVERIFY json_verify)
-if(NOT JSONVERIFY)
-    message(FATAL_ERROR "Program json_verify not found")
+if(JSONVERIFY)
+    set(JSONERRORS_TXT "jsonerrors.txt")
+    add_custom_command(
+        OUTPUT "${JSONERRORS_TXT}"
+        DEPENDS "${DRAFT_NAME_XML}" "${SPLIT_ARTWORK}"
+        COMMAND ${PYTHON} "${SPLIT_ARTWORK}" "${DRAFT_NAME_XML}" '//artwork[@type="json"]' "${JSONVERIFY}" >/dev/null 2>"${JSONERRORS_TXT}"
+    )
+    add_custom_target(
+        jsonerrors ALL
+        DEPENDS "${JSONERRORS_TXT}"
+    )
 endif()
-set(JSONERRORS_TXT "jsonerrors.txt")
-add_custom_command(
-    OUTPUT "${JSONERRORS_TXT}"
-    DEPENDS "${DRAFT_NAME_XML}" "${SPLIT_ARTWORK}"
-    COMMAND ${PYTHON} "${SPLIT_ARTWORK}" "${DRAFT_NAME_XML}" '//artwork[@type="json"]' "${JSONVERIFY}" >/dev/null 2>"${JSONERRORS_TXT}"
-)
-add_custom_target(
-    jsonerrors ALL
-    DEPENDS "${JSONERRORS_TXT}"
-)
+
+find_program(CBORVERIFY diag2pretty.rb)
+if(CBORVERIFY)
+    set(CBORERRORS_TXT "cborerrors.txt")
+    add_custom_command(
+        OUTPUT "${CBORERRORS_TXT}"
+        DEPENDS "${DRAFT_NAME_XML}" "${SPLIT_ARTWORK}"
+        COMMAND ${PYTHON} "${SPLIT_ARTWORK}" "${DRAFT_NAME_XML}" '//artwork[@type="cbor"]' "${CBORVERIFY}" 2>"${CBORERRORS_TXT}" 1>&2
+    )
+    add_custom_target(
+        cborerrors ALL
+        DEPENDS "${CBORERRORS_TXT}"
+    )
+endif()
+

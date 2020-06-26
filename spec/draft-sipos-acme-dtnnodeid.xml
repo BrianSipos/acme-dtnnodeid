@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <?rfc toc="yes"?>
-<rfc ipr="trust200902" category="std" docName="draft-sipos-acme-dtnnodeid-00">
+<rfc ipr="trust200902" category="exp" docName="draft-sipos-acme-dtnnodeid-01">
   <front>
     <title abbrev="ACME DTN Node ID">
 Automated Certificate Management Environment (ACME)
@@ -20,7 +20,7 @@ Delay-Tolerant Networking (DTN) Node ID Validation Extension
         <email>BSipos@rkf-eng.com</email>
       </address>
     </author>
-    <date year="2020" month="June" day="9" />
+    <date year="2020" month="June" day="26" />
     <area>Transport</area>
     <workgroup>Delay-Tolerant Networking</workgroup>
     <abstract>
@@ -51,6 +51,10 @@ Finally, the ACME server receives the Response Bundle and checks that the signat
       <t>
 Because the DTN Node ID is used both for routing bundles between BP agents and for multiplexing services within a BP agent, there is no possibility to separate the ACME validation of a Node ID from normal bundle handling on that same Node ID.
 This leaves Bundle administrative records as a way to leave the Node ID unchanged while disambiguating from normal service data bundles.
+      </t>
+      <t>
+The scope and behavior of this validation mechanism is similar to that of secured email validation of <xref target="I-D.ietf-acme-email-smime" />.
+For that reason some token splitting terminology in this document is taken from the email specification.
       </t>
     </section>
     <section anchor="sec-terminology" title="Terminology">
@@ -110,27 +114,42 @@ The DTN Node ID validation method proves control over a Node ID by requiring the
 The ACME server validates control of the Node ID URI by verifying that received Response Bundles correspond with the BP Node and client account key being validated.
       </t>
       <t>
-The DTN Node ID Challenge SHALL only be allowed for URIs usable as a DTN Node ID, which are currently the schemes "dtn" and "ipn" as defined in <xref target="I-D.ietf-dtn-bpbis" />.
-When an ACME server supports Node ID validation, the ACME server SHALL define a challenge object in accordance with <xref target="sec-nodeid-challenge-request" />.
+Similar to the ACME use case for validating email address ownership <xref target="I-D.ietf-acme-email-smime" />, this challenge splits the token into two parts.
+Each part reaches the client through a different channel: one via the ACME channel in the challenge object, the other via the DTN channel within the Challenge Bundle.
+The Key Authorization result requires that the ACME client have access to the results of each channel to get both parts of the token.
       </t>
       <t>
-To authorize a Node ID validation, the ACME client performs the following steps:
+The DTN Node ID Challenge SHALL only be allowed for URIs usable as a DTN Node ID, which are currently the schemes "dtn" and "ipn" as defined in <xref target="I-D.ietf-dtn-bpbis" />.
+When an ACME server supports Node ID validation, the ACME server SHALL define a challenge object in accordance with <xref target="sec-nodeid-challenge-request" />.
+Once this challenge object is defined, the ACME client may begin the validation.
+      </t>
+      <t>
+To initiate a Node ID validation, the ACME client performs the following steps:
         <list style="numbers">
           <t>
-The ACME client computes the Key Authorization in accordance with Section 8.1 of <xref target="RFC8555" /> using the challenge token and client account key.
+The ACME client obtains the challenge &lt;token-part2&gt; from the challenge object in accordance with <xref target="sec-nodeid-challenge-request" />.
           </t>
           <t>
-The ACME client indicates to the BP agent the validation token and the key authorization used for the validation.
+The ACME client indicates to the BP agent the challenge &lt;token-part2&gt; which is authorized for use.
           </t>
           <t>
 The ACME client POSTs a challenge response to the challenge URL on the ACME server accordance with Section 7.5.1 of <xref target="RFC8555" />.
 The payload object is constructed in accordance with <xref target="sec-nodeid-challenge-response" />.
           </t>
           <t>
+The ACME client waits for indication from the BP agent that a Challenge Bundle has been received, including its &lt;token-part1&gt; payload.
+          </t>
+          <t>
+The ACME client concatenates &lt;token-part1&gt; with &lt;token-part2&gt; and computes the Key Authorization in accordance with Section 8.1 of <xref target="RFC8555" /> using the full token and client account key.
+          </t>
+          <t>
+The ACME client indicates to the BP agent the Key Authorization result, which will result in a Response Bundle being sent back to the ACME server.
+          </t>
+          <t>
 The ACME client waits for the authorization to be finalized on the ACME server in accordance with Section 7.5.1 of <xref target="RFC8555" />.
           </t>
           <t>
-Once the challenge is completed (successfully or not), the ACME client indicates to the BP agent that the validation token is no longer usable.
+Once the challenge is completed (successfully or not), the ACME client indicates to the BP agent that the validation &lt;token-part1&gt; is no longer usable.
           </t>
         </list>
       </t>
@@ -138,7 +157,7 @@ Once the challenge is completed (successfully or not), the ACME client indicates
 Upon receiving a challenge response from an ACME client, the ACME server verifies the client's control over the Node ID by performing the following steps:
         <list style="numbers">
           <t>
-The ACME server computes the expected Key Authorization in accordance with Section 8.1 of <xref target="RFC8555" /> using the challenge token and client account key.
+The ACME server generates the two-part challenge token and computes the expected Key Authorization in accordance with Section 8.1 of <xref target="RFC8555" /> using the concatenated token and client account key.
           </t>
           <t>
 The ACME server sends one or more Challenge Bundles in accordance with <xref target="sec-bundle-challenge" />.
@@ -176,9 +195,9 @@ The DTN Node ID Challenge request object has the following content:
             <t hangText="type (required, string):">
 The string "dtn-nodeid-01".
             </t>
-            <t hangText="token (required, string):">
+            <t hangText="token-part2 (required, string):">
 A random value that uniquely identifies the challenge.
-This value MUST have at least 128 bits of entropy.
+This value MUST have at least 64 bits of entropy.
 It MUST NOT contain any characters outside the base64url alphabet as described in Section 5 of <xref target="RFC4648" />.
 Trailing '=' padding characters MUST be stripped.
 See <xref target="RFC4086" /> for additional information on randomness requirements.
@@ -191,7 +210,7 @@ See <xref target="RFC4086" /> for additional information on randomness requireme
   "type": "dtn-nodeid-01",
   "url": "https://example.com/acme/chall/prV_B7yEyA4",
   "status": "pending",
-  "token": "LoqXcYV8q5ONbJQxbmR7SCTNo3tiAXDfowyjxAjEuX0"
+  "token-part2": "qXjSp7npR2Y"
 }
 </artwork>
       </figure>
@@ -252,7 +271,10 @@ Set to the ACME Node ID Validation type code defined by this specification.
             <t hangText="Administrative Record Content:">
 The ACME challenge administrative record content SHALL consist of a CBOR array with two elements.
 The first element SHALL be a challenge indicator value 1, represented as a CBOR unsigned integer.
-The second element SHALL be the ACME challenge token as specified in the challenge object, represented as a CBOR text string.
+The second element SHALL be the ACME challenge token-part1, represented as a CBOR text string.
+The token-part1 is a random value that uniquely identifies the challenge.
+This value MUST have at least 64 bits of entropy.
+See <xref target="RFC4086" /> for additional information on randomness requirements.
             </t>
           </list>
         </t>
@@ -261,7 +283,10 @@ The second element SHALL be the ACME challenge token as specified in the challen
 An ACME challenge administrative record would have CBOR diagnostic notation as:
         </preamble>
         <artwork type="cbor">
-[1, "LoqXcYV8q5ONbJQxbmR7SCTNo3tiAXDfowyjxAjEuX0"]
+[
+  1, / challenge indicator /
+  "LVMo24VdNAw" / token-part1 /
+]
 </artwork>
         </figure>
         <t>
@@ -302,7 +327,10 @@ The second element SHALL be the ACME Key Authorization in accordance with Sectio
 An ACME response administrative record would have CBOR diagnostic notation (truncated for terseness) as:
         </preamble>
         <artwork type="cbor">
-[1, "LoqXcYV8...jxAjEuX0.9jg46WB3...fm21mqTI"]
+[
+  2, / response indicator /
+  "qXjSp7npR2YtUyjbhV00DA.9jg46WB3...fm21mqTI" / key authorization /
+]
 </artwork>
         </figure>
         <t>
@@ -483,6 +511,7 @@ This specification is based on DTN use cases related to PKIX certificate generat
       <?rfc include="reference.I-D.ietf-dtn-bpsec.xml"?>
     </references>
     <references title="Informative References">
+      <?rfc include="reference.I-D.ietf-acme-email-smime.xml"?>
       <?rfc include="reference.I-D.ietf-dtn-bibect.xml"?>
       <?rfc include="reference.I-D.ietf-dtn-tcpclv4.xml"?>
       <reference anchor="github-acme-dtnnodeid" target="https://github.com/BSipos-RKF/acme-dtnnodeid/">
