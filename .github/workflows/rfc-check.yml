@@ -11,7 +11,8 @@ jobs:
     - uses: actions/checkout@v1
     - name: dependencies
       run: |
-        sudo apt-get install cmake xml2rfc xmlstarlet python3 yajl-tools
+        sudo apt-get install cmake xmlstarlet yajl-tools python3 python3-pip
+        pip3 install xml2rfc
     - name: xml2rfc
       run: |
         mkdir -p spec/build
@@ -24,3 +25,4 @@ jobs:
           spec/build/draft-*.html
           spec/build/draft-*.txt
           spec/build/misspelling.txt
+          spec/build/*errors.txt
