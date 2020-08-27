@@ -12,6 +12,8 @@ jobs:
     - name: dependencies
       run: |
         sudo apt-get install cmake xmlstarlet yajl-tools python3 python3-pip python3-setuptools python3-wheel
+        which pip3
+        pip3 --version
         pip3 install --prefix=/usr/local xml2rfc
     - name: xml2rfc
       run: |
