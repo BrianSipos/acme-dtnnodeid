@@ -5,6 +5,7 @@ BPbis
 BPSEC
 CBOR
 CDDL
+CRC
 cryptographic
 CSR
 dereference
@@ -26,6 +27,7 @@ PKI
 PKIX
 plaintext
 POSTs
+pre
 RKF
 rtt
 RTT
