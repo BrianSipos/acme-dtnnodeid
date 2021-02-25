@@ -16,14 +16,15 @@ jobs:
         which xml2rfc
     - name: xml2rfc
       run: |
-        mkdir -p spec/build
-        (cd spec/build && cmake ..)
-        cmake --build spec/build -v
+        mkdir -p build
+        (cd build && cmake ..)
+        cmake --build build -v
     - uses: actions/upload-artifact@v2
       with:
         name: spec
         path: |
-          spec/build/draft-*.html
-          spec/build/draft-*.txt
-          spec/build/misspelling.txt
-          spec/build/*errors.txt
+          build/spec/draft-*.html
+          build/spec/draft-*.txt
+          build/spec/misspelling.txt
+          build/spec/*errors.txt
+          build/spec/*valid.txt
