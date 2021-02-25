@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   <!-- Leave out some artworks -->
-  <xsl:template match="artwork[@type='json']">
+  <xsl:template match="sourcecode[@type='json']">
   </xsl:template>
-  <xsl:template match="artwork[@type='cbor']">
+  <xsl:template match="sourcecode[@type='cbor']">
   </xsl:template>
-  <xsl:template match="artwork[@type='cddl']">
+  <xsl:template match="sourcecode[@type='cddl']">
   </xsl:template>
   <!-- standard copy template -->
   <xsl:template match="@*|node()">

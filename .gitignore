@@ -1,0 +1,10 @@
+*~
+
+.project
+.pydevproject
+.externalToolBuilders/
+
+/build/
+
+**/__pycache__/
+*.pyc
