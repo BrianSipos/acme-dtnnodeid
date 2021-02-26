@@ -50,6 +50,7 @@ RKF
 rtt
 RTT
 SHA
+SHS
 subjectAltName
 subproblem
 subproblems

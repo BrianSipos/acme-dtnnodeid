@@ -21,7 +21,7 @@ Delay-Tolerant Networking (DTN) Node ID Validation Extension
         <email>BSipos@rkf-eng.com</email>
       </address>
     </author>
-    <date />
+    <date/>
     <area>Security</area>
     <workgroup>Automated Certificate Management Environment</workgroup>
     <keyword>ACME</keyword>
@@ -210,7 +210,7 @@ The ACME server generates an authorization for the Node ID with challenge type "
         <li>
 The ACME server sends one or more Challenge Bundles in accordance with <xref target="sec-bundle-challenge"/>.
 Each challenge bundle SHALL contain a distinct &lt;token-part1&gt; to be able to correlate with a response bundle.
-Computing an expected Key Authorization digest is not necessary until a resposne is received.
+Computing an expected Key Authorization digest is not necessary until a response is received.
         </li>
         <li>
 The ACME server waits for Response Bundle(s) for a limited interval of time.
