@@ -27,4 +27,4 @@ jobs:
           build/spec/draft-*.txt
           build/spec/misspelling.txt
           build/spec/*errors.txt
-          build/spec/*valid.txt
+

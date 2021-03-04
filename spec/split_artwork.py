@@ -21,7 +21,10 @@ def main():
                         help='The command and its arguments to run and pass to stdin.')
 
     args = parser.parse_args()
-    logging.basicConfig(level=args.log_level.upper())
+    logging.basicConfig(
+        level=args.log_level.upper(),
+        stream=sys.stdout
+    )
     logging.root.debug('command args: %s', args)
 
     with open(args.infile, 'rb') as infile:
@@ -30,12 +33,15 @@ def main():
     
     exitcodes = []
     for elem in doc.xpath(args.xpath):
+        text = elem.text.strip()
+        LOGGER.info('Processing element text:\n%s', text)
         proc = subprocess.Popen(args.command, stdin=subprocess.PIPE)
-        proc.communicate(elem.text.encode('utf8'))
+        proc.communicate(text.encode('utf8'))
         proc.stdin.close()
         exitcodes.append(proc.wait())
     
-    return max(exitcodes)
+    return max(exitcodes) if exitcodes else 0
+
 
 if __name__ == '__main__':
     sys.exit(main())
