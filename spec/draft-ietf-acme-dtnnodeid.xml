@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?rfc toc="yes"?>
-<rfc xmlns:xi="http://www.w3.org/2001/XInclude" category="exp" docName="draft-ietf-acme-dtnnodeid-01" ipr="trust200902" submissionType="IETF" tocInclude="true" version="3">
+<rfc xmlns:xi="http://www.w3.org/2001/XInclude" category="exp" ipr="trust200902" submissionType="IETF" tocInclude="true" version="3">
   <front>
     <title abbrev="ACME DTN Node ID">
 Automated Certificate Management Environment (ACME)
@@ -45,9 +45,9 @@ A DTN Node ID is a URI with a specific set of allowed schemes, and determines ho
 Currently the schemes "dtn" and "ipn" as defined in <xref target="I-D.ietf-dtn-bpbis"/> are valid for a Node ID.
       </t>
       <t>
-Once an ACME server validates a Node ID, either as a pre-authorization of the "uri" or as one of the authorizations of an order containing a "uri", the client can finalize the order using an associated certificate signing request.
+Once an ACME server validates a Node ID, either as a pre-authorization of the "uri" or as one of the authorizations of an order containing a "uri", the client can finalize the order using an associated certificate signing request (CSR).
 Because a single order can contain multiple identifiers of multiple types, there can be operational issues for a client attempting to, and possibly failing to, validate those multiple identifiers as described in <xref target="sec-multiple-claims"/>.
-Once a certificate is issued for a Node ID, how the ACME client configures the BP agent with the new certificate is an implementation matter.
+Once a certificate is issued for a Node ID, how the ACME client configures the Bundle Protocol (BP) agent with the new certificate is an implementation matter.
       </t>
       <t>
 The scope and behavior of this validation mechanism is similar to that of secured email validation of <xref target="I-D.ietf-acme-email-smime"/>.
@@ -131,7 +131,7 @@ In this document, the only purpose for which a URI ACME identifier is validated 
 Identifiers of type "uri" MUST appear in an extensionRequest attribute <xref target="RFC2985"/> requesting a subjectAltName extension of type uniformResourceIdentifier having a value consistent with the requirements of <xref target="RFC3986"/>.
       </t>
       <t>
-Any identifier of type "uri" in a newOrder request MUST NOT have a wildcard ("*") character in its value.
+Any identifier of type "uri" in a newOrder request MUST NOT have a wildcard character ("*") in its value.
       </t>
       <t>
 If an ACME server wishes to request proof that a user controls a URI, it SHALL create an authorization with the identifier type "uri".
@@ -175,7 +175,7 @@ See <xref section="7.4" target="RFC8555"/> for more details.
 The ACME client obtains the challenge source Node ID and &lt;token-part2&gt; from the challenge object in accordance with <xref target="sec-nodeid-challenge-request"/>.
         </li>
         <li>
-The ACME client indicates to the BP agent the source and challenge &lt;token-part2&gt; which is authorized for use.
+The ACME client indicates to the BP agent the source Node ID and challenge &lt;token-part2&gt; which is authorized for use and the associated client account key fingerprint.
         </li>
         <li>
 The ACME client POSTs a challenge response to the challenge URL on the ACME server accordance with <xref section="7.5.1" target="RFC8555"/>.
@@ -185,7 +185,7 @@ The payload object is constructed in accordance with <xref target="sec-nodeid-ch
 The ACME client waits for indication from the BP agent that a Challenge Bundle has been received, including its &lt;token-part1&gt; payload.
         </li>
         <li>
-The ACME client concatenates &lt;token-part1&gt; with &lt;token-part2&gt; (as text strings) and computes the Key Authorization in accordance with <xref section="8.1" target="RFC8555"/> using the full token and client account key digest.
+The ACME client concatenates &lt;token-part1&gt; with &lt;token-part2&gt; (as text strings) and computes the Key Authorization in accordance with <xref section="8.1" target="RFC8555"/> using the full token and client account key fingerprint.
         </li>
         <li>
 The ACME client indicates to the BP agent the SHA-256 digest of the Key Authorization result, which results in a Response Bundle being sent back to the ACME server in accordance with <xref target="sec-bundle-response"/>.
@@ -271,8 +271,7 @@ See <xref target="RFC4086"/> for additional information on randomness requiremen
 }
 </sourcecode>
         <t>
-The only over-the-wire data required by ACME for a Challenge Bundle is a nonce token, split into two parts, but the response data needs a client account key to generate the Key Authorization and its digest.
-The client account key is kept within the ACME client, the BP agent needs only the derived key thumbprint for its Response Bundle.
+The &lt;token-part2&gt; value included in this object is fixed for the entire challenge, and may correspond with multiple separate &lt;token-part1&gt; values when multiple Challenge Bundles are sent for a single validation.
         </t>
       </section>
       <section anchor="sec-nodeid-challenge-response">
@@ -306,7 +305,10 @@ Because there is no requirement on the path (or paths) which bundles may travers
       <section anchor="sec-bundle-challenge">
         <name>ACME Node ID Validation Challenge Bundles</name>
         <t>
-Each ACME Node ID Validation Challenge Bundle has parameters as listed here:
+Each Each ACME Node ID Validation Challenge Bundle SHALL be structured and encoded in accordance with <xref target="I-D.ietf-dtn-bpbis"/>.
+        </t>
+        <t>
+Each Challenge Bundle has parameters as listed here:
         </t>
         <dl newline="false" spacing="normal">
           <dt>Bundle Processing Control Flags:</dt>
@@ -339,26 +341,39 @@ Set to the ACME Node ID Validation type code defined in <xref target="sec-iana-b
           </dd>
           <dt>Administrative Record Content:</dt>
           <dd>
-The Challenge Bundle administrative record content SHALL consist of a CBOR map containing one pair.
+            <t>
+The Challenge Bundle administrative record content SHALL consist of a CBOR map containing one pair:
+            </t>
+            <ul>
+              <li>
 The pair SHALL consist of key 1 with value of ACME challenge token-part1, represented as a CBOR byte string.
-The token-part1 is a random value that uniquely identifies the challenge.
+The token-part1 is a random value that uniquely identifies the challenge bundle.
 This value MUST have at least 128 bits of entropy.
 See <xref target="RFC4086"/> for additional information on randomness requirements.
-            </dd>
+              </li>
+            </ul>
+          </dd>
         </dl>
         <t>
 An example full Challenge Bundle is included in <xref target="sec-example-bundle-challenge"/>
         </t>
         <t>
-Challenge Bundles SHOULD be BIB-signed in accordance with <xref target="I-D.ietf-dtn-bpsec"/> if the ACME server is capable of signing bundles.
-BP agents SHALL refuse to respond to a Challenge Bundle which is signed by a known ACME server but has an invalid signature.
-Challenge Bundles SHOULD NOT be directly encrypted (by BCB or any other method).
+Challenge Bundles SHALL include a Block Integrity Block (BIB) in accordance with <xref target="I-D.ietf-dtn-bpsec"/>.
+The Security Source of this BIB SHALL be either the ACME server node itself or a routing node trusted by the ACME client node (see <xref target="sec-security-impersonate"/>).
+The BIB SHALL cover both the payload block and the primary block (either directly as a target or as additional authenticated data for the payload block signature).
+BP agents SHALL NOT to respond to a Challenge Bundle which is either not signed or has a security source which is untrusted or has signature which fails to verify.
+        </t>
+        <t>
+Challenge Bundles SHALL NOT be directly encrypted by Block Confidentiality Block (BCB) or any other method (see <xref target="sec-security-leak"/>).
         </t>
       </section>
       <section anchor="sec-bundle-response">
         <name>ACME Node ID Validation Response Bundles</name>
         <t>
-Each ACME Node ID Validation Response Bundle has parameters as listed here:
+Each Each ACME Node ID Validation Response Bundle SHALL be structured and encoded in accordance with <xref target="I-D.ietf-dtn-bpbis"/>.
+        </t>
+        <t>
+Each Response Bundle has parameters as listed here:
         </t>
         <dl newline="false" spacing="normal">
           <dt>Bundle Processing Control Flags:</dt>
@@ -386,18 +401,29 @@ Set to the ACME Node ID Validation type code defined in <xref target="sec-iana-b
           </dd>
           <dt>Administrative Record Content:</dt>
           <dd>
-The Response Bundle administrative record content SHALL consist of a CBOR map containing two pairs.
+            <t>
+The Response Bundle administrative record content SHALL consist of a CBOR map containing two pairs:
+            </t>
+            <ul>
+              <li>
 One pair SHALL consist of key 1 with value of ACME challenge token-part1, copied from the Request Bundle, represented as a CBOR byte string.
+              </li>
+              <li>
 One pair SHALL consist of key 2 with value of the SHA-256 digest <xref target="FIPS180-4"/> of the ACME Key Authorization in accordance with <xref section="8.1" target="RFC8555"/>, represented as a CBOR byte string.
+              </li>
+            </ul>
           </dd>
         </dl>
         <t>
 An example full Response Bundle is included in <xref target="sec-example-bundle-response"/>
         </t>
         <t>
-Response Bundles MAY be BIB-signed in accordance with <xref target="I-D.ietf-dtn-bpsec"/> if the BP agent is capable of signing bundles.
-A BIB on the bundle gives no more security than the Key Authorization itself.
-Response Bundles SHOULD NOT be directly encrypted (by BCB or any other method).
+Response Bundles SHOULD include a BIB in accordance with <xref target="I-D.ietf-dtn-bpsec"/>.
+The Security Source of this BIB SHALL be a routing node trusted by the ACME server node (see <xref target="sec-security-impersonate"/>).
+The BIB SHALL cover both the payload block and the primary block (either directly as a target or as additional authenticated data for the payload block signature).
+        </t>
+        <t>
+Response Bundles SHALL NOT be directly encrypted by BCB or any other method (see <xref target="sec-security-leak"/> for explanation).
         </t>
       </section>
       <section anchor="sec-response-check">
@@ -428,17 +454,18 @@ Any of the failures above SHOULD be indicated as subproblems to the ACME client.
     <section>
       <name>Certificate Request Profile</name>
       <t>
-The ultimate purpose of this ACME validation is to allow a CA to issue certificates following the profiles of <xref section="4.4.2" target="I-D.ietf-dtn-tcpclv4"/> and <xref target="I-D.bsipos-dtn-bpsec-cose"/>.
+The ultimate purpose of this ACME validation is to allow a CA to issue certificates following the profiles of <xref section="4.4.2" target="I-D.ietf-dtn-tcpclv4"/>, <xref target="I-D.sipos-dtn-udpcl"/>, and <xref target="I-D.bsipos-dtn-bpsec-cose"/>.
 These purposes are referred to here as bundle security certificates.
       </t>
       <t>
-One common behavior of bundle security certificates are the use of the Extended Key Usage key purpose "id-kp-bundleSecurity".
-Any CA implementing the validation method defined in this document SHOULD also support issuing certificates with the bundle security Extended Key Usage.
+One defining aspect of bundle security certificates is the Extended Key Usage key purpose "id-kp-bundleSecurity" of <xref target="IANA-SMI"/>.
+When requesting a certificate which includes a Node ID SAN, the CSR SHOULD include an Extended Key Usage of id-kp-bundleSecurity.
+When a bundle security certificate is issued based on a validated Node ID SAN, the certificate SHALL include an Extended Key Usage of id-kp-bundleSecurity.
       </t>
       <section anchor="sec-multiple-claims">
         <name>Multiple Identity Claims</name>
         <t>
-A single bundle security certificate request MAY contain a mixed set of SAN claims, including combinations of "ip", "dns", and "uri" claims.
+A single bundle security CSR MAY contain a mixed set of SAN claims, including combinations of "ip", "dns", and "uri" claims.
 There is no restriction on how a certificate combines these claims, but each claim MUST be validated by an ACME server to issue such a certificate as part of an associated ACME order.
 This is no different than the existing behavior of <xref target="RFC8555"/> but is mentioned here to make sure that CA policy handles such situations; especially related to validation failure of an identifier in the presence of multiple identifiers.
 The specific use case of <xref target="I-D.ietf-dtn-tcpclv4"/> allows, and for some network policies requires, that a certificate authenticate both the DNS name of an entity as well as the Node ID of the entity.
@@ -450,13 +477,13 @@ The specific use case of <xref target="I-D.ietf-dtn-tcpclv4"/> allows, and for s
 ACME extensions specified in this document can be used to request encryption-only or signing-only bundle security certificates.
         </t>
         <t>
-In order to request signing only S/MIME certificate, the CSR MUST include the key usage extension with digitalSignature and/or nonRepudiation bits set and no other bits set.
+In order to request signing only bundle security certificate, the CSR MUST include the key usage extension with digitalSignature and/or nonRepudiation bits set and no other bits set.
         </t>
         <t>
-In order to request encryption only S/MIME certificate, the CSR MUST include the key usage extension with keyEncipherment or keyAgreement bits set and no other bits set.
+In order to request encryption only bundle security certificate, the CSR MUST include the key usage extension with keyEncipherment or keyAgreement bits set and no other bits set.
         </t>
         <t>
-Presence of both of the above sets of key usage bits in the CSR, as well as absence of key usage extension in the CSR, signals to ACME server to issue an S/MIME certificate suitable for both signing and encryption.
+Presence of both of the above sets of key usage bits in the CSR, as well as absence of key usage extension in the CSR, signals to ACME server to issue a bundle security certificate suitable for both signing and encryption.
         </t>
       </section>
     </section>
@@ -483,18 +510,18 @@ This example implementation only constructs encoded bundles and does not attempt
       <t>
 This section separates security considerations into threat categories based on guidance of BCP 72 <xref target="RFC3552"/>.
       </t>
-      <section>
+      <section anchor="sec-security-leak">
         <name>Threat: Passive Leak of Validation Data</name>
         <t>
 Because this challenge mechanism is used to bootstrap security between DTN Nodes, the challenge and its response are likely to be transferred in plaintext.
-The ACME data itself is a random token (nonce) and a cryptographic signature, so there is no sensitive data to be leaked within the Node ID Validation bundle exchange.
+The only ACME data present on-the-wire is a random token and a cryptographic signature, so there is no sensitive data to be leaked within the Node ID Validation bundle exchange.
+Because each challenge uses a separate token, there is no value in an on-path attacker seeing the tokens from past challenges and/or responses.
         </t>
         <t>
-Under certain circumstances, when BPSEC key material is available to the BP agent managed by the ACME client, the use of a BCB for the Request Bundle and/or Response Bundle can give additional confidentiality to the bundle metadata.
-This is not expected to be a general use case, as the whole point of ACME is to validate identifiers of untrusted client services.
+It is possible for intermediate BP nodes to encapsulate-and-encrypt Challenge and/or Response Bundles while they traverse untrusted networks, but that is a DTN configuration matter outside of the scope of this document.
         </t>
       </section>
-      <section>
+      <section anchor="sec-security-impersonate">
         <name>Threat: BP Node Impersonation</name>
         <t>
 As described in <xref section="8.1" target="RFC8555"/>, it is possible for an active attacker to alter data on both ACME client channel and the DTN validation channel.
@@ -504,7 +531,10 @@ One way to mitigate single-path on-path attacks is to attempt validation of the 
 It is not a trivial task to guarantee bundle routing though, so more advanced techniques such as onion routing (using bundle-in-bundle encapsulation <xref target="I-D.ietf-dtn-bibect"/>) could be employed.
         </t>
         <t>
-Under certain circumstances, when BPSEC key material is available to the BP agent managed by the ACME client, the use of a BIB signature on the Response Bundle can give additional assurance that the response is coming from a valid BP agent.
+Another mitigation is to delegate bundle integrity sourcing to a trusted routing node near (in the sense of bundle routing topology) the bundle source node.
+This is functionally similar to DKIM signing of <xref target="RFC6376"/>, where a routing node in a source DTN sub-network is trusted to vouch for the origination of a bundle by adding a BIB before fowarding it.
+The bundle receiver then need not trust the source of the bundle, but only trust the security source of the BIB.
+The receiver needs policy configuration to know which security source is permitted to vouch for which bundle sources.
         </t>
       </section>
       <section>
@@ -636,6 +666,15 @@ This specification is based on DTN use cases related to PKIX certificate generat
             <date/>
           </front>
         </reference>
+        <reference anchor="IANA-SMI" target="https://www.iana.org/assignments/smi-numbers/">
+          <front>
+            <title>Structure of Management Information (SMI) Numbers</title>
+            <author>
+              <organization>IANA</organization>
+            </author>
+            <date/>
+          </front>
+        </reference>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.2985.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.3552.xml"/>
@@ -653,9 +692,11 @@ This specification is based on DTN use cases related to PKIX certificate generat
       </references>
       <references>
         <name>Informative References</name>
+        <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6376.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-acme-email-smime.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-dtn-bibect.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-dtn-tcpclv4.xml"/>
+        <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.sipos-dtn-udpcl.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.bsipos-dtn-bpsec-cose.xml"/>
         <reference anchor="github-acme-dtnnodeid" target="https://github.com/BSipos-RKF/acme-dtnnodeid/">
           <front>
