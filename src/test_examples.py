@@ -13,7 +13,7 @@ def b64enc(data):
     ''' Base-64 encode with trailing removal.
     '''
     enc = base64.urlsafe_b64encode(data)
-    enc = enc.strip(b'=')
+    enc = enc.rstrip(b'=')
     return enc.decode('latin1')
 
 
@@ -49,3 +49,4 @@ class TestExample(unittest.TestCase):
         print('Key Auth.:', encode_diagnostic(key_auth))
         key_auth_digest = hash(key_auth.encode('latin1'))
         print('Key Auth. digest:', encode_diagnostic(key_auth_digest, bstr_as='base64url'))
+        print('Key Auth. digest:', encode_diagnostic(key_auth_digest, bstr_as='hex'))

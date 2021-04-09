@@ -683,7 +683,7 @@ acme-record = {
   token-part1,
   ? key-auth-digest ; present for Response Bundles
 }
-token-part1 = (1: bstr)
+token-part1 = (1 =&gt; bstr)
 key-auth-digest = (2 =&gt; bstr)
 </sourcecode>
     </section>
