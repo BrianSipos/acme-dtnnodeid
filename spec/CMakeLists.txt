@@ -25,12 +25,12 @@ set(DRAFT_NAME_HTML "${DRAFT_NAME}.html")
 add_custom_command(
     OUTPUT "${DRAFT_NAME_TXT}"
     DEPENDS "${DRAFT_NAME_XML}"
-    COMMAND ${XML2RFC} --no-network --text -o "${DRAFT_NAME_TXT}" "${DRAFT_NAME_XML}"
+    COMMAND ${XML2RFC} --text -o "${DRAFT_NAME_TXT}" "${DRAFT_NAME_XML}"
 )
 add_custom_command(
     OUTPUT "${DRAFT_NAME_HTML}"
     DEPENDS "${DRAFT_NAME_XML}"
-    COMMAND ${XML2RFC} --no-network --html -o "${DRAFT_NAME_HTML}" "${DRAFT_NAME_XML}"
+    COMMAND ${XML2RFC} --html -o "${DRAFT_NAME_HTML}" "${DRAFT_NAME_XML}"
 )
 
 set(DICTIONARY_TXT "${CMAKE_CURRENT_SOURCE_DIR}/dictionary.txt")
