@@ -61,7 +61,7 @@ This document does not address:
         </t>
         <ul spacing="normal">
           <li>
-Specific BP extension blocks or BPSec security contexts necessary to fulfil the security requirements of this protocol.
+Specific BP extension blocks or BPSec security contexts necessary to fulfill the security requirements of this protocol.
 The exact security context needed, and their parameters, are network-specific.
           </li>
           <li>
@@ -496,13 +496,13 @@ Any of the failures above SHOULD be indicated as subproblems to the ACME client.
       <name>Bundle Integrity Gateway</name>
       <t>
 This section defines a BIB use which closely resembles the function of DKIM email signing <xref target="RFC6376"/>.
-In this mechanism a routing node in a DTN sub-network vouches for the origination of a bundle by adding a BIB before fowarding it.
+In this mechanism a routing node in a DTN sub-network vouches for the origination of a bundle by adding a BIB before forwarding it.
 The bundle receiver then need not trust the source of the bundle, but only trust this security source node.
 The receiver needs policy configuration to know which security source is permitted to vouch for which bundle sources.
       </t>
       <t>
 An integrity gateway SHALL validate the Source Node ID of a bundle, using local-network-specific means, before adding a BIB to the bundle.
-The exact means by which an inegrity gateway validates a bundle's source is network-specific, but could use physical-layer, network-layer or BP-convergence-layer authentication.
+The exact means by which an integrity gateway validates a bundle's source is network-specific, but could use physical-layer, network-layer or BP-convergence-layer authentication.
 The bundle source could also add its own BIB with a local-network-specific security context or local-network-specific key material (i.e. a group key shared within the local network).
       </t>
       <t>
@@ -602,7 +602,7 @@ It is possible for an on-path attacker to replay both Challenge Bundles or Respo
 Even in a properly-configured DTN it is possible that intermediate bundle routers to use multicast forwarding of a unicast-destination bundle.
         </t>
         <t>
-Ultimately, the point of the ACME bundle exchange is to derive a Key Authorization and its cryprotgraphic digest and communicate it back to the ACME server for validation, so the uniqueness of the Key Authorization directly determines the scope of replay validity.
+Ultimately, the point of the ACME bundle exchange is to derive a Key Authorization and its cryptographic digest and communicate it back to the ACME server for validation, so the uniqueness of the Key Authorization directly determines the scope of replay validity.
 The uniqueness of each &lt;token-part1&gt; to each challenge bundle ensures that the Key Authorization is unique to the challenge bundle.
 The uniqueness of each &lt;token-part2&gt; to the ACME challenge ensures that the Key Authorization is unique to that ACME challenge.
         </t>
@@ -623,7 +623,7 @@ The victim BP agent can ignore Challenge Bundles which do not conform to the spe
 The victim BP agent can require all Challenge Bundles to be BIB-signed to ensure authenticity of the challenge.
         </t>
         <t>
-A malicous entity can continually send Response Bundles to a BP agent.
+A malicious entity can continually send Response Bundles to a BP agent.
 The victim BP agent can ignore Response Bundles which do not conform to the specific time interval or Source Node ID or challenge token for an active Node ID validation.
         </t>
         <t>

@@ -7,12 +7,14 @@ BP
 BPbis
 BPSEC
 BPSec
+BPv
 bstr
 bundleSecurity
 CBOR
 CDDL
 cddl
 CRC
+CRLs
 cryptographic
 CSR
 dereference
@@ -47,6 +49,7 @@ PKIX
 plaintext
 POSTs
 pre
+rejectedIdentifier
 RKF
 RTT
 rtt
@@ -58,6 +61,7 @@ subproblem
 subproblems
 TBD
 unicast
+unicode
 uniformResourceIdentifier
 untrusted
 URI
