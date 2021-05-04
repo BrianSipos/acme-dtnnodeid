@@ -1,5 +1,6 @@
 ack
 acknowledgement
+Alexey
 auth
 BCB
 BCP
@@ -13,6 +14,7 @@ bundleSecurity
 CBOR
 CDDL
 cddl
+chal
 CRC
 CRLs
 cryptographic
@@ -38,6 +40,7 @@ keyAgreement
 keyEncipherment
 kp
 LLC
+Melnikov
 MitM
 multicast
 newAuthz

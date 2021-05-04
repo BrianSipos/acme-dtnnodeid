@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?rfc toc="yes"?>
-<rfc xmlns:xi="http://www.w3.org/2001/XInclude" category="exp" docName="draft-ietf-acme-dtnnodeid-02" ipr="trust200902" submissionType="IETF" tocInclude="true" version="3">
+<rfc xmlns:xi="http://www.w3.org/2001/XInclude" category="exp" docName="draft-ietf-acme-dtnnodeid-03" ipr="trust200902" submissionType="IETF" tocInclude="true" version="3">
   <front>
     <title abbrev="ACME DTN Node ID">
 Automated Certificate Management Environment (ACME)
 Delay-Tolerant Networking (DTN) Node ID Validation Extension
     </title>
-    <seriesInfo name="Internet-Draft" value="draft-ietf-acme-dtnnodeid-02"/>
+    <seriesInfo name="Internet-Draft" value="draft-ietf-acme-dtnnodeid-03"/>
     <author fullname="Brian Sipos" initials="B." surname="Sipos">
       <organization abbrev="RKF Engineering">RKF Engineering Solutions, LLC</organization>
       <address>
@@ -50,8 +50,7 @@ Because a single order can contain multiple identifiers of multiple types, there
 Once a certificate is issued for a Node ID, how the ACME client configures the Bundle Protocol (BP) agent with the new certificate is an implementation matter.
       </t>
       <t>
-The scope and behavior of this validation mechanism is similar to that of secured email validation of <xref target="I-D.ietf-acme-email-smime"/>.
-For that reason some token splitting terminology in this document is taken from the email specification.
+The scope and behavior of this validation mechanism is similar to that of secured email validation of <xref target="RFC8823"/>.
       </t>
       <section>
         <name>Scope</name>
@@ -60,6 +59,10 @@ This document describes the ACME messages, BPv7 payloads, and BPSec requirements
 This document does not address:
         </t>
         <ul spacing="normal">
+          <li>
+Mechanisms for communication between ACME client or ACME server and their associated BP agent(s).
+This document only describes exchanges between ACME client--server pairs and between their BP agents.
+          </li>
           <li>
 Specific BP extension blocks or BPSec security contexts necessary to fulfill the security requirements of this protocol.
 The exact security context needed, and their parameters, are network-specific.
@@ -101,11 +104,44 @@ More detailed descriptions of the rationale and capabilities of these networks c
 When a ACME client requests a pre-authorization or an order with a "uri" having one of the DTN Node ID schemes, the ACME server offers a challenge type to validate that Node ID.
 If the ACME client attempts the authorization challenge to validate a Node ID, the ACME server sends an ACME Node ID Validation Challenge Bundle with a destination of the Node ID being validated.
 The BP agent on that node receives the Challenge Bundle, generates an ACME key authorization digest, and sends an ACME Node ID Validation Response Bundle in reply.
+An Integrity Gateway on the client side of the DTN can be used to attest to the source of the Response Bundle.
 Finally, the ACME server receives the Response Bundle and checks that the digest was generated for the associated ACME challenge and from the client account key associated with the original request.
+This workflow is shown in the diagram of <xref target="fig-entity-relations"/> and defined in <xref target="sec-validate-nodeid"/>.
+        </t>
+      <figure anchor="fig-entity-relations">
+        <name>The relationships between Node ID Validation entities</name>
+        <artwork align="center" type="ascii-art">
+     +------------+                             +------------+
+     |    ACME    |&lt;===== HTTPS exchanges =====&gt;|    ACME    |
+     |   Client   |                             |   Server   |
+     +------------+                             +------------+
+           |                                        |    ^
+   Enable or disable                           Send |    |
+ challenge from server                    Challenge |    | Indicate
+           |                  Non-DTN               |    | Response
+--------------------------------------------------------------------
+           V                    DTN                 V    |
+    ++------------++                           ++------------++
+    || Admin Elem.||                           || Admin Elem.||
+    |+------------+|                           |+------------+|
+    |   Client's   |&lt;----- Challenge Bundle ---|   Server's   |
+    |   BP Agent   |                           |   BP Agent   |
+    +--------------+                           +--------------+
+           |                                          ^
+           |     +-------------+                      |
+           |     |  Integrity  |                      |
+           +----&gt;|   Gateway   |---Response Bundle----+
+                 +-------------+
+</artwork>
+      </figure>
+        <t>
+Because the DTN Node ID is used both for routing bundles between BP agents and for multiplexing administrative services within a BP agent, there is no possibility to separate the ACME validation of a Node ID from normal bundle handling for that same Node ID.
+This leaves administrative record types as a way to leave the Node ID unchanged while disambiguating from other service data bundles.
         </t>
         <t>
-Because the DTN Node ID is used both for routing bundles between BP agents and for multiplexing services within a BP agent, there is no possibility to separate the ACME validation of a Node ID from normal bundle handling on that same Node ID.
-This leaves Bundle administrative records as a way to leave the Node ID unchanged while disambiguating from normal service data bundles.
+There is nothing in this protocol which requires network-topological co-location of either the ACME client or ACME server with their associated BP agent.
+While ACME requires a low-enough latency network to perform HTTPS exchanges between ACME client and server, the client's BP agent (the one being validated) could be on the far side of a long-delay or multi-hop DTN network.
+The means by which the ACME client or server communicates with its associated BP agent is an implementation matter.
         </t>
       </section>
       <section>
@@ -193,10 +229,24 @@ The DTN Node ID validation method proves control over a Node ID by requiring the
 The ACME server validates control of the Node ID URI by verifying that received Response Bundles correspond with the BP Node and client account key being validated.
       </t>
       <t>
-Similar to the ACME use case for validating email address ownership <xref target="I-D.ietf-acme-email-smime"/>, this challenge splits the token into two parts.
-Each part reaches the client through a different channel: one via the ACME channel in the challenge object, the other via the DTN channel within the Challenge Bundle.
-The Key Authorization result requires that the ACME client have access to the results of each channel to get both parts of the token.
+Similar to the ACME use case for validating email address ownership <xref target="RFC8823"/>, this challenge splits the token into several parts, each being transported by a different channel, and the Key Authorization result requires combining all parts of the token.
+The token parts are:
       </t>
+      <dl>
+        <dt><tt>token-chal</tt></dt>
+        <dd>
+This token is unique to, and constant for, each ACME authorization.
+It is contained in the Challenge Object of <xref target="sec-nodeid-challenge-request"/> as well as the Challenge Bundle of <xref target="sec-bundle-challenge"/>.
+It ensures that the Key Authorization is bound to the specific ACME challenge (and parent ACME authorization) and also allows the ACME client's BP agent to filter-in only valid Challenge Bundles.
+This token is also accessible to DTN on-path eavesdroppers.
+        </dd>
+        <dt><tt>token-bundle</tt></dt>
+        <dd>
+This token is unique to each Challenge Bundle sent by the ACME server.
+It is contained in the Challenge Bundle of <xref target="sec-bundle-challenge"/> and ensures that the Key Authorization is bound to the ability to receive the Challenge Bundle.
+This token is also accessible to DTN on-path eavesdroppers.
+        </dd>
+      </dl>
       <t>
 The DTN Node ID Challenge SHALL only be allowed for URIs usable as a DTN Node ID, which are currently the schemes "dtn" and "ipn" as defined in <xref target="I-D.ietf-dtn-bpbis"/>.
 When an ACME server supports Node ID validation, the ACME server SHALL define a challenge object in accordance with <xref target="sec-nodeid-challenge-request"/>.
@@ -212,29 +262,31 @@ From either of these entry points an authorization for the "uri" type is indicat
 See <xref section="7.4" target="RFC8555"/> for more details.
         </li>
         <li>
-The ACME client obtains the challenge source Node ID and &lt;token-part2&gt; from the challenge object in accordance with <xref target="sec-nodeid-challenge-request"/>.
+The ACME client obtains the challenge source Node ID and <tt>token-chal</tt> from the challenge object in accordance with <xref target="sec-nodeid-challenge-request"/>.
         </li>
-        <li>
-The ACME client indicates to the BP agent the source Node ID and challenge &lt;token-part2&gt; which is authorized for use and the associated client account key fingerprint.
+        <li anchor="step-client-authorize">
+The ACME client indicates to the administrative element of its BP agent the source Node ID and challenge <tt>token-chal</tt> which is authorized for use and the associated client account key thumbprint.
+The ACME client SHALL wait, if necessary, until the agent is configured before proceeding to the next step.
         </li>
         <li>
 The ACME client POSTs a challenge response to the challenge URL on the ACME server accordance with <xref section="7.5.1" target="RFC8555"/>.
 The payload object is constructed in accordance with <xref target="sec-nodeid-challenge-response"/>.
         </li>
         <li>
-The ACME client waits for indication from the BP agent that a Challenge Bundle has been received, including its &lt;token-part1&gt; payload.
+The administrative element waits for a Challenge Bundle to be received with the authorized ACME parameters, including its <tt>token-bundle</tt> payload, in accordance with <xref target="sec-bundle-challenge"/>.
         </li>
         <li>
-The ACME client concatenates &lt;token-part1&gt; with &lt;token-part2&gt; (as text strings) and computes the Key Authorization in accordance with <xref section="8.1" target="RFC8555"/> using the full token and client account key fingerprint.
+The administrative element concatenates <tt>token-bundle</tt> with <tt>token-chal</tt> (each as base64url-encoded text strings) and computes the Key Authorization in accordance with <xref section="8.1" target="RFC8555"/> using the full token and client account key thumbprint.
         </li>
         <li>
-The ACME client indicates to the BP agent the SHA-256 digest of the Key Authorization result, which results in a Response Bundle being sent back to the ACME server in accordance with <xref target="sec-bundle-response"/>.
+The administrative element computes the SHA-256 digest of the Key Authorization result and generates a Response Bundle to send back to the ACME server in accordance with <xref target="sec-bundle-response"/>.
         </li>
         <li>
 The ACME client waits for the authorization to be finalized on the ACME server in accordance with <xref section="7.5.1" target="RFC8555"/>.
         </li>
         <li>
-Once the challenge is completed (successfully or not), the ACME client indicates to the BP agent that the validation source and &lt;token-part2&gt; is no longer usable.
+Once the challenge is completed (successfully or not), the ACME client indicates to the BP agent that the validation source and <tt>token-chal</tt> is no longer usable.
+If the authorization fails, the ACME client MAY retry the challenge from Step <xref format="counter" target="step-client-authorize"/>.
         </li>
       </ol>
       <t>
@@ -245,24 +297,25 @@ The ACME server verifies the client's control over a Node ID by performing the f
 The ACME server receives a newOrder or newAuthz request including the identifier of type "uri", where the URI value is a Node ID.
         </li>
         <li>
-The ACME server generates an authorization for the Node ID with challenge type "dtn-nodeid-01" and a &lt;token-part2&gt;.
+The ACME server generates an authorization for the Node ID with challenge type "dtn-nodeid-01" in accordance with <xref target="sec-nodeid-challenge-request"/>.
+        </li>
+        <li anchor="step-server-authorize">
+The ACME server receives a POST to the challenge URL indicated from the authorization object.
+The payload is handled in accordance with <xref target="sec-nodeid-challenge-response"/>.
         </li>
         <li>
-The ACME server sends one or more Challenge Bundles in accordance with <xref target="sec-bundle-challenge"/>.
-Each challenge bundle SHALL contain a distinct &lt;token-part1&gt; to be able to correlate with a response bundle.
+The ACME server sends, via the administrative element of its BP agent, one or more Challenge Bundles in accordance with <xref target="sec-bundle-challenge"/>.
+Each challenge bundle SHALL contain a distinct <tt>token-bundle</tt> to be able to correlate with a response bundle.
 Computing an expected Key Authorization digest is not necessary until a response is received.
         </li>
         <li>
-The ACME server waits for Response Bundle(s) for a limited interval of time.
-A default response interval, used when the challenge does not contain an RTT, SHOULD be a configurable parameter of the ACME server.
-If the ACME client indicated an RTT value in the challenge object, the response interval SHOULD be twice the RTT (with limiting logic applied as described below).
-The lower limit on response waiting time is network-specific, but SHOULD NOT be shorter than one second.
-The upper limit on response waiting time is network-specific, but SHOULD NOT be longer than one minute (60 seconds) for a terrestrial-only DTN.
+The ACME server waits for Response Bundle(s) for a limited interval of time (based on the challenge response object).
 Responses are encoded in accordance with <xref target="sec-bundle-response"/>.
         </li>
         <li>
 Once received and decoded, the ACME server checks the contents of each Response Bundle in accordance with <xref target="sec-response-check"/>.
 After all Challenge Bundles have either been responded to or timed-out, the validation procedure is successful only if all responses are successful.
+If validation is not successful, a client may retry the challenge which starts in Step <xref format="counter" target="step-server-authorize"/>.
         </li>
       </ol>
       <t>
@@ -272,7 +325,7 @@ Each response failure MAY be indicated to the ACME client as a validation subpro
       </t>
       <t>
 When responding to a Challenge Bundle, a BP agent SHALL send a single Response Bundle in accordance with <xref target="sec-bundle-response"/>.
-A BP agent SHALL respond to ACME challenges only within the interval of time, only for the Node ID, and only for the validation token indicated by the ACME client.
+A BP agent SHALL respond to ACME challenges only within the interval of time, only for the Node ID, and only for the <tt>token-chal</tt> indicated by the ACME client.
 A BP agent SHALL respond to multiple challenges with the same parameters.
 These correspond with the ACME server validating via multiple routing paths.
       </t>
@@ -293,7 +346,7 @@ The string "dtn-nodeid-01".
           <dd>
 The source Node ID of bundles originating at the ACME server as a text URI.
           </dd>
-          <dt>token-part2 (required, string):</dt>
+          <dt>token-chal (required, string):</dt>
           <dd>
 A random value that uniquely identifies the challenge.
 This value MUST have at least 128 bits of entropy.
@@ -306,12 +359,12 @@ See <xref target="RFC4086"/> for additional information on randomness requiremen
 {
   "type": "dtn-nodeid-01",
   "url": "https://example.com/acme/chall/prV_B7yEyA4",
-  "source": "dtn://example-acme-server/",
-  "token-part2": "tPUZNY4ONIk6LxErRFEjVw"
+  "source": "dtn://acme-server/",
+  "token-chal": "tPUZNY4ONIk6LxErRFEjVw"
 }
 </sourcecode>
         <t>
-The &lt;token-part2&gt; value included in this object is fixed for the entire challenge, and may correspond with multiple separate &lt;token-part1&gt; values when multiple Challenge Bundles are sent for a single validation.
+The <tt>token-chal</tt> value included in this object is fixed for the entire challenge, and may correspond with multiple separate <tt>token-bundle</tt> values when multiple Challenge Bundles are sent for a single validation.
         </t>
       </section>
       <section anchor="sec-nodeid-challenge-response">
@@ -341,6 +394,12 @@ There is no special significance to zero-value RTT, it simply indicates the resp
 A challenge response is not sent until the BP agent has been configured to properly respond to the challenge, so the RTT value is meant to indicate any node-specific path delays expected to encountered from the ACME server.
 Because there is no requirement on the path (or paths) which bundles may traverse between the ACME server and the BP agent, and the ACME server can attempt some path diversity, the RTT value SHOULD be pessimistic.
         </t>
+        <t>
+A default bundle response interval, used when the object does not contain an RTT, SHOULD be a configurable parameter of the ACME server.
+If the ACME client indicated an RTT value in the object, the response interval SHOULD be twice the RTT (with limiting logic applied as described below).
+The lower limit on response waiting time is network-specific, but SHOULD NOT be shorter than one second.
+The upper limit on response waiting time is network-specific, but SHOULD NOT be longer than one minute (60 seconds) for a terrestrial-only DTN.
+        </t>
       </section>
       <section anchor="sec-bundle-challenge">
         <name>ACME Node ID Validation Challenge Bundles</name>
@@ -366,10 +425,6 @@ The ACME server SHOULD NOT perform URI normalization on the Node ID given by the
           <dd>
 The Source Node ID SHALL indicate the Node ID of the ACME server performing the challenge.
           </dd>
-          <dt>Report-to Node ID:</dt>
-          <dd>
-The Report-to Node ID SHALL indicate the Node ID of the ACME server performing the challenge if status reports are requested.
-          </dd>
           <dt>Creation Timestamp and Lifetime:</dt>
           <dd>
 The Creation Timestamp SHALL be set to the time at which the challenge was generated.
@@ -382,12 +437,15 @@ Set to the ACME Node ID Validation type code defined in <xref target="sec-iana-b
           <dt>Administrative Record Content:</dt>
           <dd>
             <t>
-The Challenge Bundle administrative record content SHALL consist of a CBOR map containing one pair:
+The Challenge Bundle administrative record content SHALL consist of a CBOR map containing two pairs:
             </t>
             <ul>
               <li>
-The pair SHALL consist of key 1 with value of ACME challenge token-part1, represented as a CBOR byte string.
-The token-part1 is a random value that uniquely identifies the challenge bundle.
+One pair SHALL consist of key 1 with value of ACME challenge <tt>token-chal</tt>, copied from the challenge object, represented as a CBOR byte string.
+              </li>
+              <li>
+One pair SHALL consist of key 2 with value of ACME challenge <tt>token-bundle</tt>, represented as a CBOR byte string.
+The <tt>token-bundle</tt> is a random value that uniquely identifies the challenge bundle.
 This value MUST have at least 128 bits of entropy.
 See <xref target="RFC4086"/> for additional information on randomness requirements.
               </li>
@@ -399,13 +457,39 @@ This structure is part of the extension CDDL in <xref target="sec-cddl"/>.
 An example full Challenge Bundle is included in <xref target="sec-example-bundle-challenge"/>
         </t>
         <t>
-Challenge Bundles SHALL include a Block Integrity Block (BIB) in accordance with <xref target="sec-bib-gateway"/>.
-An ACME client BP agent SHALL NOT respond to a Challenge Bundle which does not have a BIB-covered payload.
-An ACME client BP agent SHALL NOT respond to a Challenge Bundle with a BIB which has a security source which is untrusted or has signature which fails to verify.
+If the BP agent generating a Challenge Bundle does not have a well-synchronized clock or the agent responding to the challenge is expected to not have a well-synchronized clock, the bundle SHALL include a Bundle Age extension block.
         </t>
         <t>
+Challenge Bundles SHALL include a Block Integrity Block (BIB) in accordance with <xref target="sec-bib-gateway"/> or with a Security Source identical to the bundle Source Node.
 Challenge Bundles SHALL NOT be directly encrypted by Block Confidentiality Block (BCB) or any other method (see <xref target="sec-security-leak"/>).
         </t>
+        <section anchor="sec-challenge-check">
+          <name>Challenge Bundle Checks</name>
+          <t>
+A proper Challenge Bundle meets all of the following criteria:
+          </t>
+          <ul spacing="normal">
+            <li>
+The Challenge Bundle was received within the time interval allowed for the challenge.
+            </li>
+            <li>
+The Challenge Bundle Source Node ID is identical to the Node ID indicated in the ACME challenge object.
+The comparison of Node IDs SHALL use the comparison logic of <xref target="RFC3986"/> and scheme-based normalization of those schemes specified in <xref target="I-D.ietf-dtn-bpbis"/>.
+            </li>
+            <li>
+The Challenge Bundle contains a BIB which covers at least the primary block and payload.
+That BIB has a security source which is trusted and passes security-context-specific validation (i.e. MAC or signature verification).
+            </li>
+            <li>
+The challenge payload contains the <tt>token-chal</tt> as indicated in the ACME challenge object.
+The challenge payload contains a <tt>token-bundle</tt> meeting the definition in <xref target="sec-bundle-challenge"/>.
+            </li>
+          </ul>
+          <t>
+Any of the failures above SHALL cause the challenge bundle to be deleted and otherwise ignored by the BP agent.
+The BP agent MAY send status reports about the deletion if allowed by security policy.
+          </t>
+        </section>
       </section>
       <section anchor="sec-bundle-response">
         <name>ACME Node ID Validation Response Bundles</name>
@@ -442,14 +526,17 @@ Set to the ACME Node ID Validation type code defined in <xref target="sec-iana-b
           <dt>Administrative Record Content:</dt>
           <dd>
             <t>
-The Response Bundle administrative record content SHALL consist of a CBOR map containing two pairs:
+The Response Bundle administrative record content SHALL consist of a CBOR map containing three pairs:
             </t>
             <ul>
               <li>
-One pair SHALL consist of key 1 with value of ACME challenge token-part1, copied from the Request Bundle, represented as a CBOR byte string.
+One pair SHALL consist of key 1 with value of ACME challenge <tt>token-chal</tt>, copied from the Request Bundle, represented as a CBOR byte string.
               </li>
               <li>
-One pair SHALL consist of key 2 with value of the SHA-256 digest <xref target="FIPS180-4"/> of the ACME Key Authorization in accordance with <xref section="8.1" target="RFC8555"/>, represented as a CBOR byte string.
+One pair SHALL consist of key 2 with value of ACME challenge <tt>token-bundle</tt>, copied from the Request Bundle, represented as a CBOR byte string.
+              </li>
+              <li>
+One pair SHALL consist of key 3 with value of the SHA-256 digest <xref target="FIPS180-4"/> of the ACME Key Authorization in accordance with <xref section="8.1" target="RFC8555"/>, represented as a CBOR byte string.
               </li>
             </ul>
           </dd>
@@ -459,37 +546,40 @@ This structure is part of the extension CDDL in <xref target="sec-cddl"/>.
 An example full Response Bundle is included in <xref target="sec-example-bundle-response"/>
         </t>
         <t>
-Response Bundles SHOULD include a BIB in accordance with <xref target="sec-bib-gateway"/>.
-An ACME server BP agent SHOULD NOT accept a Response Bundle which does not have a BIB-covered payload.
-An ACME server BP agent SHALL NOT accept a Response Bundle Bundle with a BIB which has a security source which is untrusted or has signature which fails to verify.
+If the BP agent responding to a Challenge Bundle does not have a well-synchronized clock, it SHALL use any information about last-hop delays and (if present) Bundle Age extension data to infer the age of the Challenge Bundle and lifetime of the Response Bundle.
         </t>
         <t>
+Response Bundles SHALL include a BIB in accordance with <xref target="sec-bib-gateway"/>.
 Response Bundles SHALL NOT be directly encrypted by BCB or any other method (see <xref target="sec-security-leak"/> for explanation).
         </t>
-      </section>
-      <section anchor="sec-response-check">
-        <name>Response Bundle Checks</name>
-        <t>
+        <section anchor="sec-response-check">
+          <name>Response Bundle Checks</name>
+          <t>
 A proper Response Bundle meets all of the following criteria:
-        </t>
-        <ul spacing="normal">
-          <li>
+          </t>
+          <ul spacing="normal">
+            <li>
 The Response Bundle was received within the time interval allowed for the challenge.
-          </li>
-          <li>
+            </li>
+            <li>
 The Response Bundle Source Node ID is identical to the Node ID being validated.
 The comparison of Node IDs SHALL use the comparison logic of <xref target="RFC3986"/> and scheme-based normalization of those schemes specified in <xref target="I-D.ietf-dtn-bpbis"/>.
-          </li>
-          <li>
-The response payload contains the &lt;token-part1&gt; as sent in the Challenge Bundle.
+            </li>
+            <li>
+The Response Bundle contains a BIB which covers at least the primary block and payload.
+That BIB has a security source which is trusted and passes security-context-specific validation.
+            </li>
+            <li>
+The response payload contains the <tt>token-chal</tt> and <tt>token-bundle</tt> as sent in the Challenge Bundle.
 The response payload contains the expected Key Authorization digest computed by the ACME server.
-Because multiple Challenge Bundles can be sent to validate the same Node ID, the &lt;token-part1&gt; in the response is needed to correlate with the expected Key Authorization digest.
-          </li>
-        </ul>
-        <t>
+Because multiple Challenge Bundles can be sent to validate the same Node ID, the <tt>token-bundle</tt> in the response is needed to correlate with the expected Key Authorization digest.
+            </li>
+          </ul>
+          <t>
 Any of the failures above SHALL cause the validation to fail.
 Any of the failures above SHOULD be indicated as subproblems to the ACME client.
-        </t>
+          </t>
+        </section>
       </section>
     </section>
     <section anchor="sec-bib-gateway">
@@ -603,8 +693,8 @@ Even in a properly-configured DTN it is possible that intermediate bundle router
         </t>
         <t>
 Ultimately, the point of the ACME bundle exchange is to derive a Key Authorization and its cryptographic digest and communicate it back to the ACME server for validation, so the uniqueness of the Key Authorization directly determines the scope of replay validity.
-The uniqueness of each &lt;token-part1&gt; to each challenge bundle ensures that the Key Authorization is unique to the challenge bundle.
-The uniqueness of each &lt;token-part2&gt; to the ACME challenge ensures that the Key Authorization is unique to that ACME challenge.
+The uniqueness of each <tt>token-bundle</tt> to each challenge bundle ensures that the Key Authorization is unique to the challenge bundle.
+The uniqueness of each <tt>token-chal</tt> to the ACME challenge ensures that the Key Authorization is unique to that ACME challenge.
         </t>
         <t>
 Having each bundle's primary block and payload block covered by a BIB from a trusted security source (see <xref target="sec-bib-gateway"/>) ensures that a replayed bundle cannot be altered in the blocks used by ACME.
@@ -710,7 +800,10 @@ Within the "Bundle Protocol" registry <xref target="IANA-BP"/>, the following en
     <section anchor="sec-doc-ack">
       <name>Acknowledgments</name>
       <t>
-This specification is based on DTN use cases related to PKIX certificate generation.
+This specification is based on DTN use cases related to PKIX certificate issuance.
+      </t>
+      <t>
+The workflow and terminology of this validation method was originally copied from the work of Alexey Melnikov in <xref target="RFC8823"/>.
       </t>
     </section>
   </middle>
@@ -774,7 +867,7 @@ This specification is based on DTN use cases related to PKIX certificate generat
       <references>
         <name>Informative References</name>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6376.xml"/>
-        <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml-ids/reference.I-D.ietf-acme-email-smime.xml"/>
+        <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8823.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml-ids/reference.I-D.ietf-dtn-bibect.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml-ids/reference.I-D.ietf-dtn-tcpclv4.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml-ids/reference.I-D.sipos-dtn-udpcl.xml"/>
@@ -802,15 +895,17 @@ The CDDL extension of BP <xref target="I-D.ietf-dtn-bpbis"/> for the ACME bundle
 ; All ACME records have the same structure
 $admin-record /= [0xFFFF, acme-record]
 acme-record = {
-  token-part1,
+  token-chal,
+  token-bundle,
   ? key-auth-digest ; present for Response Bundles
 }
-token-part1 = (1 =&gt; bstr)
-key-auth-digest = (2 =&gt; bstr)
+token-chal = (1 =&gt; bstr)
+token-bundle = (2 =&gt; bstr)
+key-auth-digest = (3 =&gt; bstr)
 </sourcecode>
     </section>
     <section>
-      <name>Example Bundles</name>
+      <name>Example Authorization</name>
       <t>
 [NOTE to the RFC Editor: The "0xFFFF" in these examples are replaced by the "ACME Node ID Validation" administrative record type code.]
       </t>
@@ -826,7 +921,7 @@ For this example the ACME client key thumbprint has the base64url encoded value 
 "LPJNul-wow4m6DsqxbninhsWHlwfp0JecwQzYpOLmCQ"
 </sourcecode>
       <t>
-And the ACME-server generated token-part2 (transported to the ACME client via HTTPS) has the base64url-encoded value of:
+And the ACME-server generated <tt>token-chal</tt> has the base64url-encoded value of:
       </t>
       <sourcecode type="cbor">
 "tPUZNY4ONIk6LxErRFEjVw"
@@ -834,7 +929,7 @@ And the ACME-server generated token-part2 (transported to the ACME client via HT
       <section anchor="sec-example-bundle-challenge">
         <name>Challenge Bundle</name>
         <t>
-For the single challenge bundle in this example, the token-part1 (transported as byte string via BP) has the base64url-encoded value of:
+For the single challenge bundle in this example, the <tt>token-bundle</tt> (transported as byte string via BP) has the base64url-encoded value of:
         </t>
         <sourcecode type="cbor">
 "p3yRYFU4KxwQaHQjJ2RdiQ"
@@ -865,7 +960,8 @@ This challenge requires that the ACME client respond within a 60 second time win
     &lt;&lt;[ / type-specific data /
       0xFFFF, / record-type-code /
       { / record-content /
-        1: b64'p3yRYFU4KxwQaHQjJ2RdiQ' / token-part1 /
+        1: b64'tPUZNY4ONIk6LxErRFEjVw' / token-chal /
+        2: b64'p3yRYFU4KxwQaHQjJ2RdiQ' / token-bundle /
       }
     ]&gt;&gt;
   ]
@@ -876,7 +972,7 @@ This challenge requires that the ACME client respond within a 60 second time win
       <section anchor="sec-example-bundle-response">
         <name>Response Bundle</name>
         <t>
-When the tokens are combined with the key fingerprint, the full Key Authorization value (a single string split across lines for readability) is:
+When the tokens are combined with the key thumbprint, the full Key Authorization value (a single string split across lines for readability) is:
       </t>
         <sourcecode type="cbor">
 "p3yRYFU4KxwQaHQjJ2RdiQtPUZNY4ONIk6LxErRFEjVw."
@@ -908,8 +1004,9 @@ This response indicates that there is 30 seconds remaining in the response time 
     &lt;&lt;[ / block-type-specific data /
       0xFFFF, / record-type-code /
       { / record-content /
-        1: b64'p3yRYFU4KxwQaHQjJ2RdiQ', / token-part1 /
-        2: b64'mVIOJEQZie8XpYM6MMVSQUiNPH64URnhM9niJ5XHrew'
+        1: b64'tPUZNY4ONIk6LxErRFEjVw' / token-chal /
+        2: b64'p3yRYFU4KxwQaHQjJ2RdiQ' / token-bundle /
+        3: b64'mVIOJEQZie8XpYM6MMVSQUiNPH64URnhM9niJ5XHrew'
         / key auth. digest /
       }
     ]&gt;&gt;
