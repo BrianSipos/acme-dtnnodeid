@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?rfc toc="yes"?>
-<rfc xmlns:xi="http://www.w3.org/2001/XInclude" category="exp" docName="draft-ietf-acme-dtnnodeid-03" ipr="trust200902" submissionType="IETF" tocInclude="true" version="3">
+<rfc xmlns:xi="http://www.w3.org/2001/XInclude" category="exp" docName="draft-ietf-acme-dtnnodeid-03" ipr="trust200902" submissionType="IETF" tocInclude="true" updates="-ietf-dtn-bpbis" version="3">
   <front>
     <title abbrev="ACME DTN Node ID">
 Automated Certificate Management Environment (ACME)
@@ -51,6 +51,9 @@ Once a certificate is issued for a Node ID, how the ACME client configures the B
       </t>
       <t>
 The scope and behavior of this validation mechanism is similar to that of secured email validation of <xref target="RFC8823"/>.
+      </t>
+      <t>
+This docuemnt also updates BPv7 to explicitly use the IANA administrative record type registry in <xref target="sec-bpv7-admin-type"/>.
       </t>
       <section>
         <name>Scope</name>
@@ -108,9 +111,9 @@ An Integrity Gateway on the client side of the DTN can be used to attest to the 
 Finally, the ACME server receives the Response Bundle and checks that the digest was generated for the associated ACME challenge and from the client account key associated with the original request.
 This workflow is shown in the diagram of <xref target="fig-entity-relations"/> and defined in <xref target="sec-validate-nodeid"/>.
         </t>
-      <figure anchor="fig-entity-relations">
-        <name>The relationships between Node ID Validation entities</name>
-        <artwork align="center" type="ascii-art">
+        <figure anchor="fig-entity-relations">
+          <name>The relationships between Node ID Validation entities</name>
+          <artwork align="center" type="ascii-art">
      +------------+                             +------------+
      |    ACME    |&lt;===== HTTPS exchanges =====&gt;|    ACME    |
      |   Client   |                             |   Server   |
@@ -119,7 +122,7 @@ This workflow is shown in the diagram of <xref target="fig-entity-relations"/> a
    Enable or disable                           Send |    |
  challenge from server                    Challenge |    | Indicate
            |                  Non-DTN               |    | Response
---------------------------------------------------------------------
+~~~~~~~~~~~|~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|~~~~|~~~~~~~~~~
            V                    DTN                 V    |
     ++------------++                           ++------------++
     || Admin Elem.||                           || Admin Elem.||
@@ -133,7 +136,7 @@ This workflow is shown in the diagram of <xref target="fig-entity-relations"/> a
            +----&gt;|   Gateway   |---Response Bundle----+
                  +-------------+
 </artwork>
-      </figure>
+        </figure>
         <t>
 Because the DTN Node ID is used both for routing bundles between BP agents and for multiplexing administrative services within a BP agent, there is no possibility to separate the ACME validation of a Node ID from normal bundle handling for that same Node ID.
 This leaves administrative record types as a way to leave the Node ID unchanged while disambiguating from other service data bundles.
@@ -233,14 +236,18 @@ Similar to the ACME use case for validating email address ownership <xref target
 The token parts are:
       </t>
       <dl>
-        <dt><tt>token-chal</tt></dt>
+        <dt>
+          <tt>token-chal</tt>
+        </dt>
         <dd>
 This token is unique to, and constant for, each ACME authorization.
 It is contained in the Challenge Object of <xref target="sec-nodeid-challenge-request"/> as well as the Challenge Bundle of <xref target="sec-bundle-challenge"/>.
 It ensures that the Key Authorization is bound to the specific ACME challenge (and parent ACME authorization) and also allows the ACME client's BP agent to filter-in only valid Challenge Bundles.
 This token is also accessible to DTN on-path eavesdroppers.
         </dd>
-        <dt><tt>token-bundle</tt></dt>
+        <dt>
+          <tt>token-bundle</tt>
+        </dt>
         <dd>
 This token is unique to each Challenge Bundle sent by the ACME server.
 It is contained in the Challenge Bundle of <xref target="sec-bundle-challenge"/> and ensures that the Key Authorization is bound to the ability to receive the Challenge Bundle.
@@ -637,6 +644,16 @@ Presence of both of the above sets of key usage bits in the CSR, as well as abse
         </t>
       </section>
     </section>
+    <section anchor="sec-bpv7-admin-type">
+      <name>Bundle Protocol Administrative Record Types Registry</name>
+      <t>
+This document updates the requirements in <xref section="6.1" target="I-D.ietf-dtn-bpbis"/> to use an existing IANA registry and updates that sub-registry in <xref target="sec-iana-bp-admin-type"/>.
+      </t>
+      <t>
+Instead of using the explicit list of types in Table 3 of <xref target="I-D.ietf-dtn-bpbis"/>, a BP Agent SHALL interpret administrative record type code values in accordance with the IANA "Administrative Record Types" sub-registry for entries having a "Bundle Protocol Version" of 7.
+Additionally, this document clarifies the zero-value reservation for BPv7 and makes a reservation of high-valued record type codes for "private or experimental use" which applies only to BPv7.
+      </t>
+    </section>
     <section>
       <name>Implementation Status</name>
       <t>
@@ -701,7 +718,7 @@ Having each bundle's primary block and payload block covered by a BIB from a tru
 All together, these properties mean that there is no degraded security caused by replay of either a Challenge Bundle or a Response Bundle even in the case where the primary or payload block is not covered by a BIB.
 The worst that can come of bundle replay is the waste of network resources as described in <xref target="sec-security-dos"/>.
         </t>
-        </section>
+      </section>
       <section anchor="sec-security-dos">
         <name>Threat: Denial of Service</name>
         <t>
@@ -728,7 +745,7 @@ For this reason any ACME server can rate-limit validation activities for individ
 This specification adds to the ACME registry and BP registry for this behavior.
       </t>
       <section anchor="sec-iana-acme-identifier">
-        <name>ACME Identifier Type</name>
+        <name>ACME Identifier Types</name>
         <t>
 Within the "Automated Certificate Management Environment (ACME) Protocol" registry <xref target="IANA-ACME"/>, the following entry has been added to the "ACME Identifier Types" sub-registry.
         </t>
@@ -748,7 +765,7 @@ Within the "Automated Certificate Management Environment (ACME) Protocol" regist
         </table>
       </section>
       <section anchor="sec-iana-acme-method">
-        <name>ACME Validation Method</name>
+        <name>ACME Validation Methods</name>
         <t>
 Within the "Automated Certificate Management Environment (ACME) Protocol" registry <xref target="IANA-ACME"/>, the following entry has been added to the "ACME Validation Methods" sub-registry.
         </t>
@@ -772,10 +789,57 @@ Within the "Automated Certificate Management Environment (ACME) Protocol" regist
         </table>
       </section>
       <section anchor="sec-iana-bp-admin-type">
-        <name>BP Bundle Administrative Record Types</name>
+        <name>Bundle Administrative Record Types</name>
         <t>
-Within the "Bundle Protocol" registry <xref target="IANA-BP"/>, the following entry has been added to the "Bundle Administrative Record Types" sub-registry.
-[NOTE to the RFC Editor: For RFC5050 compatibility this value needs to be no larger than 15, but such compatibility is not needed. BPbis has no upper limit on this code point value.]
+Within the "Bundle Protocol" registry <xref target="IANA-BP"/>, the "Bundle Administrative Record Types" sub-registry has been updated to include a leftmost "Bundle Protocol Version" column.
+The existing sub-registry entries have been updated to have BP versions as in the following table.
+        </t>
+        <table>
+          <thead>
+            <tr>
+              <th>Bundle Protocol Version</th>
+              <th>Value</th>
+              <th>Description</th>
+              <th>Reference</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>6,7</td>
+              <td>0</td>
+              <td>Reserved</td>
+              <td>
+                <xref target="RFC7116"/>
+              </td>
+            </tr>
+            <tr>
+              <td>6,7</td>
+              <td>1</td>
+              <td>Bundle status report</td>
+              <td>
+                <xref target="RFC5050"/>
+                <xref target="I-D.ietf-dtn-bpbis"/>
+              </td>
+            </tr>
+            <tr>
+              <td>6</td>
+              <td>2</td>
+              <td>Custody signal</td>
+              <td>
+                <xref target="RFC5050"/>
+              </td>
+            </tr>
+            <tr>
+              <td>6,7</td>
+              <td>3-15</td>
+              <td>Unassigned</td>
+              <td/>
+            </tr>
+          </tbody>
+        </table>
+        <t>
+Within the "Bundle Protocol" registry <xref target="IANA-BP"/>, the following entries have been added to the "Bundle Administrative Record Types" sub-registry.
+[NOTE to the RFC Editor: For RFC5050 compatibility the TBD value needs to be no larger than 15, but such compatibility is not needed. For BPbis the TBD value nees to be no larger than 65535.]
         </t>
         <table>
           <thead>
@@ -791,6 +855,18 @@ Within the "Bundle Protocol" registry <xref target="IANA-BP"/>, the following en
               <td>7</td>
               <td>TBD</td>
               <td>ACME Node ID Validation</td>
+              <td>This specification</td>
+            </tr>
+            <tr>
+              <td>7</td>
+              <td>16-65535</td>
+              <td>Unassigned</td>
+              <td/>
+            </tr>
+            <tr>
+              <td>7</td>
+              <td>&gt;= 65536</td>
+              <td>Reserved for Private or Experimental Use</td>
               <td>This specification</td>
             </tr>
           </tbody>
@@ -866,7 +942,9 @@ The workflow and terminology of this validation method was originally copied fro
       </references>
       <references>
         <name>Informative References</name>
+        <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.5050.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6376.xml"/>
+        <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7116.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8823.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml-ids/reference.I-D.ietf-dtn-bibect.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml-ids/reference.I-D.ietf-dtn-tcpclv4.xml"/>
