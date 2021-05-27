@@ -53,7 +53,7 @@ Once a certificate is issued for a Node ID, how the ACME client configures the B
 The scope and behavior of this validation mechanism is similar to that of secured email validation of <xref target="RFC8823"/>.
       </t>
       <t>
-This docuemnt also updates BPv7 to explicitly use the IANA administrative record type registry in <xref target="sec-bpv7-admin-type"/>.
+This document also updates BPv7 to explicitly use the IANA administrative record type registry in <xref target="sec-bpv7-admin-type"/>.
       </t>
       <section>
         <name>Scope</name>
@@ -404,8 +404,8 @@ Because there is no requirement on the path (or paths) which bundles may travers
         <t>
 A default bundle response interval, used when the object does not contain an RTT, SHOULD be a configurable parameter of the ACME server.
 If the ACME client indicated an RTT value in the object, the response interval SHOULD be twice the RTT (with limiting logic applied as described below).
-The lower limit on response waiting time is network-specific, but SHOULD NOT be shorter than one second.
-The upper limit on response waiting time is network-specific, but SHOULD NOT be longer than one minute (60 seconds) for a terrestrial-only DTN.
+The lower limit on response interval is network-specific, but SHOULD NOT be shorter than one second.
+The upper limit on response interval is network-specific, but SHOULD NOT be longer than one minute (60 seconds) for a terrestrial-only DTN.
         </t>
       </section>
       <section anchor="sec-bundle-challenge">
@@ -583,8 +583,9 @@ Because multiple Challenge Bundles can be sent to validate the same Node ID, the
             </li>
           </ul>
           <t>
-Any of the failures above SHALL cause the validation to fail.
+Any of the failures above SHALL cause the validation to fail with an ACME error type of "incorrectResponse".
 Any of the failures above SHOULD be indicated as subproblems to the ACME client.
+The lack of a response within the expected response interval, as defined in <xref target="sec-nodeid-challenge-response"/>, SHALL also be treated as a validation failure.
           </t>
         </section>
       </section>
@@ -593,9 +594,9 @@ Any of the failures above SHOULD be indicated as subproblems to the ACME client.
       <name>Bundle Integrity Gateway</name>
       <t>
 This section defines a BIB use which closely resembles the function of DKIM email signing <xref target="RFC6376"/>.
-In this mechanism a routing node in a DTN sub-network vouches for the origination of a bundle by adding a BIB before forwarding it.
+In this mechanism a routing node in a DTN sub-network attests to the origination of a bundle by adding a BIB before forwarding it.
 The bundle receiver then need not trust the source of the bundle, but only trust this security source node.
-The receiver needs policy configuration to know which security source is permitted to vouch for which bundle sources.
+The receiver needs policy configuration to know which security sources are permitted to attest for which bundle sources.
       </t>
       <t>
 An integrity gateway SHALL validate the Source Node ID of a bundle, using local-network-specific means, before adding a BIB to the bundle.
@@ -654,10 +655,10 @@ Instead of using the explicit list of types in Table 3 of <xref target="I-D.ietf
 Additionally, this document clarifies the zero-value reservation for BPv7 and makes a reservation of high-valued record type codes for "private or experimental use" which applies only to BPv7.
       </t>
     </section>
-    <section>
+    <section removeInRFC="true">
       <name>Implementation Status</name>
       <t>
-[NOTE to the RFC Editor: please remove this section before publication, as well as the reference to <xref target="RFC7942"/> and <xref target="github-acme-dtnnodeid"/>.]
+[NOTE to the RFC Editor: please remove this section before publication, as well as the reference to <xref target="RFC7942"/> and <xref target="github-dtn-demo-agent"/> and <xref target="github-dtn-wireshark"/>.]
       </t>
       <t>
 This section records the status of known implementations of the protocol defined by this specification at the time of posting of this Internet-Draft, and is based on a proposal described in <xref target="RFC7942"/>.
@@ -668,8 +669,10 @@ This is not intended as, and must not be construed to be, a catalog of available
 Readers are advised to note that other implementations can exist.
       </t>
       <t>
-An example implementation of the this draft of ACME has been created as a GitHub project <xref target="github-acme-dtnnodeid"/> and is intended to use as a proof-of-concept and as a possible source of interoperability testing.
-This example implementation only constructs encoded bundles and does not attempt to provide a full BP Agent interface.
+An example implementation of the this draft of ACME Node ID Validation has been created as a GitHub project <xref target="github-dtn-demo-agent"/> and is intended to use as a proof-of-concept and as a possible source of interoperability testing.
+      </t>
+      <t>
+A Wireshark dissector for of the this draft of ACME Node ID Validation has been created as a GitHub project <xref target="github-dtn-wireshark"/> and is intended to be used to inspect and troubleshoot implementations.
       </t>
     </section>
     <section anchor="sec-security">
@@ -839,7 +842,7 @@ The existing sub-registry entries have been updated to have BP versions as in th
         </table>
         <t>
 Within the "Bundle Protocol" registry <xref target="IANA-BP"/>, the following entries have been added to the "Bundle Administrative Record Types" sub-registry.
-[NOTE to the RFC Editor: For RFC5050 compatibility the TBD value needs to be no larger than 15, but such compatibility is not needed. For BPbis the TBD value nees to be no larger than 65535.]
+[NOTE to the RFC Editor: For RFC5050 compatibility the TBD value needs to be no larger than 15, but such compatibility is not needed. For BPbis the TBD value needs to be no larger than 65535.]
         </t>
         <table>
           <thead>
@@ -950,9 +953,18 @@ The workflow and terminology of this validation method was originally copied fro
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml-ids/reference.I-D.ietf-dtn-tcpclv4.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml-ids/reference.I-D.sipos-dtn-udpcl.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml-ids/reference.I-D.bsipos-dtn-bpsec-cose.xml"/>
-        <reference anchor="github-acme-dtnnodeid" target="https://github.com/BSipos-RKF/acme-dtnnodeid/">
+        <reference anchor="github-dtn-demo-agent" target="https://github.com/BSipos-RKF/dtn-demo-agent/">
           <front>
-            <title>ACME Node ID Example Implementation</title>
+            <title>Python implementation of basic BPv7-related protocols</title>
+            <author fullname="Brian Sipos" initials="B." surname="Sipos">
+              <organization abbrev="RKF Engineering">RKF Engineering Solutions, LLC</organization>
+            </author>
+            <date/>
+          </front>
+        </reference>
+        <reference anchor="github-dtn-wireshark" target="https://github.com/BSipos-RKF/dtn-wireshark/">
+          <front>
+            <title>Wireshark Dissectors for BPv7-related Protocols</title>
             <author fullname="Brian Sipos" initials="B." surname="Sipos">
               <organization abbrev="RKF Engineering">RKF Engineering Solutions, LLC</organization>
             </author>
