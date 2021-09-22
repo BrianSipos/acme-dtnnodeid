@@ -10,6 +10,7 @@ BPSEC
 BPSec
 BPv
 bstr
+bundleEID
 bundleSecurity
 CBOR
 CDDL
@@ -19,6 +20,7 @@ CRC
 CRLs
 cryptographic
 CSR
+demux
 dereference
 digitalSignature
 disambiguating
@@ -33,6 +35,7 @@ FIPS
 HTTPS
 IANA
 IETF
+incorrectResponse
 ip
 ipn
 JSON
@@ -47,6 +50,7 @@ newAuthz
 newOrder
 nodeid
 nonRepudiation
+otherName
 PKI
 PKIX
 plaintext
@@ -71,5 +75,6 @@ URI
 uri
 URIs
 url
+Wireshark
 xFFFF
 XPath
