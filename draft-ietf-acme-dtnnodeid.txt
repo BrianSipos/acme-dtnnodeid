@@ -4,9 +4,9 @@
 
 Automated Certificate Management Environment                    B. Sipos
 Internet-Draft                                           RKF Engineering
-Updates: -ietf-dtn-bpbis (if approved)                       7 June 2021
+Updates: -ietf-dtn-bpbis (if approved)                 23 September 2021
 Intended status: Experimental                                           
-Expires: 9 December 2021
+Expires: 27 March 2022
 
 
    Automated Certificate Management Environment (ACME) Delay-Tolerant
@@ -19,8 +19,8 @@ Abstract
    Management Environment (ACME) protocol which allows an ACME server to
    validate the Delay-Tolerant Networking (DTN) Node ID for an ACME
    client.  The DTN Node ID is encoded as a certificate Subject
-   Alternative Name (SAN) of type Uniform Resource Identifier (URI) and
-   ACME Identifier type "uri".
+   Alternative Name (SAN) of type otherName with a name form of
+   bundleEID and as an ACME Identifier type "bundleEID".
 
 Status of This Memo
 
@@ -37,7 +37,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 9 December 2021.
+   This Internet-Draft will expire on 27 March 2022.
 
 Copyright Notice
 
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-Sipos                    Expires 9 December 2021                [Page 1]
+Sipos                     Expires 27 March 2022                 [Page 1]
 
-Internet-Draft              ACME DTN Node ID                   June 2021
+Internet-Draft              ACME DTN Node ID              September 2021
 
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -71,50 +71,52 @@ Table of Contents
 
    1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   3
      1.1.  Scope . . . . . . . . . . . . . . . . . . . . . . . . . .   3
-     1.2.  Authorization Strategy  . . . . . . . . . . . . . . . . .   4
+     1.2.  Authorization Strategy  . . . . . . . . . . . . . . . . .   5
      1.3.  Use of CDDL . . . . . . . . . . . . . . . . . . . . . . .   6
-     1.4.  Terminology . . . . . . . . . . . . . . . . . . . . . . .   6
-   2.  URI ACME Identifier . . . . . . . . . . . . . . . . . . . . .   7
-   3.  DTN Node ID Validation  . . . . . . . . . . . . . . . . . . .   7
-     3.1.  DTN Node ID Challenge Request Object  . . . . . . . . . .  10
-     3.2.  DTN Node ID Challenge Response Object . . . . . . . . . .  11
-     3.3.  ACME Node ID Validation Challenge Bundles . . . . . . . .  12
-       3.3.1.  Challenge Bundle Checks . . . . . . . . . . . . . . .  13
-     3.4.  ACME Node ID Validation Response Bundles  . . . . . . . .  13
-       3.4.1.  Response Bundle Checks  . . . . . . . . . . . . . . .  15
-   4.  Bundle Integrity Gateway  . . . . . . . . . . . . . . . . . .  15
-   5.  Certificate Request Profile . . . . . . . . . . . . . . . . .  16
-     5.1.  Multiple Identity Claims  . . . . . . . . . . . . . . . .  16
+     1.4.  Terminology . . . . . . . . . . . . . . . . . . . . . . .   7
+   2.  Bundle Endpoint ID ACME Identifier  . . . . . . . . . . . . .   7
+   3.  DTN Node ID Validation  . . . . . . . . . . . . . . . . . . .   8
+     3.1.  DTN Node ID Challenge Request Object  . . . . . . . . . .  11
+     3.2.  DTN Node ID Challenge Response Object . . . . . . . . . .  12
+     3.3.  ACME Node ID Validation Challenge Bundles . . . . . . . .  13
+       3.3.1.  Challenge Bundle Checks . . . . . . . . . . . . . . .  14
+     3.4.  ACME Node ID Validation Response Bundles  . . . . . . . .  14
+       3.4.1.  Response Bundle Checks  . . . . . . . . . . . . . . .  16
+   4.  Bundle Integrity Gateway  . . . . . . . . . . . . . . . . . .  16
+   5.  Certificate Request Profile . . . . . . . . . . . . . . . . .  17
+     5.1.  Multiple Identity Claims  . . . . . . . . . . . . . . . .  17
      5.2.  Generating Encryption-only or Signing-only Bundle Security
-           Certificates  . . . . . . . . . . . . . . . . . . . . . .  16
-   6.  Bundle Protocol Administrative Record Types Registry  . . . .  17
-   7.  Implementation Status . . . . . . . . . . . . . . . . . . . .  17
-   8.  Security Considerations . . . . . . . . . . . . . . . . . . .  18
-     8.1.  Threat: Passive Leak of Validation Data . . . . . . . . .  18
-     8.2.  Threat: BP Node Impersonation . . . . . . . . . . . . . .  18
-     8.3.  Threat: Bundle Replay . . . . . . . . . . . . . . . . . .  19
-     8.4.  Threat: Denial of Service . . . . . . . . . . . . . . . .  19
-   9.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  20
-     9.1.  ACME Identifier Types . . . . . . . . . . . . . . . . . .  20
-     9.2.  ACME Validation Methods . . . . . . . . . . . . . . . . .  20
-     9.3.  Bundle Administrative Record Types  . . . . . . . . . . .  20
-   10. Acknowledgments . . . . . . . . . . . . . . . . . . . . . . .  21
-   11. References  . . . . . . . . . . . . . . . . . . . . . . . . .  22
-     11.1.  Normative References . . . . . . . . . . . . . . . . . .  22
-     11.2.  Informative References . . . . . . . . . . . . . . . . .  23
-   Appendix A.  Administrative Record Types CDDL . . . . . . . . . .  25
-   Appendix B.  Example Authorization  . . . . . . . . . . . . . . .  25
-     B.1.  Challenge Bundle  . . . . . . . . . . . . . . . . . . . .  26
-     B.2.  Response Bundle . . . . . . . . . . . . . . . . . . . . .  26
+           Certificates  . . . . . . . . . . . . . . . . . . . . . .  17
+   6.  Bundle Protocol Administrative Record Types Registry  . . . .  18
+   7.  Implementation Status . . . . . . . . . . . . . . . . . . . .  18
+   8.  Security Considerations . . . . . . . . . . . . . . . . . . .  19
+     8.1.  Threat: Passive Leak of Validation Data . . . . . . . . .  19
+     8.2.  Threat: BP Node Impersonation . . . . . . . . . . . . . .  19
+     8.3.  Threat: Bundle Replay . . . . . . . . . . . . . . . . . .  20
+     8.4.  Threat: Denial of Service . . . . . . . . . . . . . . . .  20
+     8.5.  Inherited Security Considerations . . . . . . . . . . . .  21
+     8.6.  Out-of-Scope BP Agent Communication . . . . . . . . . . .  21
+   9.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  21
+     9.1.  ACME Identifier Types . . . . . . . . . . . . . . . . . .  22
+     9.2.  ACME Validation Methods . . . . . . . . . . . . . . . . .  22
+     9.3.  Bundle Administrative Record Types  . . . . . . . . . . .  22
+   10. Acknowledgments . . . . . . . . . . . . . . . . . . . . . . .  23
+   11. References  . . . . . . . . . . . . . . . . . . . . . . . . .  24
+     11.1.  Normative References . . . . . . . . . . . . . . . . . .  24
+     11.2.  Informative References . . . . . . . . . . . . . . . . .  25
+   Appendix A.  Administrative Record Types CDDL . . . . . . . . . .  27
+   Appendix B.  Example Authorization  . . . . . . . . . . . . . . .  27
 
 
 
-Sipos                    Expires 9 December 2021                [Page 2]
+Sipos                     Expires 27 March 2022                 [Page 2]
 
-Internet-Draft              ACME DTN Node ID                   June 2021
+Internet-Draft              ACME DTN Node ID              September 2021
 
 
-   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .  27
+     B.1.  Challenge Bundle  . . . . . . . . . . . . . . . . . . . .  28
+     B.2.  Response Bundle . . . . . . . . . . . . . . . . . . . . .  28
+   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .  29
 
 1.  Introduction
 
@@ -125,23 +127,29 @@ Internet-Draft              ACME DTN Node ID                   June 2021
    the subject claims supported by the PKIX profile [RFC5280].
 
    In the case of this specification, the claim being validated is a
-   Subject Alternative Name (SAN) of type Uniform Resource Identifier
-   (URI) used to represent the Node ID of a Delay-Tolerant Networking
-   (DTN) Node.  A DTN Node ID is a URI with a specific set of allowed
-   schemes, and determines how bundles are routed within a DTN.
-   Currently the schemes "dtn" and "ipn" as defined in
-   [I-D.ietf-dtn-bpbis] are valid for a Node ID.
+   Subject Alternative Name (SAN) of type otherName with a name form of
+   bundleEID, which used to represent an Endpoint ID (EID) for a Delay-
+   Tolerant Networking (DTN) bundle.  Currently the URI schemes "dtn"
+   and "ipn" as defined in [I-D.ietf-dtn-bpbis] are valid for an
+   Endpoint ID.  A DTN Node ID is an Endpoint ID with scheme-specific
+   restrictions to identify it as such; currently the "dtn" scheme uses
+   an empty demux part and the "ipn" scheme uses service number zero.
+
+   Because the SAN URI claim is new to ACME, a new ACME Identifier type
+   "bundleEID" is needed to manage this claim within ACME messaging.  A
+   "bundleEID" claim can be part of a pre-authorization or as one of the
+   authorizations of an order containing any number of claims.
 
    Once an ACME server validates a Node ID, either as a pre-
-   authorization of the "uri" or as one of the authorizations of an
-   order containing a "uri", the client can finalize the order using an
-   associated certificate signing request (CSR).  Because a single order
-   can contain multiple identifiers of multiple types, there can be
-   operational issues for a client attempting to, and possibly failing
-   to, validate those multiple identifiers as described in Section 5.1.
-   Once a certificate is issued for a Node ID, how the ACME client
-   configures the Bundle Protocol (BP) agent with the new certificate is
-   an implementation matter.
+   authorization of the "bundleEID" or as one of the authorizations of
+   an order containing a "bundleEID", the client can finalize the order
+   using an associated certificate signing request (CSR).  Because a
+   single order can contain multiple identifiers of multiple types,
+   there can be operational issues for a client attempting to, and
+   possibly failing to, validate those multiple identifiers as described
+   in Section 5.1.  Once a certificate is issued for a Node ID, how the
+   ACME client configures the Bundle Protocol (BP) agent with the new
+   certificate is an implementation matter.
 
    The scope and behavior of this validation mechanism is similar to
    that of secured email validation of [RFC8823].
@@ -155,20 +163,17 @@ Internet-Draft              ACME DTN Node ID                   June 2021
    requirements needed to validate Node ID ownership.  This document
    does not address:
 
+
+
+Sipos                     Expires 27 March 2022                 [Page 3]
+
+Internet-Draft              ACME DTN Node ID              September 2021
+
+
    *  Mechanisms for communication between ACME client or ACME server
       and their associated BP agent(s).  This document only describes
       exchanges between ACME client--server pairs and between their BP
       agents.
-
-
-
-
-
-
-Sipos                    Expires 9 December 2021                [Page 3]
-
-Internet-Draft              ACME DTN Node ID                   June 2021
-
 
    *  Specific BP extension blocks or BPSec security contexts necessary
       to fulfill the security requirements of this protocol.  The exact
@@ -202,6 +207,25 @@ Internet-Draft              ACME DTN Node ID                   June 2021
       certificate requests.  This specification is focused only on
       single-use DTN-specific PKIX profiles.
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Sipos                     Expires 27 March 2022                 [Page 4]
+
+Internet-Draft              ACME DTN Node ID              September 2021
+
+
 1.2.  Authorization Strategy
 
    The basic unit of data exchange in a DTN is a Bundle
@@ -215,52 +239,73 @@ Internet-Draft              ACME DTN Node ID                   June 2021
    descriptions of the rationale and capabilities of these networks can
    be found in "Delay-Tolerant Network Architecture" [RFC4838].
 
-   When a ACME client requests a pre-authorization or an order with a
-   "uri" having one of the DTN Node ID schemes, the ACME server offers a
-   challenge type to validate that Node ID.  If the ACME client attempts
+   When an ACME client requests a pre-authorization or an order with a
+   "bundleEID" identifier type having a value consistent with a Node ID
+   (see Section 4.2.5 of [I-D.ietf-dtn-bpbis]), the ACME server offers a
+   "dtn-nodeid-01" challenge type to validate that Node ID.  If the ACME
+   client attempts the authorization challenge to validate a Node ID,
+   the ACME server sends an ACME Node ID Validation Challenge Bundle
+   with a destination of the Node ID being validated.  The BP agent on
+   that node receives the Challenge Bundle, generates an ACME key
+   authorization digest, and sends an ACME Node ID Validation Response
+   Bundle in reply.  An Integrity Gateway on the client side of the DTN
+   can be used to attest to the source of the Response Bundle.  Finally,
+   the ACME server receives the Response Bundle and checks that the
+   digest was generated for the associated ACME challenge and from the
+   client account key associated with the original request.  This
+   workflow is shown in the diagram of Figure 1 and defined in
+   Section 3.
 
 
 
-Sipos                    Expires 9 December 2021                [Page 4]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Sipos                     Expires 27 March 2022                 [Page 5]
 
-Internet-Draft              ACME DTN Node ID                   June 2021
+Internet-Draft              ACME DTN Node ID              September 2021
 
-
-   the authorization challenge to validate a Node ID, the ACME server
-   sends an ACME Node ID Validation Challenge Bundle with a destination
-   of the Node ID being validated.  The BP agent on that node receives
-   the Challenge Bundle, generates an ACME key authorization digest, and
-   sends an ACME Node ID Validation Response Bundle in reply.  An
-   Integrity Gateway on the client side of the DTN can be used to attest
-   to the source of the Response Bundle.  Finally, the ACME server
-   receives the Response Bundle and checks that the digest was generated
-   for the associated ACME challenge and from the client account key
-   associated with the original request.  This workflow is shown in the
-   diagram of Figure 1 and defined in Section 3.
 
         +------------+                             +------------+
         |    ACME    |<===== HTTPS exchanges =====>|    ACME    |
         |   Client   |                             |   Server   |
         +------------+                             +------------+
-              |                                        |    ^
-      Enable or disable                           Send |    |
-    challenge from server                    Challenge |    | Indicate
-              |                  Non-DTN               |    | Response
-   ~~~~~~~~~~~|~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|~~~~|~~~~~~~~~~
-              V                    DTN                 V    |
+              |                                       |   ^
+   (1) Enable or (6) disable                 (2) Send |   |
+     validation from server                 Challenge |   |(5) Indicate
+              |                  Non-DTN              |   |   Response
+   ~~~~~~~~~~~|~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|~~~|~~~~~~~~~~~~
+              V                    DTN                V   |
        ++------------++                           ++------------++
        || Admin Elem.||                           || Admin Elem.||
-       |+------------+|                           |+------------+|
-       |   Client's   |<----- Challenge Bundle ---|   Server's   |
+       |+------------+|           (3) Challenge   |+------------+|
+       |   Client's   |<------------- Bundle -----|   Server's   |
        |   BP Agent   |                           |   BP Agent   |
        +--------------+                           +--------------+
               |                                          ^
               |     +-------------+                      |
-              |     |  Integrity  |                      |
-              +---->|   Gateway   |---Response Bundle----+
+              |     |  Integrity  |   (4) Response       |
+              +---->|   Gateway   |------ Bundle --------+
                     +-------------+
 
-      Figure 1: The relationships between Node ID Validation entities
+      Figure 1: The relationships and flows between Node ID Validation
+                                  entities
 
    Because the DTN Node ID is used both for routing bundles between BP
    agents and for multiplexing administrative services within a BP
@@ -274,14 +319,6 @@ Internet-Draft              ACME DTN Node ID                   June 2021
    associated BP agent.  While ACME requires a low-enough latency
    network to perform HTTPS exchanges between ACME client and server,
    the client's BP agent (the one being validated) could be on the far
-
-
-
-Sipos                    Expires 9 December 2021                [Page 5]
-
-Internet-Draft              ACME DTN Node ID                   June 2021
-
-
    side of a long-delay or multi-hop DTN network.  The means by which
    the ACME client or server communicates with its associated BP agent
    is an implementation matter.
@@ -292,6 +329,14 @@ Internet-Draft              ACME DTN Node ID                   June 2021
    Definition Language (CDDL) of [RFC8610].  The entire CDDL structure
    can be extracted from the XML version of this document using the
    XPath expression:
+
+
+
+
+Sipos                     Expires 27 March 2022                 [Page 6]
+
+Internet-Draft              ACME DTN Node ID              September 2021
+
 
    '//sourcecode[@type="cddl"]'
 
@@ -320,63 +365,58 @@ Internet-Draft              ACME DTN Node ID                   June 2021
       ACME client to authorize a challenge type "dtn-nodeid-01".
 
    Challenge Bundle:  This is a shortened form of the full "ACME Node ID
-      Validation Challenge Bundle".  It is a Bundle created by the ACME
-      server to challenge a Node ID claim.
+      Validation Challenge Bundle".  It is a Bundle created by the BP
+      agent managed by the ACME server to challenge a Node ID claim.
 
    Response Bundle:  This is a shortened form of the full "ACME Node ID
       Validation Response Bundle".  It is a Bundle created by the BP
       agent managed by the ACME client to validate a Node ID claim.
 
+2.  Bundle Endpoint ID ACME Identifier
+
+   This specification is the first to make use of an Bundle Endpoint ID
+   to identify a claim for a certificate request in ACME.  In this
+   document, the only purpose for which an Bundle Endpoint ID ACME
+   identifier is validated is as a DTN Node ID (see Section 3), but
+   other specifications can define challenge types for other Endpoint ID
+   uses.
+
+   Identifiers of type "bundleEID" in certificate requests MUST appear
+   in an extensionRequest attribute [RFC2985] containing a
+   subjectAltName extension of type otherName having an other name form
+   of bundleEID consistent with the requirements of Section 4.4.2.1 of
+   [I-D.ietf-dtn-tcpclv4].  Because the bundleEID is encoded as an
 
 
 
-
-
-
-Sipos                    Expires 9 December 2021                [Page 6]
+Sipos                     Expires 27 March 2022                 [Page 7]
 
-Internet-Draft              ACME DTN Node ID                   June 2021
+Internet-Draft              ACME DTN Node ID              September 2021
 
 
-2.  URI ACME Identifier
-
-   This specification is the first to make use of a URI to identify a
-   service for a certificate request in ACME.  The URI-type identifier
-   is general purpose, and validating ownership of a URI requires a
-   specific purpose related to its "scheme" component.  In this
-   document, the only purpose for which a URI ACME identifier is
-   validated is as a DTN Node ID (see Section 3), but other
-   specifications can define challenge types for other URI uses.
-
-   Identifiers of type "uri" in certificate requests MUST appear in an
-   extensionRequest attribute [RFC2985] containing a subjectAltName
-   extension of type uniformResourceIdentifier having a value consistent
-   with the requirements of [RFC3986].  Because the
-   uniformResourceIdentifier is encoded as an IA5String it SHALL be
-   treated as being in the percent-encoded form of Section 2.1 of
-   [RFC3986].  Any "uri" identifier which fails to properly percent-
-   decode SHALL be rejected with an ACME error type of "malformed".
-
-   Identifiers of type "uri" present in ACME messages are unicode text
-   strings and SHALL NOT be percent encoded.
+   IA5String it SHALL be treated as being in the percent-encoded form of
+   Section 2.1 of [RFC3986].  Any "bundleEID" identifier which fails to
+   properly percent-decode SHALL be rejected with an ACME error type of
+   "malformed".
 
    The ACME server SHALL decode and normalize (based on scheme-specific
-   syntax) all received identifiers of type "uri".  Any "uri" identifier
-   request which uses a scheme not handled by the ACME server or for
-   which the URI does not match the scheme-specific syntax SHALL be
-   rejected with an ACME error type of "rejectedIdentifier".
+   syntax) all received identifiers of type "bundleEID".  Any
+   "bundleEID" identifier request which uses a scheme not handled by the
+   ACME server or for which the URI does not match the scheme-specific
+   syntax SHALL be rejected with an ACME error type of
+   "rejectedIdentifier".
 
    When an ACME server needs to request proof that a client controls a
-   URI, it SHALL create an authorization with the identifier type "uri".
-   The ACME server SHALL NOT attempt to dereference the URI value on its
-   own.  It is the responsibility of a validation method to ensure the
-   URI ownership via scheme-specific means authorized by the ACME
-   client.
+   URI, it SHALL create an authorization with the identifier type
+   "bundleEID".  The ACME server SHALL NOT attempt to dereference the
+   Endpoint ID value on its own.  It is the responsibility of a
+   validation method to ensure the URI ownership via scheme-specific
+   means authorized by the ACME client.
 
    An identifier for the Node ID of "dtn://example/" would be formatted
    as:
 
-   {"type": "uri", "value": "dtn://example/"}
+   {"type": "bundleEID", "value": "dtn://example/"}
 
 3.  DTN Node ID Validation
 
@@ -387,32 +427,46 @@ Internet-Draft              ACME DTN Node ID                   June 2021
    received Response Bundles correspond with the BP Node and client
    account key being validated.
 
-
-
-Sipos                    Expires 9 December 2021                [Page 7]
-
-Internet-Draft              ACME DTN Node ID                   June 2021
-
-
    Similar to the ACME use case for validating email address ownership
    [RFC8823], this challenge splits the token into several parts, each
    being transported by a different channel, and the Key Authorization
    result requires combining all parts of the token.  The token parts
    are:
 
-   "token-chal"  This token is unique to, and constant for, each ACME
-      authorization.  It is contained in the Challenge Object of
-      Section 3.1 as well as the Challenge Bundle of Section 3.3.  It
-      ensures that the Key Authorization is bound to the specific ACME
-      challenge (and parent ACME authorization) and also allows the ACME
-      client's BP agent to filter-in only valid Challenge Bundles.  This
-      token is also accessible to DTN on-path eavesdroppers.
+   token-chal  This token is unique to, and constant for, each ACME
 
-   "token-bundle"  This token is unique to each Challenge Bundle sent by
+
+
+
+
+
+
+
+
+
+
+Sipos                     Expires 27 March 2022                 [Page 8]
+
+Internet-Draft              ACME DTN Node ID              September 2021
+
+
+      authorization.  It is contained in the Challenge Object of
+      Section 3.1 as well as the Challenge Bundle of Section 3.3 and
+      Response Bundle of Section 3.4.  Each authorization can consist of
+      multiple Challenge Bundles (e.g. taking different routes), but
+      they all share the same token-chal value.  This ensures that the
+      Key Authorization is bound to the specific ACME challenge (and
+      parent ACME authorization) and also allows the ACME client's BP
+      agent to filter-in only valid Challenge Bundles.  This token is
+      also accessible to DTN on-path eavesdroppers.
+
+   token-bundle  This token is unique to each Challenge Bundle sent by
       the ACME server.  It is contained in the Challenge Bundle of
-      Section 3.3 and ensures that the Key Authorization is bound to the
-      ability to receive the Challenge Bundle.  This token is also
-      accessible to DTN on-path eavesdroppers.
+      Section 3.3 and Response Bundle of Section 3.4.  This ensures that
+      the Key Authorization is bound to the ability to receive the
+      Challenge Bundle and not just have access to the ACME Challenge
+      Object.  This token is also accessible to DTN on-path
+      eavesdroppers.
 
    The DTN Node ID Challenge SHALL only be allowed for URIs usable as a
    DTN Node ID, which are currently the schemes "dtn" and "ipn" as
@@ -425,16 +479,16 @@ Internet-Draft              ACME DTN Node ID                   June 2021
    following steps:
 
    1.  The ACME client POSTs a newOrder or newAuthz request including
-       the identifier of type "uri" for the desired Node ID.  From
-       either of these entry points an authorization for the "uri" type
-       is indicated by the ACME server.  See Section 7.4 of [RFC8555]
-       for more details.
+       the identifier of type "bundleEID" for the desired Node ID.  From
+       either of these entry points an authorization for the "bundleEID"
+       type is indicated by the ACME server.  See Section 7.4 of
+       [RFC8555] for more details.
 
-   2.  The ACME client obtains the challenge source Node ID and "token-
-       chal" from the challenge object in accordance with Section 3.1.
+   2.  The ACME client obtains the challenge source Node ID and token-
+       chal from the challenge object in accordance with Section 3.1.
 
    3.  The ACME client indicates to the administrative element of its BP
-       agent the source Node ID and challenge "token-chal" which is
+       agent the source Node ID and challenge token-chal which is
        authorized for use and the associated client account key
        thumbprint.  The ACME client SHALL wait, if necessary, until the
        agent is configured before proceeding to the next step.
@@ -445,19 +499,21 @@ Internet-Draft              ACME DTN Node ID                   June 2021
 
 
 
-Sipos                    Expires 9 December 2021                [Page 8]
+
+
+Sipos                     Expires 27 March 2022                 [Page 9]
 
-Internet-Draft              ACME DTN Node ID                   June 2021
+Internet-Draft              ACME DTN Node ID              September 2021
 
 
    5.  The administrative element waits for a Challenge Bundle to be
        received with the authorized ACME parameters, including its
-       "token-bundle" payload, in accordance with Section 3.3.
+       token-bundle payload, in accordance with Section 3.3.
 
-   6.  The administrative element concatenates "token-bundle" with
-       "token-chal" (each as base64url-encoded text strings) and
-       computes the Key Authorization in accordance with Section 8.1 of
-       [RFC8555] using the full token and client account key thumbprint.
+   6.  The administrative element concatenates token-bundle with token-
+       chal (each as base64url-encoded text strings) and computes the
+       Key Authorization in accordance with Section 8.1 of [RFC8555]
+       using the full token and client account key thumbprint.
 
    7.  The administrative element computes the SHA-256 digest of the Key
        Authorization result and generates a Response Bundle to send back
@@ -468,14 +524,15 @@ Internet-Draft              ACME DTN Node ID                   June 2021
 
    9.  Once the challenge is completed (successfully or not), the ACME
        client indicates to the BP agent that the validation source and
-       "token-chal" is no longer usable.  If the authorization fails,
-       the ACME client MAY retry the challenge from Step 3.
+       token-chal is no longer usable.  If the authorization fails, the
+       ACME client MAY retry the challenge from Step 3.
 
    The ACME server verifies the client's control over a Node ID by
    performing the following steps:
 
    1.  The ACME server receives a newOrder or newAuthz request including
-       the identifier of type "uri", where the URI value is a Node ID.
+       the identifier of type "bundleEID", where the URI value is a Node
+       ID.
 
    2.  The ACME server generates an authorization for the Node ID with
        challenge type "dtn-nodeid-01" in accordance with Section 3.1.
@@ -487,25 +544,27 @@ Internet-Draft              ACME DTN Node ID                   June 2021
    4.  The ACME server sends, via the administrative element of its BP
        agent, one or more Challenge Bundles in accordance with
        Section 3.3.  Each challenge bundle SHALL contain a distinct
-       "token-bundle" to be able to correlate with a response bundle.
+       token-bundle to be able to correlate with a response bundle.
        Computing an expected Key Authorization digest is not necessary
        until a response is received.
 
    5.  The ACME server waits for Response Bundle(s) for a limited
-       interval of time (based on the challenge response object).
-       Responses are encoded in accordance with Section 3.4.
+       interval of time (based on the challenge response object of
+       Section 3.2).  Responses are encoded in accordance with
+       Section 3.4.
+
+
+
+
+
+Sipos                     Expires 27 March 2022                [Page 10]
+
+Internet-Draft              ACME DTN Node ID              September 2021
+
 
    6.  Once received and decoded, the ACME server checks the contents of
        each Response Bundle in accordance with Section 3.4.1.  After all
        Challenge Bundles have either been responded to or timed-out, the
-
-
-
-Sipos                    Expires 9 December 2021                [Page 9]
-
-Internet-Draft              ACME DTN Node ID                   June 2021
-
-
        validation procedure is successful only if all responses are
        successful.  If validation is not successful, a client may retry
        the challenge which starts in Step 3.
@@ -520,7 +579,7 @@ Internet-Draft              ACME DTN Node ID                   June 2021
    When responding to a Challenge Bundle, a BP agent SHALL send a single
    Response Bundle in accordance with Section 3.4.  A BP agent SHALL
    respond to ACME challenges only within the interval of time, only for
-   the Node ID, and only for the "token-chal" indicated by the ACME
+   the Node ID, and only for the token-chal indicated by the ACME
    client.  A BP agent SHALL respond to multiple challenges with the
    same parameters.  These correspond with the ACME server validating
    via multiple routing paths.
@@ -554,17 +613,14 @@ Internet-Draft              ACME DTN Node ID                   June 2021
 
 
 
-
-
-
-Sipos                    Expires 9 December 2021               [Page 10]
+Sipos                     Expires 27 March 2022                [Page 11]
 
-Internet-Draft              ACME DTN Node ID                   June 2021
+Internet-Draft              ACME DTN Node ID              September 2021
 
 
-   The "token-chal" value included in this object is fixed for the
-   entire challenge, and may correspond with multiple separate "token-
-   bundle" values when multiple Challenge Bundles are sent for a single
+   The token-chal value included in this object is fixed for the entire
+   challenge, and may correspond with multiple separate token-bundle
+   values when multiple Challenge Bundles are sent for a single
    validation.
 
 3.2.  DTN Node ID Challenge Response Object
@@ -613,15 +669,15 @@ Internet-Draft              ACME DTN Node ID                   June 2021
 
 
 
-Sipos                    Expires 9 December 2021               [Page 11]
+Sipos                     Expires 27 March 2022                [Page 12]
 
-Internet-Draft              ACME DTN Node ID                   June 2021
+Internet-Draft              ACME DTN Node ID              September 2021
 
 
 3.3.  ACME Node ID Validation Challenge Bundles
 
-   Each Each ACME Node ID Validation Challenge Bundle SHALL be
-   structured and encoded in accordance with [I-D.ietf-dtn-bpbis].
+   Each ACME Node ID Validation Challenge Bundle SHALL be structured and
+   encoded in accordance with [I-D.ietf-dtn-bpbis].
 
    Each Challenge Bundle has parameters as listed here:
 
@@ -638,12 +694,12 @@ Internet-Draft              ACME DTN Node ID                   June 2021
       normalization on the Node ID given by the ACME client.
 
    Source Node ID:  The Source Node ID SHALL indicate the Node ID of the
-      ACME server performing the challenge.
+      BP agent of the ACME server performing the challenge.
 
    Creation Timestamp and Lifetime:  The Creation Timestamp SHALL be set
       to the time at which the challenge was generated.  The Lifetime
-      SHALL indicate the response interval for which ACME server will
-      accept responses to this challenge.
+      SHALL indicate the response interval (of Section 3.2) for which
+      ACME server will accept responses to this challenge.
 
    Administrative Record Type Code:  Set to the ACME Node ID Validation
       type code defined in Section 9.3.
@@ -652,15 +708,15 @@ Internet-Draft              ACME DTN Node ID                   June 2021
       record content SHALL consist of a CBOR map containing two pairs:
 
       *  One pair SHALL consist of key 1 with value of ACME challenge
-         "token-chal", copied from the challenge object, represented as
-         a CBOR byte string.
+         token-chal, copied from the challenge object, represented as a
+         CBOR byte string.
 
       *  One pair SHALL consist of key 2 with value of ACME challenge
-         "token-bundle", represented as a CBOR byte string.  The "token-
-         bundle" is a random value that uniquely identifies the
-         challenge bundle.  This value MUST have at least 128 bits of
-         entropy.  See [RFC4086] for additional information on
-         randomness requirements.
+         token-bundle, represented as a CBOR byte string.  The token-
+         bundle is a random value that uniquely identifies the challenge
+         bundle.  This value MUST have at least 128 bits of entropy.
+         See [RFC4086] for additional information on randomness
+         requirements.
 
    This structure is part of the extension CDDL in Appendix A.  An
    example full Challenge Bundle is included in Appendix B.1
@@ -669,9 +725,9 @@ Internet-Draft              ACME DTN Node ID                   June 2021
 
 
 
-Sipos                    Expires 9 December 2021               [Page 12]
+Sipos                     Expires 27 March 2022                [Page 13]
 
-Internet-Draft              ACME DTN Node ID                   June 2021
+Internet-Draft              ACME DTN Node ID              September 2021
 
 
    If the BP agent generating a Challenge Bundle does not have a well-
@@ -690,7 +746,8 @@ Internet-Draft              ACME DTN Node ID                   June 2021
    A proper Challenge Bundle meets all of the following criteria:
 
    *  The Challenge Bundle was received within the time interval allowed
-      for the challenge.
+      for the challenge.  The allowed interval starts at the Creation
+      Timestamp and extends for the Lifetime of the Challenge Bundle.
 
    *  The Challenge Bundle Source Node ID is identical to the Node ID
       indicated in the ACME challenge object.  The comparison of Node
@@ -702,9 +759,9 @@ Internet-Draft              ACME DTN Node ID                   June 2021
       is trusted and passes security-context-specific validation (i.e.
       MAC or signature verification).
 
-   *  The challenge payload contains the "token-chal" as indicated in
-      the ACME challenge object.  The challenge payload contains a
-      "token-bundle" meeting the definition in Section 3.3.
+   *  The challenge payload contains the token-chal as indicated in the
+      ACME challenge object.  The challenge payload contains a token-
+      bundle meeting the definition in Section 3.3.
 
    Any of the failures above SHALL cause the challenge bundle to be
    deleted and otherwise ignored by the BP agent.  The BP agent MAY send
@@ -712,27 +769,23 @@ Internet-Draft              ACME DTN Node ID                   June 2021
 
 3.4.  ACME Node ID Validation Response Bundles
 
-   Each Each ACME Node ID Validation Response Bundle SHALL be structured
-   and encoded in accordance with [I-D.ietf-dtn-bpbis].
+   Each ACME Node ID Validation Response Bundle SHALL be structured and
+   encoded in accordance with [I-D.ietf-dtn-bpbis].
 
    Each Response Bundle has parameters as listed here:
 
    Bundle Processing Control Flags:  The primary block flags SHALL
-
-
-
-
-
-
-
-Sipos                    Expires 9 December 2021               [Page 13]
-
-Internet-Draft              ACME DTN Node ID                   June 2021
-
-
       indicate that the payload is an administrative record.  The
       primary block flags SHALL NOT indicate that user application
       acknowledgement is requested; this flag distinguishes the Response
+
+
+
+Sipos                     Expires 27 March 2022                [Page 14]
+
+Internet-Draft              ACME DTN Node ID              September 2021
+
+
       Bundle from the Challenge Bundle.  The primary block flags MAY
       indicate that status reports are requested; such status can be
       helpful to troubleshoot routing issues.
@@ -741,7 +794,7 @@ Internet-Draft              ACME DTN Node ID                   June 2021
       Source Node ID of the Challenge Bundle to which this response
       corresponds.
 
-   Source Node ID:  The Source Node ID SHALL be identical to the the
+   Source Node ID:  The Source Node ID SHALL be identical to the
       Destination EID of the Challenge Bundle to which this response
       corresponds.
 
@@ -757,12 +810,12 @@ Internet-Draft              ACME DTN Node ID                   June 2021
       record content SHALL consist of a CBOR map containing three pairs:
 
       *  One pair SHALL consist of key 1 with value of ACME challenge
-         "token-chal", copied from the Request Bundle, represented as a
+         token-chal, copied from the Request Bundle, represented as a
          CBOR byte string.
 
       *  One pair SHALL consist of key 2 with value of ACME challenge
-         "token-bundle", copied from the Request Bundle, represented as
-         a CBOR byte string.
+         token-bundle, copied from the Request Bundle, represented as a
+         CBOR byte string.
 
       *  One pair SHALL consist of key 3 with value of the SHA-256
          digest [FIPS180-4] of the ACME Key Authorization in accordance
@@ -777,25 +830,25 @@ Internet-Draft              ACME DTN Node ID                   June 2021
    delays and (if present) Bundle Age extension data to infer the age of
    the Challenge Bundle and lifetime of the Response Bundle.
 
-
-
-
-
-Sipos                    Expires 9 December 2021               [Page 14]
-
-Internet-Draft              ACME DTN Node ID                   June 2021
-
-
    Response Bundles SHALL include a BIB in accordance with Section 4.
    Response Bundles SHALL NOT be directly encrypted by BCB or any other
    method (see Section 8.1 for explanation).
+
+
+
+
+Sipos                     Expires 27 March 2022                [Page 15]
+
+Internet-Draft              ACME DTN Node ID              September 2021
+
 
 3.4.1.  Response Bundle Checks
 
    A proper Response Bundle meets all of the following criteria:
 
    *  The Response Bundle was received within the time interval allowed
-      for the challenge.
+      for the challenge.  The allowed interval starts at the Creation
+      Timestamp and extends for the Lifetime of the Response Bundle.
 
    *  The Response Bundle Source Node ID is identical to the Node ID
       being validated.  The comparison of Node IDs SHALL use the
@@ -806,11 +859,11 @@ Internet-Draft              ACME DTN Node ID                   June 2021
       primary block and payload.  That BIB has a security source which
       is trusted and passes security-context-specific validation.
 
-   *  The response payload contains the "token-chal" and "token-bundle"
-      as sent in the Challenge Bundle.  The response payload contains
-      the expected Key Authorization digest computed by the ACME server.
+   *  The response payload contains the token-chal and token-bundle as
+      sent in the Challenge Bundle.  The response payload contains the
+      expected Key Authorization digest computed by the ACME server.
       Because multiple Challenge Bundles can be sent to validate the
-      same Node ID, the "token-bundle" in the response is needed to
+      same Node ID, the token-bundle in the response is needed to
       correlate with the expected Key Authorization digest.
 
    Any of the failures above SHALL cause the validation to fail with an
@@ -834,24 +887,23 @@ Internet-Draft              ACME DTN Node ID                   June 2021
    bundle.  The exact means by which an integrity gateway validates a
    bundle's source is network-specific, but could use physical-layer,
    network-layer or BP-convergence-layer authentication.  The bundle
-
-
-
-Sipos                    Expires 9 December 2021               [Page 15]
-
-Internet-Draft              ACME DTN Node ID                   June 2021
-
-
    source could also add its own BIB with a local-network-specific
    security context or local-network-specific key material (i.e. a group
    key shared within the local network).
 
+
+
+Sipos                     Expires 27 March 2022                [Page 16]
+
+Internet-Draft              ACME DTN Node ID              September 2021
+
+
    When an integrity gateway adds a BIB it SHALL be in accordance with
    [I-D.ietf-dtn-bpsec].  The BIB targets SHALL cover both the payload
    block and the primary block (either directly as a target or as
-   additional authenticated data for the payload block signature).  The
-   Security Source of this BIB SHALL be either the bundle source Node ID
-   itself or a routing node trusted by the destination node (see
+   additional authenticated data for the payload block MAC/signature).
+   The Security Source of this BIB SHALL be either the bundle source
+   Node ID itself or a routing node trusted by the destination node (see
    Section 8.2).
 
 5.  Certificate Request Profile
@@ -873,17 +925,17 @@ Internet-Draft              ACME DTN Node ID                   June 2021
 5.1.  Multiple Identity Claims
 
    A single bundle security CSR MAY contain a mixed set of SAN claims,
-   including combinations of "ip", "dns", and "uri" claims.  There is no
-   restriction on how a certificate combines these claims, but each
-   claim MUST be validated by an ACME server to issue such a certificate
-   as part of an associated ACME order.  This is no different than the
-   existing behavior of [RFC8555] but is mentioned here to make sure
-   that CA policy handles such situations; especially related to
-   validation failure of an identifier in the presence of multiple
-   identifiers.  The specific use case of [I-D.ietf-dtn-tcpclv4] allows,
-   and for some network policies requires, that a certificate
-   authenticate both the DNS name of an entity as well as the Node ID of
-   the entity.
+   including combinations of "ip", "dns", and "bundleEID" claims.  There
+   is no restriction on how a certificate combines these claims, but
+   each claim MUST be validated by an ACME server to issue such a
+   certificate as part of an associated ACME order.  This is no
+   different than the existing behavior of [RFC8555] but is mentioned
+   here to make sure that CA policy handles such situations; especially
+   related to validation failure of an identifier in the presence of
+   multiple identifiers.  The specific use case of
+   [I-D.ietf-dtn-tcpclv4] allows, and for some network policies
+   requires, that a certificate authenticate both the DNS name of an
+   entity as well as the Node ID of the entity.
 
 5.2.  Generating Encryption-only or Signing-only Bundle Security
       Certificates
@@ -891,16 +943,16 @@ Internet-Draft              ACME DTN Node ID                   June 2021
    ACME extensions specified in this document can be used to request
    encryption-only or signing-only bundle security certificates.
 
-
-
-Sipos                    Expires 9 December 2021               [Page 16]
-
-Internet-Draft              ACME DTN Node ID                   June 2021
-
-
    In order to request signing only bundle security certificate, the CSR
    MUST include the key usage extension with digitalSignature and/or
    nonRepudiation bits set and no other bits set.
+
+
+
+Sipos                     Expires 27 March 2022                [Page 17]
+
+Internet-Draft              ACME DTN Node ID              September 2021
+
 
    In order to request encryption only bundle security certificate, the
    CSR MUST include the key usage extension with keyEncipherment or
@@ -949,9 +1001,13 @@ Internet-Draft              ACME DTN Node ID                   June 2021
 
 
 
-Sipos                    Expires 9 December 2021               [Page 17]
+
+
+
+
+Sipos                     Expires 27 March 2022                [Page 18]
 
-Internet-Draft              ACME DTN Node ID                   June 2021
+Internet-Draft              ACME DTN Node ID              September 2021
 
 
    An example implementation of the this draft of ACME Node ID
@@ -1005,9 +1061,9 @@ Internet-Draft              ACME DTN Node ID                   June 2021
 
 
 
-Sipos                    Expires 9 December 2021               [Page 18]
+Sipos                     Expires 27 March 2022                [Page 19]
 
-Internet-Draft              ACME DTN Node ID                   June 2021
+Internet-Draft              ACME DTN Node ID              September 2021
 
 
    Another way to mitigate single-path on-path attacks is to attempt
@@ -1028,10 +1084,10 @@ Internet-Draft              ACME DTN Node ID                   June 2021
    Authorization and its cryptographic digest and communicate it back to
    the ACME server for validation, so the uniqueness of the Key
    Authorization directly determines the scope of replay validity.  The
-   uniqueness of each "token-bundle" to each challenge bundle ensures
-   that the Key Authorization is unique to the challenge bundle.  The
-   uniqueness of each "token-chal" to the ACME challenge ensures that
-   the Key Authorization is unique to that ACME challenge.
+   uniqueness of each token-bundle to each challenge bundle ensures that
+   the Key Authorization is unique to the challenge bundle.  The
+   uniqueness of each token-chal to the ACME challenge ensures that the
+   Key Authorization is unique to that ACME challenge.
 
    Having each bundle's primary block and payload block covered by a BIB
    from a trusted security source (see Section 4) ensures that a
@@ -1061,9 +1117,9 @@ Internet-Draft              ACME DTN Node ID                   June 2021
 
 
 
-Sipos                    Expires 9 December 2021               [Page 19]
+Sipos                     Expires 27 March 2022                [Page 20]
 
-Internet-Draft              ACME DTN Node ID                   June 2021
+Internet-Draft              ACME DTN Node ID              September 2021
 
 
    Similar to other validation methods, an ACME server validating a DTN
@@ -1071,10 +1127,56 @@ Internet-Draft              ACME DTN Node ID                   June 2021
    reason any ACME server can rate-limit validation activities for
    individual clients and individual certificate requests.
 
+8.5.  Inherited Security Considerations
+
+   Because this protocol relies on ACME for part of its operation, the
+   security considerations of [RFC8555] apply to all ACME client--server
+   exchanges during Node ID validation.
+
+   Because this protocol relies on BPv7 for part of its operation, the
+   security considerations of [I-D.ietf-dtn-bpbis] and
+   [I-D.ietf-dtn-bpsec] apply to all BP messaging during Node ID
+   validation.
+
+8.6.  Out-of-Scope BP Agent Communication
+
+   Although messaging between an ACME client or ACME server an its
+   associated BP agent are out-of-scope for this document, both of those
+   channels are critical to Node ID validation security.  Either channel
+   can potentially leak data or provide attack vectors if not properly
+   secured.  These channels need to protect against spoofing of
+   messaging in both directions to avoid interruption of normal
+   validation sequencing and to prevent false validations from
+   succeeding.
+
+   The ACME server and its BP agent exchange the outgoing token-chal,
+   token-bundle, and Key Authorization digest but these values do not
+   need to be confidential (they are also in plaintext over the BP
+   channel).
+
+   Depending on implementation details, the ACME client might transmit
+   the client account key thumbprint to its BP agent to allow computing
+   the Key Authorization digest on the BP agent.  If an ACME client does
+   transmit its client account key thumbprint to a BP agent, it is
+   important that this data is kept confidential because it provides the
+   binding of the client account key to the Node ID validation (as well
+   as for all other types of ACME validation).  Avoiding this
+   transmission would require a full round-trip between BP agent and
+   ACME client, which can be undesirable if the two are separated by a
+   long-delay network.
+
 9.  IANA Considerations
 
    This specification adds to the ACME registry and BP registry for this
    behavior.
+
+
+
+
+Sipos                     Expires 27 March 2022                [Page 21]
+
+Internet-Draft              ACME DTN Node ID              September 2021
+
 
 9.1.  ACME Identifier Types
 
@@ -1117,9 +1219,19 @@ Internet-Draft              ACME DTN Node ID                   June 2021
 
 
 
-Sipos                    Expires 9 December 2021               [Page 20]
+
+
+
+
+
+
+
+
+
+
+Sipos                     Expires 27 March 2022                [Page 22]
 
-Internet-Draft              ACME DTN Node ID                   June 2021
+Internet-Draft              ACME DTN Node ID              September 2021
 
 
     +=================+=======+===============+======================+
@@ -1173,9 +1285,9 @@ Internet-Draft              ACME DTN Node ID                   June 2021
 
 
 
-Sipos                    Expires 9 December 2021               [Page 21]
+Sipos                     Expires 27 March 2022                [Page 23]
 
-Internet-Draft              ACME DTN Node ID                   June 2021
+Internet-Draft              ACME DTN Node ID              September 2021
 
 
 11.  References
@@ -1229,9 +1341,9 @@ Internet-Draft              ACME DTN Node ID                   June 2021
 
 
 
-Sipos                    Expires 9 December 2021               [Page 22]
+Sipos                     Expires 27 March 2022                [Page 24]
 
-Internet-Draft              ACME DTN Node ID                   June 2021
+Internet-Draft              ACME DTN Node ID              September 2021
 
 
    [RFC4838]  Cerf, V., Burleigh, S., Hooke, A., Torgerson, L., Durst,
@@ -1269,26 +1381,30 @@ Internet-Draft              ACME DTN Node ID                   June 2021
               Burleigh, S., Fall, K., and E. J. Birrane, "Bundle
               Protocol Version 7", Work in Progress, Internet-Draft,
               draft-ietf-dtn-bpbis-31, 25 January 2021,
-              <https://tools.ietf.org/html/draft-ietf-dtn-bpbis-31>.
+              <https://datatracker.ietf.org/doc/html/draft-ietf-dtn-
+              bpbis-31>.
 
    [I-D.ietf-dtn-bpsec]
               III, E. J. B. and K. McKeever, "Bundle Protocol Security
               Specification", Work in Progress, Internet-Draft, draft-
               ietf-dtn-bpsec-27, 16 February 2021,
-              <https://tools.ietf.org/html/draft-ietf-dtn-bpsec-27>.
+              <https://datatracker.ietf.org/doc/html/draft-ietf-dtn-
+              bpsec-27>.
 
 11.2.  Informative References
+
+
+
+
+
+Sipos                     Expires 27 March 2022                [Page 25]
+
+Internet-Draft              ACME DTN Node ID              September 2021
+
 
    [RFC5050]  Scott, K. and S. Burleigh, "Bundle Protocol
               Specification", RFC 5050, DOI 10.17487/RFC5050, November
               2007, <https://www.rfc-editor.org/info/rfc5050>.
-
-
-
-Sipos                    Expires 9 December 2021               [Page 23]
-
-Internet-Draft              ACME DTN Node ID                   June 2021
-
 
    [RFC6376]  Crocker, D., Ed., Hansen, T., Ed., and M. Kucherawy, Ed.,
               "DomainKeys Identified Mail (DKIM) Signatures", STD 76,
@@ -1309,42 +1425,43 @@ Internet-Draft              ACME DTN Node ID                   June 2021
    [I-D.ietf-dtn-bibect]
               Burleigh, S., "Bundle-in-Bundle Encapsulation", Work in
               Progress, Internet-Draft, draft-ietf-dtn-bibect-03, 18
-              February 2020,
-              <https://tools.ietf.org/html/draft-ietf-dtn-bibect-03>.
+              February 2020, <https://datatracker.ietf.org/doc/html/
+              draft-ietf-dtn-bibect-03>.
 
    [I-D.ietf-dtn-tcpclv4]
               Sipos, B., Demmer, M., Ott, J., and S. Perreault, "Delay-
               Tolerant Networking TCP Convergence Layer Protocol Version
               4", Work in Progress, Internet-Draft, draft-ietf-dtn-
               tcpclv4-26, 15 February 2021,
-              <https://tools.ietf.org/html/draft-ietf-dtn-tcpclv4-26>.
+              <https://datatracker.ietf.org/doc/html/draft-ietf-dtn-
+              tcpclv4-26>.
 
    [I-D.sipos-dtn-udpcl]
               Sipos, B., "Delay-Tolerant Networking UDP Convergence
               Layer Protocol", Work in Progress, Internet-Draft, draft-
               sipos-dtn-udpcl-01, 26 March 2021,
-              <https://tools.ietf.org/html/draft-sipos-dtn-udpcl-01>.
+              <https://datatracker.ietf.org/doc/html/draft-sipos-dtn-
+              udpcl-01>.
 
    [I-D.bsipos-dtn-bpsec-cose]
               Sipos, B., "DTN Bundle Protocol Security COSE Security
               Context", Work in Progress, Internet-Draft, draft-bsipos-
-              dtn-bpsec-cose-05, 16 March 2021,
-              <https://tools.ietf.org/html/draft-bsipos-dtn-bpsec-cose-
-              05>.
+              dtn-bpsec-cose-06, 3 June 2021,
+              <https://datatracker.ietf.org/doc/html/draft-bsipos-dtn-
+              bpsec-cose-06>.
+
+
+
+
+Sipos                     Expires 27 March 2022                [Page 26]
+
+Internet-Draft              ACME DTN Node ID              September 2021
+
 
    [github-dtn-demo-agent]
               Sipos, B., "Python implementation of basic BPv7-related
               protocols",
               <https://github.com/BSipos-RKF/dtn-demo-agent/>.
-
-
-
-
-
-Sipos                    Expires 9 December 2021               [Page 24]
-
-Internet-Draft              ACME DTN Node ID                   June 2021
-
 
    [github-dtn-wireshark]
               Sipos, B., "Wireshark Dissectors for BPv7-related
@@ -1387,24 +1504,21 @@ Appendix B.  Example Authorization
 
    "LPJNul-wow4m6DsqxbninhsWHlwfp0JecwQzYpOLmCQ"
 
-   And the ACME-server generated "token-chal" has the base64url-encoded
+   And the ACME-server generated token-chal has the base64url-encoded
    value of:
+
+
+
+Sipos                     Expires 27 March 2022                [Page 27]
+
+Internet-Draft              ACME DTN Node ID              September 2021
+
 
    "tPUZNY4ONIk6LxErRFEjVw"
 
-
-
-
-
-
-Sipos                    Expires 9 December 2021               [Page 25]
-
-Internet-Draft              ACME DTN Node ID                   June 2021
-
-
 B.1.  Challenge Bundle
 
-   For the single challenge bundle in this example, the "token-bundle"
+   For the single challenge bundle in this example, the token-bundle
    (transported as byte string via BP) has the base64url-encoded value
    of:
 
@@ -1448,15 +1562,16 @@ B.2.  Response Bundle
    Authorization value (a single string split across lines for
    readability) is:
 
+
+
+
+Sipos                     Expires 27 March 2022                [Page 28]
+
+Internet-Draft              ACME DTN Node ID              September 2021
+
+
    "p3yRYFU4KxwQaHQjJ2RdiQtPUZNY4ONIk6LxErRFEjVw."
    "LPJNul-wow4m6DsqxbninhsWHlwfp0JecwQzYpOLmCQ"
-
-
-
-Sipos                    Expires 9 December 2021               [Page 26]
-
-Internet-Draft              ACME DTN Node ID                   June 2021
-
 
    The minimal-but-valid Response Bundle is shown in Figure 3.  This
    response indicates that there is 30 seconds remaining in the response
@@ -1506,7 +1621,4 @@ Author's Address
 
 
 
-
-
-
-Sipos                    Expires 9 December 2021               [Page 27]
+Sipos                     Expires 27 March 2022                [Page 29]
