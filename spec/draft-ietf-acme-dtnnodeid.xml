@@ -205,7 +205,7 @@ This specification is the first to make use of an Bundle Endpoint ID to identify
 In this document, the only purpose for which an Bundle Endpoint ID ACME identifier is validated is as a DTN Node ID (see <xref target="sec-validate-nodeid"/>), but other specifications can define challenge types for other Endpoint ID uses.
       </t>
       <t>
-Identifiers of type "bundleEID" in certificate requests MUST appear in an extensionRequest attribute <xref target="RFC2985"/> containing a subjectAltName extension of type otherName having an other name form of bundleEID consistent with the requirements of <xref section="4.4.2.1" target="I-D.ietf-dtn-tcpclv4"/>.
+Identifiers of type "bundleEID" in certificate requests MUST appear in an extensionRequest attribute <xref target="RFC2985"/> containing a subjectAltName extension of type otherName with a name form of <tt>bundleEID</tt> consistent with the requirements of <xref section="4.4.2.1" target="I-D.ietf-dtn-tcpclv4"/>.
 Because the bundleEID is encoded as an IA5String it SHALL be treated as being in the percent-encoded form of <xref section="2.1" target="RFC3986"/>.
 Any "bundleEID" identifier which fails to properly percent-decode SHALL be rejected with an ACME error type of "malformed".
       </t>
