@@ -1,2 +1,2 @@
 *** Unused rule bpv7_start
-{1: h'746963', 2: h'746163', 3: h'746F65'}
+"tic"
