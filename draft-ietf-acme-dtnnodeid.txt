@@ -383,8 +383,8 @@ Internet-Draft              ACME DTN Node ID              September 2021
 
    Identifiers of type "bundleEID" in certificate requests MUST appear
    in an extensionRequest attribute [RFC2985] containing a
-   subjectAltName extension of type otherName having an other name form
-   of bundleEID consistent with the requirements of Section 4.4.2.1 of
+   subjectAltName extension of type otherName with a name form of
+   bundleEID consistent with the requirements of Section 4.4.2.1 of
    [I-D.ietf-dtn-tcpclv4].  Because the bundleEID is encoded as an
 
 
