@@ -126,12 +126,12 @@ This workflow is shown in the diagram of <xref target="fig-entity-relations"/> a
 ~~~~~~~~~~~|~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|~~~|~~~~~~~~~~~~
            V                    DTN                V   |
     ++------------++                           ++------------++
-    || Admin Elem.||                           || Admin Elem.||
-    |+------------+|           (3) Challenge   |+------------+|
-    |   Client's   |&lt;------------- Bundle -----|   Server's   |
-    |   BP Agent   |                           |   BP Agent   |
-    +--------------+                           +--------------+
-           |                                          ^
+    || Admin Elem.||                           || Admin Elem.||-+
+    |+------------+|           (3) Challenge   |+------------+| |
+    |   Client's   |&lt;------------- Bundle -----|   Server's   | |
+    |   BP Agent   |                           |   BP Agent   | |
+    +--------------+                           +--------------+ |
+           |                                     +----^---------+
            |     +-------------+                      |
            |     |  Integrity  |   (4) Response       |
            +----&gt;|   Gateway   |------ Bundle --------+
@@ -351,7 +351,7 @@ The string "dtn-nodeid-01".
           </dd>
           <dt>source (required, array of string):</dt>
           <dd>
-An unordered list of possible source Node ID of bundles originating at the ACME server.
+An unordered list of possible source Node ID of bundles originating at the BP agent(s) of the ACME server.
 See <xref target="sec-multi-perspective"/> for a discussion of multi-perspective validation using multiple sources.
 The array <bcp14>SHALL</bcp14> be non-empty.
 The array <bcp14>MAY</bcp14> contain Node IDs which are not actually used as a challenge bundle source.
