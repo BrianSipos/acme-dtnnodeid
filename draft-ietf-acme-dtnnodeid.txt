@@ -293,12 +293,12 @@ Internet-Draft              ACME DTN Node ID                October 2021
    ~~~~~~~~~~~|~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|~~~|~~~~~~~~~~~~
               V                    DTN                V   |
        ++------------++                           ++------------++
-       || Admin Elem.||                           || Admin Elem.||
-       |+------------+|           (3) Challenge   |+------------+|
-       |   Client's   |<------------- Bundle -----|   Server's   |
-       |   BP Agent   |                           |   BP Agent   |
-       +--------------+                           +--------------+
-              |                                          ^
+       || Admin Elem.||                           || Admin Elem.||-+
+       |+------------+|           (3) Challenge   |+------------+| |
+       |   Client's   |<------------- Bundle -----|   Server's   | |
+       |   BP Agent   |                           |   BP Agent   | |
+       +--------------+                           +--------------+ |
+              |                                     +----^---------+
               |     +-------------+                      |
               |     |  Integrity  |   (4) Response       |
               +---->|   Gateway   |------ Bundle --------+
@@ -588,11 +588,11 @@ Internet-Draft              ACME DTN Node ID                October 2021
    type (required, string):  The string "dtn-nodeid-01".
 
    source (required, array of string):  An unordered list of possible
-      source Node ID of bundles originating at the ACME server.  See
-      Section 3.5 for a discussion of multi-perspective validation using
-      multiple sources.  The array SHALL be non-empty.  The array MAY
-      contain Node IDs which are not actually used as a challenge bundle
-      source.
+      source Node ID of bundles originating at the BP agent(s) of the
+      ACME server.  See Section 3.5 for a discussion of multi-
+      perspective validation using multiple sources.  The array SHALL be
+      non-empty.  The array MAY contain Node IDs which are not actually
+      used as a challenge bundle source.
 
    token-chal (required, string):  A random value that uniquely
       identifies the challenge.  This value MUST have at least 128 bits

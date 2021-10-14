@@ -1507,12 +1507,12 @@ This workflow is shown in the diagram of <a href="#fig-entity-relations" class="
 ~~~~~~~~~~~|~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|~~~|~~~~~~~~~~~~
            V                    DTN                V   |
     ++------------++                           ++------------++
-    || Admin Elem.||                           || Admin Elem.||
-    |+------------+|           (3) Challenge   |+------------+|
-    |   Client's   |&lt;------------- Bundle -----|   Server's   |
-    |   BP Agent   |                           |   BP Agent   |
-    +--------------+                           +--------------+
-           |                                          ^
+    || Admin Elem.||                           || Admin Elem.||-+
+    |+------------+|           (3) Challenge   |+------------+| |
+    |   Client's   |&lt;------------- Bundle -----|   Server's   | |
+    |   BP Agent   |                           |   BP Agent   | |
+    +--------------+                           +--------------+ |
+           |                                     +----^---------+
            |     +-------------+                      |
            |     |  Integrity  |   (4) Response       |
            +----&gt;|   Gateway   |------ Bundle --------+
@@ -1750,7 +1750,7 @@ The string "dtn-nodeid-01".<a href="#section-3.1-3.2" class="pilcrow">¶</a>
           <dd class="break"></dd>
 <dt id="section-3.1-3.3">source (required, array of string):</dt>
           <dd style="margin-left: 1.5em" id="section-3.1-3.4">
-An unordered list of possible source Node ID of bundles originating at the ACME server.
+An unordered list of possible source Node ID of bundles originating at the BP agent(s) of the ACME server.
 See <a href="#sec-multi-perspective" class="xref">Section 3.5</a> for a discussion of multi-perspective validation using multiple sources.
 The array <span class="bcp14">SHALL</span> be non-empty.
 The array <span class="bcp14">MAY</span> contain Node IDs which are not actually used as a challenge bundle source.<a href="#section-3.1-3.4" class="pilcrow">¶</a>
