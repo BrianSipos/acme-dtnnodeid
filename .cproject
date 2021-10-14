@@ -47,11 +47,11 @@
                     					
                     <folderInfo id="de.marw.cmake.cdt.lsp.config.cmake.318172198." name="/" resourcePath="">
                         						
-                        <toolChain id="de.marw.cmake.cdt.lsp.config.cmake.toolChain.691452843" name="CMake driven" superClass="de.marw.cmake.cdt.lsp.config.cmake.toolChain">
+                        <toolChain id="de.marw.cmake.cdt.lsp.config.cmake.toolChain.691452843" name="CMake driven" nonInternalBuilderId="de.marw.cmake.cdt.lsp.builder.portable" superClass="de.marw.cmake.cdt.lsp.config.cmake.toolChain">
                             							
                             <targetPlatform id="de.marw.cmake.cdt.lsp.targetPlatform.cmake.988723344" name="Any Platform" superClass="de.marw.cmake.cdt.lsp.targetPlatform.cmake"/>
                             							
-                            <builder buildPath="/acme-dtnnodeid/build/Default" id="de.marw.cmake.cdt.lsp.builder.portable.1364348237" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="CMake Builder" superClass="de.marw.cmake.cdt.lsp.builder.portable"/>
+                            <builder buildPath="/acme-dtnnodeid/build/Default" id="de.marw.cmake.cdt.lsp.builder.portable.1793867226" name="CMake Builder" superClass="de.marw.cmake.cdt.lsp.builder.portable"/>
                             							
                             <tool id="de.marw.cmake.cdt.lsp.toolchain.tool.dummy.675438756" name="CMake driven Languages Proxy" superClass="de.marw.cmake.cdt.lsp.toolchain.tool.dummy">
                                 								
@@ -124,5 +124,7 @@
     </storageModule>
     	
     <storageModule moduleId="org.eclipse.cdt.make.core.buildtargets"/>
+    	
+    <storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
     
 </cproject>

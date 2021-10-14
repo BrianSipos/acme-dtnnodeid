@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?rfc toc="yes"?>
-<rfc xmlns:xi="http://www.w3.org/2001/XInclude" category="exp" docName="draft-ietf-acme-dtnnodeid-05" ipr="trust200902" submissionType="IETF" tocInclude="true" updates="-ietf-dtn-bpbis" version="3">
+<rfc xmlns:xi="http://www.w3.org/2001/XInclude" category="exp" docName="draft-ietf-acme-dtnnodeid-06" ipr="trust200902" submissionType="IETF" tocInclude="true" version="3">
   <front>
     <title abbrev="ACME DTN Node ID">
 Automated Certificate Management Environment (ACME)
 Delay-Tolerant Networking (DTN) Node ID Validation Extension
     </title>
-    <seriesInfo name="Internet-Draft" value="draft-ietf-acme-dtnnodeid-05"/>
+    <seriesInfo name="Internet-Draft" value="draft-ietf-acme-dtnnodeid-06"/>
     <author fullname="Brian Sipos" initials="B." surname="Sipos">
       <organization abbrev="RKF Engineering">RKF Engineering Solutions, LLC</organization>
       <address>
@@ -18,7 +18,7 @@ Delay-Tolerant Networking (DTN) Node ID Validation Extension
           <code>20814-6198</code>
           <country>United States of America</country>
         </postal>
-        <email>BSipos@rkf-eng.com</email>
+        <email>brian.sipos+ietf@gmail.com</email>
       </address>
     </author>
     <date/>
@@ -29,7 +29,7 @@ Delay-Tolerant Networking (DTN) Node ID Validation Extension
     <abstract>
       <t>
 This document specifies an extension to the Automated Certificate Management Environment (ACME) protocol which allows an ACME server to validate the Delay-Tolerant Networking (DTN) Node ID for an ACME client.
-The DTN Node ID is encoded as a certificate Subject Alternative Name (SAN) of type otherName with a name form of <tt>bundleEID</tt> and as an ACME Identifier type "bundleEID".
+The DTN Node ID is encoded as a certificate Subject Alternative Name (SAN) of type otherName with a name form of <tt>BundleEID</tt> and as an ACME Identifier type "bundleEID".
       </t>
     </abstract>
   </front>
@@ -40,12 +40,12 @@ The DTN Node ID is encoded as a certificate Subject Alternative Name (SAN) of ty
 Although the original purpose of the Automatic Certificate Management Environment (ACME) <xref target="RFC8555"/> was to allow Public Key Infrastructure Using X.509 (PKIX) certificate authorities to validate network domain names of clients, the same mechanism can be used to validate any of the subject claims supported by the PKIX profile <xref target="RFC5280"/>.
       </t>
       <t>
-In the case of this specification, the claim being validated is a Subject Alternative Name (SAN) of type otherName with a name form of <tt>bundleEID</tt>, which used to represent an Endpoint ID (EID) for a Delay-Tolerant Networking (DTN) bundle.
+In the case of this specification, the claim being validated is a Subject Alternative Name (SAN) of type otherName with a name form of <tt>BundleEID</tt>, which used to represent an Endpoint ID (EID) for a Delay-Tolerant Networking (DTN) bundle.
 Currently the URI schemes "dtn" and "ipn" as defined in <xref target="I-D.ietf-dtn-bpbis"/> are valid for an Endpoint ID.
 A DTN Node ID is an Endpoint ID with scheme-specific restrictions to identify it as such; currently the "dtn" scheme uses an empty demux part and the "ipn" scheme uses service number zero.
       </t>
       <t>
-Because the SAN URI claim is new to ACME, a new ACME Identifier type "bundleEID" is needed to manage this claim within ACME messaging.
+Because the <tt>BundleEID</tt> claim is new to ACME, a new ACME Identifier type "bundleEID" is needed to manage this claim within ACME messaging.
 A "bundleEID" claim can be part of a pre-authorization or as one of the authorizations of an order containing any number of claims.
       </t>
       <t>
@@ -55,9 +55,6 @@ Once a certificate is issued for a Node ID, how the ACME client configures the B
       </t>
       <t>
 The scope and behavior of this validation mechanism is similar to that of secured email validation of <xref target="RFC8823"/>.
-      </t>
-      <t>
-This document also updates BPv7 to explicitly use the IANA administrative record type registry in <xref target="sec-bpv7-admin-type"/>.
       </t>
       <section>
         <name>Scope</name>
@@ -205,31 +202,34 @@ This specification is the first to make use of an Bundle Endpoint ID to identify
 In this document, the only purpose for which an Bundle Endpoint ID ACME identifier is validated is as a DTN Node ID (see <xref target="sec-validate-nodeid"/>), but other specifications can define challenge types for other Endpoint ID uses.
       </t>
       <t>
-Identifiers of type "bundleEID" in certificate requests MUST appear in an extensionRequest attribute <xref target="RFC2985"/> containing a subjectAltName extension of type otherName with a name form of <tt>bundleEID</tt> consistent with the requirements of <xref section="4.4.2.1" target="I-D.ietf-dtn-tcpclv4"/>.
-Because the bundleEID is encoded as an IA5String it <bcp14>SHALL</bcp14> be treated as being in the percent-encoded form of <xref section="2.1" target="RFC3986"/>.
+Identifiers of type "bundleEID" in certificate requests <bcp14>MUST</bcp14> appear in an extensionRequest attribute <xref target="RFC2985"/> containing a subjectAltName extension of type otherName with a name form of <tt>BundleEID</tt>, identified by <tt>id-on-bundleEID</tt> of <xref target="IANA-SMI"/>, consistent with the requirements of <xref section="4.4.2.1" target="I-D.ietf-dtn-tcpclv4"/>.
+Because the <tt>BundleEID</tt> is encoded as an IA5String it <bcp14>SHALL</bcp14> be treated as being in the percent-encoded form of <xref section="2.1" target="RFC3986"/>.
 Any "bundleEID" identifier which fails to properly percent-decode <bcp14>SHALL</bcp14> be rejected with an ACME error type of "malformed".
       </t>
       <t>
 The ACME server <bcp14>SHALL</bcp14> decode and normalize (based on scheme-specific syntax) all received identifiers of type "bundleEID".
-Any "bundleEID" identifier request which uses a scheme not handled by the ACME server or for which the URI does not match the scheme-specific syntax <bcp14>SHALL</bcp14> be rejected with an ACME error type of "rejectedIdentifier".
+Any "bundleEID" identifier request which uses a scheme not handled by the ACME server or for which the EID does not match the scheme-specific syntax <bcp14>SHALL</bcp14> be rejected with an ACME error type of "rejectedIdentifier".
       </t>
       <t>
-When an ACME server needs to request proof that a client controls a URI, it <bcp14>SHALL</bcp14> create an authorization with the identifier type "bundleEID".
-The ACME server <bcp14>SHALL NOT</bcp14> attempt to dereference the Endpoint ID value on its own.
-It is the responsibility of a validation method to ensure the URI ownership via scheme-specific means authorized by the ACME client.
+When an ACME server needs to request proof that a client controls a <tt>BundleEID</tt>, it <bcp14>SHALL</bcp14> create an authorization with the identifier type "bundleEID".
+The ACME server <bcp14>SHALL NOT</bcp14> attempt to dereference the EID value on its own.
+It is the responsibility of a validation method to ensure the EID ownership via scheme-specific means authorized by the ACME client.
       </t>
       <t keepWithNext="true">
 An identifier for the Node ID of "dtn://example/" would be formatted as:
       </t>
       <sourcecode type="json">
-{"type": "bundleEID", "value": "dtn://example/"}
+{
+  "type": "bundleEID",
+  "value": "dtn://example/"
+}
 </sourcecode>
     </section>
     <section anchor="sec-validate-nodeid">
       <name>DTN Node ID Validation</name>
       <t>
 The DTN Node ID validation method proves control over a Node ID by requiring the ACME client to configure a BP agent to respond to specific Challenge Bundles sent from the ACME server.
-The ACME server validates control of the Node ID URI by verifying that received Response Bundles correspond with the BP Node and client account key being validated.
+The ACME server validates control of the Node ID by verifying that received Response Bundles correspond with the BP Node and client account key being validated.
       </t>
       <t>
 Similar to the ACME use case for validating email address ownership <xref target="RFC8823"/>, this challenge splits the token into several parts, each being transported by a different channel, and the Key Authorization result requires combining all parts of the token.
@@ -240,7 +240,7 @@ The token parts are:
           <tt>token-chal</tt>
         </dt>
         <dd>
-This token is unique to, and constant for, each ACME authorization.
+This token is unique to, and identifies, each ACME authorization.
 It is contained in the Challenge Object of <xref target="sec-nodeid-challenge-request"/> as well as the Challenge Bundle of <xref target="sec-bundle-challenge"/> and Response Bundle of <xref target="sec-bundle-response"/>.
 Each authorization can consist of multiple Challenge Bundles (e.g. taking different routes), but they all share the same <tt>token-chal</tt> value.
 This ensures that the Key Authorization is bound to the specific ACME challenge (and parent ACME authorization) and also allows the ACME client's BP agent to filter-in only valid Challenge Bundles.
@@ -257,7 +257,11 @@ This token is also accessible to DTN on-path eavesdroppers.
         </dd>
       </dl>
       <t>
-The DTN Node ID Challenge <bcp14>SHALL</bcp14> only be allowed for URIs usable as a DTN Node ID, which are currently the schemes "dtn" and "ipn" as defined in <xref target="I-D.ietf-dtn-bpbis"/>.
+For each ACME server, the pair of <tt>token-chal</tt> and <tt>token-bundle</tt> values is the unique correlator between Challenge and Response bundles.
+Because multiple Challenge Bundles can be sent to validate the same Node ID, the <tt>token-bundle</tt> in the response is needed to correlate with the expected Key Authorization digest.
+      </t>
+      <t>
+The DTN Node ID Challenge <bcp14>SHALL</bcp14> only be allowed for an EID usable as a DTN Node ID, which  <xref target="I-D.ietf-dtn-bpbis"/>.
 When an ACME server supports Node ID validation, the ACME server <bcp14>SHALL</bcp14> define a challenge object in accordance with <xref target="sec-nodeid-challenge-request"/>.
 Once this challenge object is defined, the ACME client may begin the validation.
       </t>
@@ -323,20 +327,14 @@ Responses are encoded in accordance with <xref target="sec-bundle-response"/>.
         </li>
         <li>
 Once received and decoded, the ACME server checks the contents of each Response Bundle in accordance with <xref target="sec-response-check"/>.
-After all Challenge Bundles have either been responded to or timed-out, the validation procedure is successful only if all responses are successful.
+After all Challenge Bundles have either been responded to or timed-out, the ACME server policy (see <xref target="sec-multi-perspective"/>) determines whether the validation is successful.
 If validation is not successful, a client may retry the challenge which starts in Step <xref format="counter" target="step-server-authorize"/>.
         </li>
       </ol>
       <t>
-An ACME server <bcp14>MAY</bcp14> send multiple challenges from different origins in the DTN network to avoid possible on-path attacks, as recommended in <xref section="10.2" target="RFC8555"/>.
-If responses are received from multiple challenges, any response failure <bcp14>SHALL</bcp14> cause a failure of the overall validation.
-Each response failure <bcp14>MAY</bcp14> be indicated to the ACME client as a validation subproblem.
-      </t>
-      <t>
 When responding to a Challenge Bundle, a BP agent <bcp14>SHALL</bcp14> send a single Response Bundle in accordance with <xref target="sec-bundle-response"/>.
 A BP agent <bcp14>SHALL</bcp14> respond to ACME challenges only within the interval of time, only for the Node ID, and only for the <tt>token-chal</tt> indicated by the ACME client.
-A BP agent <bcp14>SHALL</bcp14> respond to multiple challenges with the same parameters.
-These correspond with the ACME server validating via multiple routing paths.
+A BP agent <bcp14>SHALL</bcp14> respond to multiple Challenge Bundles with the same ACME parameters but different bundle identities (source Node ID and timestamp); these correspond with the ACME server validating via multiple routing paths.
       </t>
       <section anchor="sec-nodeid-challenge-request">
         <name>DTN Node ID Challenge Request Object</name>
@@ -351,16 +349,19 @@ The DTN Node ID Challenge request object has the following content:
           <dd>
 The string "dtn-nodeid-01".
           </dd>
-          <dt>source (required, string):</dt>
+          <dt>source (required, array of string):</dt>
           <dd>
-The source Node ID of bundles originating at the ACME server as a text URI.
+An unordered list of possible source Node ID of bundles originating at the ACME server.
+See <xref target="sec-multi-perspective"/> for a discussion of multi-perspective validation using multiple sources.
+The array <bcp14>SHALL</bcp14> be non-empty.
+The array <bcp14>MAY</bcp14> contain Node IDs which are not actually used as a challenge bundle source.
           </dd>
           <dt>token-chal (required, string):</dt>
           <dd>
 A random value that uniquely identifies the challenge.
-This value MUST have at least 128 bits of entropy.
-It MUST NOT contain any characters outside the base64url alphabet as described in <xref section="5" target="RFC4648"/>.
-Trailing '=' padding characters MUST be stripped.
+This value <bcp14>MUST</bcp14> have at least 128 bits of entropy.
+It <bcp14>MUST</bcp14> contain any characters outside the base64url alphabet as described in <xref section="5" target="RFC4648"/>.
+Trailing '=' padding characters <bcp14>MUST</bcp14> be stripped.
 See <xref target="RFC4086"/> for additional information on randomness requirements.
           </dd>
         </dl>
@@ -368,7 +369,7 @@ See <xref target="RFC4086"/> for additional information on randomness requiremen
 {
   "type": "dtn-nodeid-01",
   "url": "https://example.com/acme/chall/prV_B7yEyA4",
-  "source": "dtn://acme-server/",
+  "source": ["dtn://acme-server/"],
   "token-chal": "tPUZNY4ONIk6LxErRFEjVw"
 }
 </sourcecode>
@@ -427,12 +428,12 @@ The primary block flags <bcp14>MAY</bcp14> indicate that status reports are requ
           </dd>
           <dt>Destination EID:</dt>
           <dd>
-The Destination EID <bcp14>SHALL</bcp14> be identical to the Node ID being validated.
-The ACME server <bcp14>SHOULD NOT</bcp14> perform URI normalization on the Node ID given by the ACME client.
+The Destination EID <bcp14>SHALL</bcp14> be the ACME-server-normalized Node ID being validated.
           </dd>
           <dt>Source Node ID:</dt>
           <dd>
 The Source Node ID <bcp14>SHALL</bcp14> indicate the Node ID of the BP agent of the ACME server performing the challenge.
+The challenge bundle source <bcp14>SHALL</bcp14> be present in the "source" array of the challenge object (see <xref target="sec-nodeid-challenge-request"/>)
           </dd>
           <dt>Creation Timestamp and Lifetime:</dt>
           <dd>
@@ -455,7 +456,7 @@ One pair <bcp14>SHALL</bcp14> consist of key 1 with value of ACME challenge <tt>
               <li>
 One pair <bcp14>SHALL</bcp14> consist of key 2 with value of ACME challenge <tt>token-bundle</tt>, represented as a CBOR byte string.
 The <tt>token-bundle</tt> is a random value that uniquely identifies the challenge bundle.
-This value MUST have at least 128 bits of entropy.
+This value <bcp14>MUST</bcp14> have at least 128 bits of entropy.
 See <xref target="RFC4086"/> for additional information on randomness requirements.
               </li>
             </ul>
@@ -484,7 +485,7 @@ The allowed interval starts at the Creation Timestamp and extends for the Lifeti
             </li>
             <li>
 The Challenge Bundle Source Node ID is identical to the Node ID indicated in the ACME challenge object.
-The comparison of Node IDs <bcp14>SHALL</bcp14> use the comparison logic of <xref target="RFC3986"/> and scheme-based normalization of those schemes specified in <xref target="I-D.ietf-dtn-bpbis"/>.
+The comparison of Node IDs <bcp14>SHALL</bcp14> use the comparison logic of the NODE-ID from <xref section="4.4.1" target="I-D.ietf-dtn-tcpclv4"/>.
             </li>
             <li>
 The Challenge Bundle contains a BIB which covers at least the primary block and payload.
@@ -570,28 +571,48 @@ A proper Response Bundle meets all of the following criteria:
           <ul spacing="normal">
             <li>
 The Response Bundle was received within the time interval allowed for the challenge.
-The allowed interval starts at the Creation Timestamp and extends for the Lifetime of the Response Bundle.
+The allowed interval starts at the Creation Timestamp and extends for the Lifetime of the associated Challenge Bundle.
+The interval of the Challenge Bundle is used here because the interval of the Response Bundle could be made to disagree with the Challenge Bundle.
             </li>
             <li>
 The Response Bundle Source Node ID is identical to the Node ID being validated.
-The comparison of Node IDs <bcp14>SHALL</bcp14> use the comparison logic of <xref target="RFC3986"/> and scheme-based normalization of those schemes specified in <xref target="I-D.ietf-dtn-bpbis"/>.
+The comparison of Node IDs <bcp14>SHALL</bcp14> use the comparison logic of the NODE-ID from <xref section="4.4.1" target="I-D.ietf-dtn-tcpclv4"/>.
             </li>
             <li>
 The Response Bundle contains a BIB which covers at least the primary block and payload.
 That BIB has a security source which is trusted and passes security-context-specific validation.
             </li>
             <li>
-The response payload contains the <tt>token-chal</tt> and <tt>token-bundle</tt> as sent in the Challenge Bundle.
+The response payload contains the same <tt>token-chal</tt> and <tt>token-bundle</tt> as sent in the Challenge Bundle (this is also how the two bundles are correlated).
 The response payload contains the expected Key Authorization digest computed by the ACME server.
-Because multiple Challenge Bundles can be sent to validate the same Node ID, the <tt>token-bundle</tt> in the response is needed to correlate with the expected Key Authorization digest.
             </li>
           </ul>
           <t>
-Any of the failures above <bcp14>SHALL</bcp14> cause the validation to fail with an ACME error type of "incorrectResponse".
-Any of the failures above <bcp14>SHOULD</bcp14> be indicated as subproblems to the ACME client.
+Any of the failures above <bcp14>SHALL</bcp14> cause that single-perspective validation to fail.
+Any of the failures above <bcp14>SHOULD</bcp14> be distinguished as subproblems to the ACME client.
 The lack of a response within the expected response interval, as defined in <xref target="sec-nodeid-challenge-response"/>, <bcp14>SHALL</bcp14> also be treated as a validation failure.
           </t>
         </section>
+      </section>
+      <section anchor="sec-multi-perspective">
+        <name>Multi-Perspective Validation</name>
+        <t>
+To avoid possible on-path attacks in certain networks, an ACME server can perform a single validation using multiple challenge bundle sources or via multiple routing paths.
+This technique is called multi-perspective validation as recommended in <xref section="10.2" target="RFC8555"/> and an implementation used by Let's Encrypt is described in <xref target="LE-multi-perspective"/>.
+        </t>
+        <t>
+When required by policy, an ACME server <bcp14>SHALL</bcp14> send multiple challenge bundles from different sources in the DTN network.
+When multiple Challenge Bundles are sent for a single validation, it is a matter of ACME server policy to determine whether or not the validation as a whole is successful.
+The result of each single-source validation is defined as success or failure in <xref target="sec-response-check"/>.
+        </t>
+        <t>
+A <bcp14>RECOMMENDED</bcp14> validation policy is to succeed if the challenge from a primary bundle source is successful and if there are no more than one failure from a secondary source.
+The determination of which perspectives are considered primary or secondary is an implementation matter.
+        </t>
+        <t>
+Regardless of whether a validation is single- or multi-perspective, a validation failure <bcp14>SHALL</bcp14> be indicated by an ACME error type of "incorrectResponse".
+Each specific perspective failure <bcp14>SHOULD</bcp14> be indicated to the ACME client as a validation subproblem.
+        </t>
       </section>
     </section>
     <section anchor="sec-bib-gateway">
@@ -620,15 +641,15 @@ The ultimate purpose of this ACME validation is to allow a CA to issue certifica
 These purposes are referred to here as bundle security certificates.
       </t>
       <t>
-One defining aspect of bundle security certificates is the Extended Key Usage key purpose "id-kp-bundleSecurity" of <xref target="IANA-SMI"/>.
-When requesting a certificate which includes a Node ID SAN, the CSR <bcp14>SHOULD</bcp14> include an Extended Key Usage of id-kp-bundleSecurity.
-When a bundle security certificate is issued based on a validated Node ID SAN, the certificate <bcp14>SHALL</bcp14> include an Extended Key Usage of id-kp-bundleSecurity.
+One defining aspect of bundle security certificates is the Extended Key Usage key purpose <tt>id-kp-bundleSecurity</tt> of <xref target="IANA-SMI"/>.
+When requesting a certificate which includes a Node ID SAN, the CSR <bcp14>SHOULD</bcp14> include an Extended Key Usage of <tt>id-kp-bundleSecurity</tt>.
+When a bundle security certificate is issued based on a validated Node ID SAN, the certificate <bcp14>SHALL</bcp14> include an Extended Key Usage of <tt>id-kp-bundleSecurity</tt>.
       </t>
       <section anchor="sec-multiple-claims">
         <name>Multiple Identity Claims</name>
         <t>
 A single bundle security CSR <bcp14>MAY</bcp14> contain a mixed set of SAN claims, including combinations of "ip", "dns", and "bundleEID" claims.
-There is no restriction on how a certificate combines these claims, but each claim MUST be validated by an ACME server to issue such a certificate as part of an associated ACME order.
+There is no restriction on how a certificate combines these claims, but each claim <bcp14>MUST</bcp14> be validated by an ACME server to issue such a certificate as part of an associated ACME order.
 This is no different than the existing behavior of <xref target="RFC8555"/> but is mentioned here to make sure that CA policy handles such situations; especially related to validation failure of an identifier in the presence of multiple identifiers.
 The specific use case of <xref target="I-D.ietf-dtn-tcpclv4"/> allows, and for some network policies requires, that a certificate authenticate both the DNS name of an entity as well as the Node ID of the entity.
         </t>
@@ -639,25 +660,15 @@ The specific use case of <xref target="I-D.ietf-dtn-tcpclv4"/> allows, and for s
 ACME extensions specified in this document can be used to request encryption-only or signing-only bundle security certificates.
         </t>
         <t>
-In order to request signing only bundle security certificate, the CSR MUST include the key usage extension with digitalSignature and/or nonRepudiation bits set and no other bits set.
+In order to request signing only bundle security certificate, the CSR <bcp14>MUST</bcp14> include the key usage extension with digitalSignature and/or nonRepudiation bits set and no other bits set.
         </t>
         <t>
-In order to request encryption only bundle security certificate, the CSR MUST include the key usage extension with keyEncipherment or keyAgreement bits set and no other bits set.
+In order to request encryption only bundle security certificate, the CSR <bcp14>MUST</bcp14> include the key usage extension with keyEncipherment or keyAgreement bits set and no other bits set.
         </t>
         <t>
 Presence of both of the above sets of key usage bits in the CSR, as well as absence of key usage extension in the CSR, signals to ACME server to issue a bundle security certificate suitable for both signing and encryption.
         </t>
       </section>
-    </section>
-    <section anchor="sec-bpv7-admin-type">
-      <name>Bundle Protocol Administrative Record Types Registry</name>
-      <t>
-This document updates the requirements in <xref section="6.1" target="I-D.ietf-dtn-bpbis"/> to use an existing IANA registry and updates that sub-registry in <xref target="sec-iana-bp-admin-type"/>.
-      </t>
-      <t>
-Instead of using the explicit list of types in Table 3 of <xref target="I-D.ietf-dtn-bpbis"/>, a BP Agent <bcp14>SHALL</bcp14> interpret administrative record type code values in accordance with the IANA "Administrative Record Types" sub-registry for entries having a "Bundle Protocol Version" of 7.
-Additionally, this document clarifies the zero-value reservation for BPv7 and makes a reservation of high-valued record type codes for "private or experimental use" which applies only to BPv7.
-      </t>
     </section>
     <section removeInRFC="true">
       <name>Implementation Status</name>
@@ -705,7 +716,7 @@ The primary mitigation is to delegate bundle integrity sourcing to a trusted rou
 This is functionally similar to DKIM signing of <xref target="RFC6376"/> and provides some level of bundle origination.
         </t>
         <t>
-Another way to mitigate single-path on-path attacks is to attempt validation of the same Node ID via multiple bundle routing paths, as recommended in <xref target="sec-validate-nodeid"/>.
+Another way to mitigate single-path on-path attacks is to attempt validation of the same Node ID from multiple sources or via multiple bundle routing paths, as defined in <xref target="sec-multi-perspective"/>.
 It is not a trivial task to guarantee bundle routing though, so more advanced techniques such as onion routing (using bundle-in-bundle encapsulation <xref target="I-D.ietf-dtn-bibect"/>) could be employed.
         </t>
       </section>
@@ -823,55 +834,10 @@ Within the "Automated Certificate Management Environment (ACME) Protocol" regist
       <section anchor="sec-iana-bp-admin-type">
         <name>Bundle Administrative Record Types</name>
         <t>
-Within the "Bundle Protocol" registry <xref target="IANA-BP"/>, the "Bundle Administrative Record Types" sub-registry has been updated to include a leftmost "Bundle Protocol Version" column.
-The existing sub-registry entries have been updated to have BP versions as in the following table.
-        </t>
-        <table>
-          <thead>
-            <tr>
-              <th>Bundle Protocol Version</th>
-              <th>Value</th>
-              <th>Description</th>
-              <th>Reference</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>6,7</td>
-              <td>0</td>
-              <td>Reserved</td>
-              <td>
-                <xref target="RFC7116"/>
-              </td>
-            </tr>
-            <tr>
-              <td>6,7</td>
-              <td>1</td>
-              <td>Bundle status report</td>
-              <td>
-                <xref target="RFC5050"/>
-                <xref target="I-D.ietf-dtn-bpbis"/>
-              </td>
-            </tr>
-            <tr>
-              <td>6</td>
-              <td>2</td>
-              <td>Custody signal</td>
-              <td>
-                <xref target="RFC5050"/>
-              </td>
-            </tr>
-            <tr>
-              <td>6,7</td>
-              <td>3-15</td>
-              <td>Unassigned</td>
-              <td/>
-            </tr>
-          </tbody>
-        </table>
-        <t>
 Within the "Bundle Protocol" registry <xref target="IANA-BP"/>, the following entries have been added to the "Bundle Administrative Record Types" sub-registry.
-[NOTE to the RFC Editor: For RFC5050 compatibility the TBD value needs to be no larger than 15, but such compatibility is not needed. For BPbis the TBD value needs to be no larger than 65535.]
+        </t>
+        <t>
+[NOTE to the RFC Editor: For <xref target="RFC5050"/> compatibility the AR-TBD value needs to be no larger than 15, but such compatibility is not needed. For BPbis the AR-TBD value needs to be no larger than 65535 as defined by <xref target="I-D.sipos-bpv7-admin-iana"/>.]
         </t>
         <table>
           <thead>
@@ -885,20 +851,8 @@ Within the "Bundle Protocol" registry <xref target="IANA-BP"/>, the following en
           <tbody>
             <tr>
               <td>7</td>
-              <td>TBD</td>
+              <td>AR-TBD</td>
               <td>ACME Node ID Validation</td>
-              <td>This specification</td>
-            </tr>
-            <tr>
-              <td>7</td>
-              <td>16-65535</td>
-              <td>Unassigned</td>
-              <td/>
-            </tr>
-            <tr>
-              <td>7</td>
-              <td>&gt;= 65536</td>
-              <td>Reserved for Private or Experimental Use</td>
               <td>This specification</td>
             </tr>
           </tbody>
@@ -976,11 +930,11 @@ The workflow and terminology of this validation method was originally copied fro
         <name>Informative References</name>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.5050.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6376.xml"/>
-        <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7116.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8823.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml-ids/reference.I-D.ietf-dtn-bibect.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml-ids/reference.I-D.ietf-dtn-tcpclv4.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml-ids/reference.I-D.sipos-dtn-udpcl.xml"/>
+        <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml-ids/reference.I-D.sipos-bpv7-admin-iana.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml-ids/reference.I-D.bsipos-dtn-bpsec-cose.xml"/>
         <reference anchor="github-dtn-demo-agent" target="https://github.com/BSipos-RKF/dtn-demo-agent/">
           <front>
@@ -998,6 +952,15 @@ The workflow and terminology of this validation method was originally copied fro
               <organization abbrev="RKF Engineering">RKF Engineering Solutions, LLC</organization>
             </author>
             <date/>
+          </front>
+        </reference>
+        <reference anchor="LE-multi-perspective" target="https://letsencrypt.org/2020/02/19/multi-perspective-validation.html">
+          <front>
+            <title>Multi-Perspective Validation Improves Domain Validation Security</title>
+            <author fullname="Josh Aas"/>
+            <author fullname="Daniel McCarney"/>
+            <author fullname="Roland Shoemaker"/>
+            <date day="19" month="Feb" year="2020"/>
           </front>
         </reference>
       </references>
