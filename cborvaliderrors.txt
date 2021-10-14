@@ -88,8 +88,8 @@ INFO:root:Processing element text:
 	from /var/lib/gems/2.7.0/gems/cddl-0.8.26/bin/cddl:94:in `<top (required)>'
 	from /usr/local/bin/cddl:23:in `load'
 	from /usr/local/bin/cddl:23:in `<main>'
-/var/lib/gems/2.7.0/gems/cbor-diag-0.5.20/lib/cbor-pure.rb:310:in `decode_item_final': extra bytes follow after a deserialized object of 1 bytes (RuntimeError)
-	from /var/lib/gems/2.7.0/gems/cbor-diag-0.5.20/lib/cbor-pure.rb:88:in `decode'
+/var/lib/gems/2.7.0/gems/cbor-diag-0.6.1/lib/cbor-pure.rb:310:in `decode_item_final': extra bytes follow after a deserialized object of 1 bytes (RuntimeError)
+	from /var/lib/gems/2.7.0/gems/cbor-diag-0.6.1/lib/cbor-pure.rb:88:in `decode'
 	from /var/lib/gems/2.7.0/gems/cddl-0.8.26/bin/cddl:99:in `block in <top (required)>'
 	from /var/lib/gems/2.7.0/gems/cddl-0.8.26/bin/cddl:94:in `each'
 	from /var/lib/gems/2.7.0/gems/cddl-0.8.26/bin/cddl:94:in `<top (required)>'
@@ -110,8 +110,8 @@ INFO:root:Processing element text:
 	from /var/lib/gems/2.7.0/gems/cddl-0.8.26/bin/cddl:94:in `<top (required)>'
 	from /usr/local/bin/cddl:23:in `load'
 	from /usr/local/bin/cddl:23:in `<main>'
-/var/lib/gems/2.7.0/gems/cbor-diag-0.5.20/lib/cbor-pure.rb:310:in `decode_item_final': extra bytes follow after a deserialized object of 1 bytes (RuntimeError)
-	from /var/lib/gems/2.7.0/gems/cbor-diag-0.5.20/lib/cbor-pure.rb:88:in `decode'
+/var/lib/gems/2.7.0/gems/cbor-diag-0.6.1/lib/cbor-pure.rb:310:in `decode_item_final': extra bytes follow after a deserialized object of 1 bytes (RuntimeError)
+	from /var/lib/gems/2.7.0/gems/cbor-diag-0.6.1/lib/cbor-pure.rb:88:in `decode'
 	from /var/lib/gems/2.7.0/gems/cddl-0.8.26/bin/cddl:99:in `block in <top (required)>'
 	from /var/lib/gems/2.7.0/gems/cddl-0.8.26/bin/cddl:94:in `each'
 	from /var/lib/gems/2.7.0/gems/cddl-0.8.26/bin/cddl:94:in `<top (required)>'
@@ -202,8 +202,8 @@ INFO:root:Processing element text:
 	from /var/lib/gems/2.7.0/gems/cddl-0.8.26/bin/cddl:94:in `<top (required)>'
 	from /usr/local/bin/cddl:23:in `load'
 	from /usr/local/bin/cddl:23:in `<main>'
-/var/lib/gems/2.7.0/gems/cbor-diag-0.5.20/lib/cbor-pure.rb:310:in `decode_item_final': extra bytes follow after a deserialized object of 1 bytes (RuntimeError)
-	from /var/lib/gems/2.7.0/gems/cbor-diag-0.5.20/lib/cbor-pure.rb:88:in `decode'
+/var/lib/gems/2.7.0/gems/cbor-diag-0.6.1/lib/cbor-pure.rb:310:in `decode_item_final': extra bytes follow after a deserialized object of 1 bytes (RuntimeError)
+	from /var/lib/gems/2.7.0/gems/cbor-diag-0.6.1/lib/cbor-pure.rb:88:in `decode'
 	from /var/lib/gems/2.7.0/gems/cddl-0.8.26/bin/cddl:99:in `block in <top (required)>'
 	from /var/lib/gems/2.7.0/gems/cddl-0.8.26/bin/cddl:94:in `each'
 	from /var/lib/gems/2.7.0/gems/cddl-0.8.26/bin/cddl:94:in `<top (required)>'

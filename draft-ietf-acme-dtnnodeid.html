@@ -9,18 +9,18 @@
 <meta content='
        
 This document specifies an extension to the Automated Certificate Management Environment (ACME) protocol which allows an ACME server to validate the Delay-Tolerant Networking (DTN) Node ID for an ACME client.
-The DTN Node ID is encoded as a certificate Subject Alternative Name (SAN) of type otherName with a name form of  bundleEID  and as an ACME Identifier type "bundleEID".
+The DTN Node ID is encoded as a certificate Subject Alternative Name (SAN) of type otherName with a name form of  BundleEID  and as an ACME Identifier type "bundleEID".
        
     ' name="description">
 <meta content="xml2rfc 3.10.0" name="generator">
 <meta content="ACME" name="keyword">
 <meta content="DTN" name="keyword">
-<meta content="draft-ietf-acme-dtnnodeid-05" name="ietf.draft">
+<meta content="draft-ietf-acme-dtnnodeid-06" name="ietf.draft">
 <!-- Generator version information:
   xml2rfc 3.10.0
     Python 3.8.10
     appdirs 1.4.4
-    ConfigArgParse 1.5.2
+    ConfigArgParse 1.5.3
     google-i18n-address 2.5.0
     html5lib 1.1
     intervaltree 3.1.0
@@ -28,7 +28,7 @@ The DTN Node ID is encoded as a certificate Subject Alternative Name (SAN) of ty
     kitchen 1.2.6
     lxml 4.6.3
     pycountry 20.7.3
-    pyflakes 2.3.1
+    pyflakes 2.4.0
     PyYAML 5.3.1
     requests 2.22.0
     setuptools 45.2.0
@@ -1189,11 +1189,11 @@ li > p:last-of-type {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">ACME DTN Node ID</td>
-<td class="right">September 2021</td>
+<td class="right">October 2021</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Sipos</td>
-<td class="center">Expires 1 April 2022</td>
+<td class="center">Expires 17 April 2022</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1203,18 +1203,15 @@ li > p:last-of-type {
 <dt class="label-workgroup">Workgroup:</dt>
 <dd class="workgroup">Automated Certificate Management Environment</dd>
 <dt class="label-internet-draft">Internet-Draft:</dt>
-<dd class="internet-draft">draft-ietf-acme-dtnnodeid-05</dd>
-<dt class="label-updates">Updates:</dt>
-<dd class="updates">
-<a href="https://www.rfc-editor.org/rfc/rfc-ietf-dtn-bpbis" class="eref">-ietf-dtn-bpbis</a> (if approved)</dd>
+<dd class="internet-draft">draft-ietf-acme-dtnnodeid-06</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2021-09-28" class="published">28 September 2021</time>
+<time datetime="2021-10-14" class="published">14 October 2021</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Experimental</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2022-04-01">1 April 2022</time></dd>
+<dd class="expires"><time datetime="2022-04-17">17 April 2022</time></dd>
 <dt class="label-authors">Author:</dt>
 <dd class="authors">
 <div class="author">
@@ -1229,7 +1226,7 @@ li > p:last-of-type {
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
 <p id="section-abstract-1">
 This document specifies an extension to the Automated Certificate Management Environment (ACME) protocol which allows an ACME server to validate the Delay-Tolerant Networking (DTN) Node ID for an ACME client.
-The DTN Node ID is encoded as a certificate Subject Alternative Name (SAN) of type otherName with a name form of <code>bundleEID</code> and as an ACME Identifier type "bundleEID".<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+The DTN Node ID is encoded as a certificate Subject Alternative Name (SAN) of type otherName with a name form of <code>BundleEID</code> and as an ACME Identifier type "bundleEID".<a href="#section-abstract-1" class="pilcrow">¶</a></p>
 </section>
 <div id="status-of-memo">
 <section id="section-boilerplate.1">
@@ -1250,7 +1247,7 @@ The DTN Node ID is encoded as a certificate Subject Alternative Name (SAN) of ty
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 1 April 2022.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 17 April 2022.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1324,6 +1321,9 @@ The DTN Node ID is encoded as a certificate Subject Alternative Name (SAN) of ty
 </li>
                 </ul>
 </li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.5">
+                <p id="section-toc.1-1.3.2.5.1"><a href="#section-3.5" class="xref">3.5</a>.  <a href="#name-multi-perspective-validatio" class="xref">Multi-Perspective Validation</a></p>
+</li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4">
@@ -1341,78 +1341,75 @@ The DTN Node ID is encoded as a certificate Subject Alternative Name (SAN) of ty
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
-            <p id="section-toc.1-1.6.1"><a href="#section-6" class="xref">6</a>.  <a href="#name-bundle-protocol-administrat" class="xref">Bundle Protocol Administrative Record Types Registry</a></p>
+            <p id="section-toc.1-1.6.1"><a href="#section-6" class="xref">6</a>.  <a href="#name-implementation-status" class="xref">Implementation Status</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
-            <p id="section-toc.1-1.7.1"><a href="#section-7" class="xref">7</a>.  <a href="#name-implementation-status" class="xref">Implementation Status</a></p>
+            <p id="section-toc.1-1.7.1"><a href="#section-7" class="xref">7</a>.  <a href="#name-security-considerations" class="xref">Security Considerations</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.1">
+                <p id="section-toc.1-1.7.2.1.1"><a href="#section-7.1" class="xref">7.1</a>.  <a href="#name-threat-passive-leak-of-vali" class="xref">Threat: Passive Leak of Validation Data</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.2">
+                <p id="section-toc.1-1.7.2.2.1"><a href="#section-7.2" class="xref">7.2</a>.  <a href="#name-threat-bp-node-impersonatio" class="xref">Threat: BP Node Impersonation</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.3">
+                <p id="section-toc.1-1.7.2.3.1"><a href="#section-7.3" class="xref">7.3</a>.  <a href="#name-threat-bundle-replay" class="xref">Threat: Bundle Replay</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.4">
+                <p id="section-toc.1-1.7.2.4.1"><a href="#section-7.4" class="xref">7.4</a>.  <a href="#name-threat-denial-of-service" class="xref">Threat: Denial of Service</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.5">
+                <p id="section-toc.1-1.7.2.5.1"><a href="#section-7.5" class="xref">7.5</a>.  <a href="#name-inherited-security-consider" class="xref">Inherited Security Considerations</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.6">
+                <p id="section-toc.1-1.7.2.6.1"><a href="#section-7.6" class="xref">7.6</a>.  <a href="#name-out-of-scope-bp-agent-commu" class="xref">Out-of-Scope BP Agent Communication</a></p>
+</li>
+            </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8">
-            <p id="section-toc.1-1.8.1"><a href="#section-8" class="xref">8</a>.  <a href="#name-security-considerations" class="xref">Security Considerations</a></p>
+            <p id="section-toc.1-1.8.1"><a href="#section-8" class="xref">8</a>.  <a href="#name-iana-considerations" class="xref">IANA Considerations</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.1">
-                <p id="section-toc.1-1.8.2.1.1"><a href="#section-8.1" class="xref">8.1</a>.  <a href="#name-threat-passive-leak-of-vali" class="xref">Threat: Passive Leak of Validation Data</a></p>
+                <p id="section-toc.1-1.8.2.1.1"><a href="#section-8.1" class="xref">8.1</a>.  <a href="#name-acme-identifier-types" class="xref">ACME Identifier Types</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.2">
-                <p id="section-toc.1-1.8.2.2.1"><a href="#section-8.2" class="xref">8.2</a>.  <a href="#name-threat-bp-node-impersonatio" class="xref">Threat: BP Node Impersonation</a></p>
+                <p id="section-toc.1-1.8.2.2.1"><a href="#section-8.2" class="xref">8.2</a>.  <a href="#name-acme-validation-methods" class="xref">ACME Validation Methods</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.3">
-                <p id="section-toc.1-1.8.2.3.1"><a href="#section-8.3" class="xref">8.3</a>.  <a href="#name-threat-bundle-replay" class="xref">Threat: Bundle Replay</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.4">
-                <p id="section-toc.1-1.8.2.4.1"><a href="#section-8.4" class="xref">8.4</a>.  <a href="#name-threat-denial-of-service" class="xref">Threat: Denial of Service</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.5">
-                <p id="section-toc.1-1.8.2.5.1"><a href="#section-8.5" class="xref">8.5</a>.  <a href="#name-inherited-security-consider" class="xref">Inherited Security Considerations</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.6">
-                <p id="section-toc.1-1.8.2.6.1"><a href="#section-8.6" class="xref">8.6</a>.  <a href="#name-out-of-scope-bp-agent-commu" class="xref">Out-of-Scope BP Agent Communication</a></p>
+                <p id="section-toc.1-1.8.2.3.1"><a href="#section-8.3" class="xref">8.3</a>.  <a href="#name-bundle-administrative-recor" class="xref">Bundle Administrative Record Types</a></p>
 </li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9">
-            <p id="section-toc.1-1.9.1"><a href="#section-9" class="xref">9</a>.  <a href="#name-iana-considerations" class="xref">IANA Considerations</a></p>
-<ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.1">
-                <p id="section-toc.1-1.9.2.1.1"><a href="#section-9.1" class="xref">9.1</a>.  <a href="#name-acme-identifier-types" class="xref">ACME Identifier Types</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.2">
-                <p id="section-toc.1-1.9.2.2.1"><a href="#section-9.2" class="xref">9.2</a>.  <a href="#name-acme-validation-methods" class="xref">ACME Validation Methods</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.3">
-                <p id="section-toc.1-1.9.2.3.1"><a href="#section-9.3" class="xref">9.3</a>.  <a href="#name-bundle-administrative-recor" class="xref">Bundle Administrative Record Types</a></p>
-</li>
-            </ul>
+            <p id="section-toc.1-1.9.1"><a href="#section-9" class="xref">9</a>.  <a href="#name-acknowledgments" class="xref">Acknowledgments</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10">
-            <p id="section-toc.1-1.10.1"><a href="#section-10" class="xref">10</a>. <a href="#name-acknowledgments" class="xref">Acknowledgments</a></p>
+            <p id="section-toc.1-1.10.1"><a href="#section-10" class="xref">10</a>. <a href="#name-references" class="xref">References</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.1">
+                <p id="section-toc.1-1.10.2.1.1"><a href="#section-10.1" class="xref">10.1</a>.  <a href="#name-normative-references" class="xref">Normative References</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.2">
+                <p id="section-toc.1-1.10.2.2.1"><a href="#section-10.2" class="xref">10.2</a>.  <a href="#name-informative-references" class="xref">Informative References</a></p>
+</li>
+            </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11">
-            <p id="section-toc.1-1.11.1"><a href="#section-11" class="xref">11</a>. <a href="#name-references" class="xref">References</a></p>
-<ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11.2.1">
-                <p id="section-toc.1-1.11.2.1.1"><a href="#section-11.1" class="xref">11.1</a>.  <a href="#name-normative-references" class="xref">Normative References</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11.2.2">
-                <p id="section-toc.1-1.11.2.2.1"><a href="#section-11.2" class="xref">11.2</a>.  <a href="#name-informative-references" class="xref">Informative References</a></p>
-</li>
-            </ul>
+            <p id="section-toc.1-1.11.1"><a href="#appendix-A" class="xref">Appendix A</a>.  <a href="#name-administrative-record-types" class="xref">Administrative Record Types CDDL</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12">
-            <p id="section-toc.1-1.12.1"><a href="#appendix-A" class="xref">Appendix A</a>.  <a href="#name-administrative-record-types" class="xref">Administrative Record Types CDDL</a></p>
-</li>
-          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13">
-            <p id="section-toc.1-1.13.1"><a href="#appendix-B" class="xref">Appendix B</a>.  <a href="#name-example-authorization" class="xref">Example Authorization</a></p>
+            <p id="section-toc.1-1.12.1"><a href="#appendix-B" class="xref">Appendix B</a>.  <a href="#name-example-authorization" class="xref">Example Authorization</a></p>
 <ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13.2.1">
-                <p id="section-toc.1-1.13.2.1.1"><a href="#appendix-B.1" class="xref">B.1</a>.  <a href="#name-challenge-bundle" class="xref">Challenge Bundle</a></p>
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12.2.1">
+                <p id="section-toc.1-1.12.2.1.1"><a href="#appendix-B.1" class="xref">B.1</a>.  <a href="#name-challenge-bundle" class="xref">Challenge Bundle</a></p>
 </li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13.2.2">
-                <p id="section-toc.1-1.13.2.2.1"><a href="#appendix-B.2" class="xref">B.2</a>.  <a href="#name-response-bundle" class="xref">Response Bundle</a></p>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12.2.2">
+                <p id="section-toc.1-1.12.2.2.1"><a href="#appendix-B.2" class="xref">B.2</a>.  <a href="#name-response-bundle" class="xref">Response Bundle</a></p>
 </li>
             </ul>
 </li>
-          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.14">
-            <p id="section-toc.1-1.14.1"><a href="#appendix-C" class="xref"></a><a href="#name-authors-address" class="xref">Author's Address</a></p>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13">
+            <p id="section-toc.1-1.13.1"><a href="#appendix-C" class="xref"></a><a href="#name-authors-address" class="xref">Author's Address</a></p>
 </li>
         </ul>
 </nav>
@@ -1426,11 +1423,11 @@ The DTN Node ID is encoded as a certificate Subject Alternative Name (SAN) of ty
 <p id="section-1-1">
 Although the original purpose of the Automatic Certificate Management Environment (ACME) <span>[<a href="#RFC8555" class="xref">RFC8555</a>]</span> was to allow Public Key Infrastructure Using X.509 (PKIX) certificate authorities to validate network domain names of clients, the same mechanism can be used to validate any of the subject claims supported by the PKIX profile <span>[<a href="#RFC5280" class="xref">RFC5280</a>]</span>.<a href="#section-1-1" class="pilcrow">¶</a></p>
 <p id="section-1-2">
-In the case of this specification, the claim being validated is a Subject Alternative Name (SAN) of type otherName with a name form of <code>bundleEID</code>, which used to represent an Endpoint ID (EID) for a Delay-Tolerant Networking (DTN) bundle.
+In the case of this specification, the claim being validated is a Subject Alternative Name (SAN) of type otherName with a name form of <code>BundleEID</code>, which used to represent an Endpoint ID (EID) for a Delay-Tolerant Networking (DTN) bundle.
 Currently the URI schemes "dtn" and "ipn" as defined in <span>[<a href="#I-D.ietf-dtn-bpbis" class="xref">I-D.ietf-dtn-bpbis</a>]</span> are valid for an Endpoint ID.
 A DTN Node ID is an Endpoint ID with scheme-specific restrictions to identify it as such; currently the "dtn" scheme uses an empty demux part and the "ipn" scheme uses service number zero.<a href="#section-1-2" class="pilcrow">¶</a></p>
 <p id="section-1-3">
-Because the SAN URI claim is new to ACME, a new ACME Identifier type "bundleEID" is needed to manage this claim within ACME messaging.
+Because the <code>BundleEID</code> claim is new to ACME, a new ACME Identifier type "bundleEID" is needed to manage this claim within ACME messaging.
 A "bundleEID" claim can be part of a pre-authorization or as one of the authorizations of an order containing any number of claims.<a href="#section-1-3" class="pilcrow">¶</a></p>
 <p id="section-1-4">
 Once an ACME server validates a Node ID, either as a pre-authorization of the "bundleEID" or as one of the authorizations of an order containing a "bundleEID", the client can finalize the order using an associated certificate signing request (CSR).
@@ -1438,8 +1435,6 @@ Because a single order can contain multiple identifiers of multiple types, there
 Once a certificate is issued for a Node ID, how the ACME client configures the Bundle Protocol (BP) agent with the new certificate is an implementation matter.<a href="#section-1-4" class="pilcrow">¶</a></p>
 <p id="section-1-5">
 The scope and behavior of this validation mechanism is similar to that of secured email validation of <span>[<a href="#RFC8823" class="xref">RFC8823</a>]</span>.<a href="#section-1-5" class="pilcrow">¶</a></p>
-<p id="section-1-6">
-This document also updates BPv7 to explicitly use the IANA administrative record type registry in <a href="#sec-bpv7-admin-type" class="xref">Section 6</a>.<a href="#section-1-6" class="pilcrow">¶</a></p>
 <section id="section-1.1">
         <h3 id="name-scope">
 <a href="#section-1.1" class="section-number selfRef">1.1. </a><a href="#name-scope" class="section-name selfRef">Scope</a>
@@ -1603,21 +1598,24 @@ It is a Bundle created by the BP agent managed by the ACME client to validate a 
 This specification is the first to make use of an Bundle Endpoint ID to identify a claim for a certificate request in ACME.
 In this document, the only purpose for which an Bundle Endpoint ID ACME identifier is validated is as a DTN Node ID (see <a href="#sec-validate-nodeid" class="xref">Section 3</a>), but other specifications can define challenge types for other Endpoint ID uses.<a href="#section-2-1" class="pilcrow">¶</a></p>
 <p id="section-2-2">
-Identifiers of type "bundleEID" in certificate requests MUST appear in an extensionRequest attribute <span>[<a href="#RFC2985" class="xref">RFC2985</a>]</span> containing a subjectAltName extension of type otherName with a name form of <code>bundleEID</code> consistent with the requirements of <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-dtn-tcpclv4-27#section-4.4.2.1" class="relref">Section 4.4.2.1</a> of [<a href="#I-D.ietf-dtn-tcpclv4" class="xref">I-D.ietf-dtn-tcpclv4</a>]</span>.
-Because the bundleEID is encoded as an IA5String it SHALL be treated as being in the percent-encoded form of <span><a href="https://rfc-editor.org/rfc/rfc3986#section-2.1" class="relref">Section 2.1</a> of [<a href="#RFC3986" class="xref">RFC3986</a>]</span>.
-Any "bundleEID" identifier which fails to properly percent-decode SHALL be rejected with an ACME error type of "malformed".<a href="#section-2-2" class="pilcrow">¶</a></p>
+Identifiers of type "bundleEID" in certificate requests <span class="bcp14">MUST</span> appear in an extensionRequest attribute <span>[<a href="#RFC2985" class="xref">RFC2985</a>]</span> containing a subjectAltName extension of type otherName with a name form of <code>BundleEID</code>, identified by <code>id-on-bundleEID</code> of <span>[<a href="#IANA-SMI" class="xref">IANA-SMI</a>]</span>, consistent with the requirements of <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-dtn-tcpclv4-28#section-4.4.2.1" class="relref">Section 4.4.2.1</a> of [<a href="#I-D.ietf-dtn-tcpclv4" class="xref">I-D.ietf-dtn-tcpclv4</a>]</span>.
+Because the <code>BundleEID</code> is encoded as an IA5String it <span class="bcp14">SHALL</span> be treated as being in the percent-encoded form of <span><a href="https://rfc-editor.org/rfc/rfc3986#section-2.1" class="relref">Section 2.1</a> of [<a href="#RFC3986" class="xref">RFC3986</a>]</span>.
+Any "bundleEID" identifier which fails to properly percent-decode <span class="bcp14">SHALL</span> be rejected with an ACME error type of "malformed".<a href="#section-2-2" class="pilcrow">¶</a></p>
 <p id="section-2-3">
-The ACME server SHALL decode and normalize (based on scheme-specific syntax) all received identifiers of type "bundleEID".
-Any "bundleEID" identifier request which uses a scheme not handled by the ACME server or for which the URI does not match the scheme-specific syntax SHALL be rejected with an ACME error type of "rejectedIdentifier".<a href="#section-2-3" class="pilcrow">¶</a></p>
+The ACME server <span class="bcp14">SHALL</span> decode and normalize (based on scheme-specific syntax) all received identifiers of type "bundleEID".
+Any "bundleEID" identifier request which uses a scheme not handled by the ACME server or for which the EID does not match the scheme-specific syntax <span class="bcp14">SHALL</span> be rejected with an ACME error type of "rejectedIdentifier".<a href="#section-2-3" class="pilcrow">¶</a></p>
 <p id="section-2-4">
-When an ACME server needs to request proof that a client controls a URI, it SHALL create an authorization with the identifier type "bundleEID".
-The ACME server SHALL NOT attempt to dereference the Endpoint ID value on its own.
-It is the responsibility of a validation method to ensure the URI ownership via scheme-specific means authorized by the ACME client.<a href="#section-2-4" class="pilcrow">¶</a></p>
+When an ACME server needs to request proof that a client controls a <code>BundleEID</code>, it <span class="bcp14">SHALL</span> create an authorization with the identifier type "bundleEID".
+The ACME server <span class="bcp14">SHALL NOT</span> attempt to dereference the EID value on its own.
+It is the responsibility of a validation method to ensure the EID ownership via scheme-specific means authorized by the ACME client.<a href="#section-2-4" class="pilcrow">¶</a></p>
 <p id="section-2-5" class="keepWithNext">
 An identifier for the Node ID of "dtn://example/" would be formatted as:<a href="#section-2-5" class="pilcrow">¶</a></p>
 <div id="section-2-6">
 <pre class="lang-json sourcecode">
-{"type": "bundleEID", "value": "dtn://example/"}
+{
+  "type": "bundleEID",
+  "value": "dtn://example/"
+}
 </pre><a href="#section-2-6" class="pilcrow">¶</a>
 </div>
 </section>
@@ -1629,7 +1627,7 @@ An identifier for the Node ID of "dtn://example/" would be formatted as:<a href=
       </h2>
 <p id="section-3-1">
 The DTN Node ID validation method proves control over a Node ID by requiring the ACME client to configure a BP agent to respond to specific Challenge Bundles sent from the ACME server.
-The ACME server validates control of the Node ID URI by verifying that received Response Bundles correspond with the BP Node and client account key being validated.<a href="#section-3-1" class="pilcrow">¶</a></p>
+The ACME server validates control of the Node ID by verifying that received Response Bundles correspond with the BP Node and client account key being validated.<a href="#section-3-1" class="pilcrow">¶</a></p>
 <p id="section-3-2">
 Similar to the ACME use case for validating email address ownership <span>[<a href="#RFC8823" class="xref">RFC8823</a>]</span>, this challenge splits the token into several parts, each being transported by a different channel, and the Key Authorization result requires combining all parts of the token.
 The token parts are:<a href="#section-3-2" class="pilcrow">¶</a></p>
@@ -1638,7 +1636,7 @@ The token parts are:<a href="#section-3-2" class="pilcrow">¶</a></p>
           <code>token-chal</code>
         </dt>
         <dd style="margin-left: 1.5em" id="section-3-3.2">
-This token is unique to, and constant for, each ACME authorization.
+This token is unique to, and identifies, each ACME authorization.
 It is contained in the Challenge Object of <a href="#sec-nodeid-challenge-request" class="xref">Section 3.1</a> as well as the Challenge Bundle of <a href="#sec-bundle-challenge" class="xref">Section 3.3</a> and Response Bundle of <a href="#sec-bundle-response" class="xref">Section 3.4</a>.
 Each authorization can consist of multiple Challenge Bundles (e.g. taking different routes), but they all share the same <code>token-chal</code> value.
 This ensures that the Key Authorization is bound to the specific ACME challenge (and parent ACME authorization) and also allows the ACME client's BP agent to filter-in only valid Challenge Bundles.
@@ -1657,86 +1655,84 @@ This token is also accessible to DTN on-path eavesdroppers.<a href="#section-3-3
       <dd class="break"></dd>
 </dl>
 <p id="section-3-4">
-The DTN Node ID Challenge SHALL only be allowed for URIs usable as a DTN Node ID, which are currently the schemes "dtn" and "ipn" as defined in <span>[<a href="#I-D.ietf-dtn-bpbis" class="xref">I-D.ietf-dtn-bpbis</a>]</span>.
-When an ACME server supports Node ID validation, the ACME server SHALL define a challenge object in accordance with <a href="#sec-nodeid-challenge-request" class="xref">Section 3.1</a>.
-Once this challenge object is defined, the ACME client may begin the validation.<a href="#section-3-4" class="pilcrow">¶</a></p>
+For each ACME server, the pair of <code>token-chal</code> and <code>token-bundle</code> values is the unique correlator between Challenge and Response bundles.
+Because multiple Challenge Bundles can be sent to validate the same Node ID, the <code>token-bundle</code> in the response is needed to correlate with the expected Key Authorization digest.<a href="#section-3-4" class="pilcrow">¶</a></p>
 <p id="section-3-5">
-To initiate a Node ID validation, the ACME client performs the following steps:<a href="#section-3-5" class="pilcrow">¶</a></p>
-<ol start="1" type="1" class="normal type-1" id="section-3-6">
-        <li id="section-3-6.1">
+The DTN Node ID Challenge <span class="bcp14">SHALL</span> only be allowed for an EID usable as a DTN Node ID, which  <span>[<a href="#I-D.ietf-dtn-bpbis" class="xref">I-D.ietf-dtn-bpbis</a>]</span>.
+When an ACME server supports Node ID validation, the ACME server <span class="bcp14">SHALL</span> define a challenge object in accordance with <a href="#sec-nodeid-challenge-request" class="xref">Section 3.1</a>.
+Once this challenge object is defined, the ACME client may begin the validation.<a href="#section-3-5" class="pilcrow">¶</a></p>
+<p id="section-3-6">
+To initiate a Node ID validation, the ACME client performs the following steps:<a href="#section-3-6" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-3-7">
+        <li id="section-3-7.1">
 The ACME client POSTs a newOrder or newAuthz request including the identifier of type "bundleEID" for the desired Node ID.
 From either of these entry points an authorization for the "bundleEID" type is indicated by the ACME server.
-See <span><a href="https://rfc-editor.org/rfc/rfc8555#section-7.4" class="relref">Section 7.4</a> of [<a href="#RFC8555" class="xref">RFC8555</a>]</span> for more details.<a href="#section-3-6.1" class="pilcrow">¶</a>
+See <span><a href="https://rfc-editor.org/rfc/rfc8555#section-7.4" class="relref">Section 7.4</a> of [<a href="#RFC8555" class="xref">RFC8555</a>]</span> for more details.<a href="#section-3-7.1" class="pilcrow">¶</a>
 </li>
-        <li id="section-3-6.2">
-The ACME client obtains the challenge source Node ID and <code>token-chal</code> from the challenge object in accordance with <a href="#sec-nodeid-challenge-request" class="xref">Section 3.1</a>.<a href="#section-3-6.2" class="pilcrow">¶</a>
+        <li id="section-3-7.2">
+The ACME client obtains the challenge source Node ID and <code>token-chal</code> from the challenge object in accordance with <a href="#sec-nodeid-challenge-request" class="xref">Section 3.1</a>.<a href="#section-3-7.2" class="pilcrow">¶</a>
 </li>
-        <li id="section-3-6.3">
+        <li id="section-3-7.3">
 <div id="step-client-authorize">
 The ACME client indicates to the administrative element of its BP agent the source Node ID and challenge <code>token-chal</code> which is authorized for use and the associated client account key thumbprint.
-The ACME client SHALL wait, if necessary, until the agent is configured before proceeding to the next step.<a href="#step-client-authorize" class="pilcrow">¶</a>
+The ACME client <span class="bcp14">SHALL</span> wait, if necessary, until the agent is configured before proceeding to the next step.<a href="#step-client-authorize" class="pilcrow">¶</a>
 </div>
         </li>
-<li id="section-3-6.4">
+<li id="section-3-7.4">
 The ACME client POSTs a challenge response to the challenge URL on the ACME server accordance with <span><a href="https://rfc-editor.org/rfc/rfc8555#section-7.5.1" class="relref">Section 7.5.1</a> of [<a href="#RFC8555" class="xref">RFC8555</a>]</span>.
-The payload object is constructed in accordance with <a href="#sec-nodeid-challenge-response" class="xref">Section 3.2</a>.<a href="#section-3-6.4" class="pilcrow">¶</a>
+The payload object is constructed in accordance with <a href="#sec-nodeid-challenge-response" class="xref">Section 3.2</a>.<a href="#section-3-7.4" class="pilcrow">¶</a>
 </li>
-        <li id="section-3-6.5">
-The administrative element waits for a Challenge Bundle to be received with the authorized ACME parameters, including its <code>token-bundle</code> payload, in accordance with <a href="#sec-bundle-challenge" class="xref">Section 3.3</a>.<a href="#section-3-6.5" class="pilcrow">¶</a>
+        <li id="section-3-7.5">
+The administrative element waits for a Challenge Bundle to be received with the authorized ACME parameters, including its <code>token-bundle</code> payload, in accordance with <a href="#sec-bundle-challenge" class="xref">Section 3.3</a>.<a href="#section-3-7.5" class="pilcrow">¶</a>
 </li>
-        <li id="section-3-6.6">
-The administrative element concatenates <code>token-bundle</code> with <code>token-chal</code> (each as base64url-encoded text strings) and computes the Key Authorization in accordance with <span><a href="https://rfc-editor.org/rfc/rfc8555#section-8.1" class="relref">Section 8.1</a> of [<a href="#RFC8555" class="xref">RFC8555</a>]</span> using the full token and client account key thumbprint.<a href="#section-3-6.6" class="pilcrow">¶</a>
+        <li id="section-3-7.6">
+The administrative element concatenates <code>token-bundle</code> with <code>token-chal</code> (each as base64url-encoded text strings) and computes the Key Authorization in accordance with <span><a href="https://rfc-editor.org/rfc/rfc8555#section-8.1" class="relref">Section 8.1</a> of [<a href="#RFC8555" class="xref">RFC8555</a>]</span> using the full token and client account key thumbprint.<a href="#section-3-7.6" class="pilcrow">¶</a>
 </li>
-        <li id="section-3-6.7">
-The administrative element computes the SHA-256 digest of the Key Authorization result and generates a Response Bundle to send back to the ACME server in accordance with <a href="#sec-bundle-response" class="xref">Section 3.4</a>.<a href="#section-3-6.7" class="pilcrow">¶</a>
+        <li id="section-3-7.7">
+The administrative element computes the SHA-256 digest of the Key Authorization result and generates a Response Bundle to send back to the ACME server in accordance with <a href="#sec-bundle-response" class="xref">Section 3.4</a>.<a href="#section-3-7.7" class="pilcrow">¶</a>
 </li>
-        <li id="section-3-6.8">
-The ACME client waits for the authorization to be finalized on the ACME server in accordance with <span><a href="https://rfc-editor.org/rfc/rfc8555#section-7.5.1" class="relref">Section 7.5.1</a> of [<a href="#RFC8555" class="xref">RFC8555</a>]</span>.<a href="#section-3-6.8" class="pilcrow">¶</a>
+        <li id="section-3-7.8">
+The ACME client waits for the authorization to be finalized on the ACME server in accordance with <span><a href="https://rfc-editor.org/rfc/rfc8555#section-7.5.1" class="relref">Section 7.5.1</a> of [<a href="#RFC8555" class="xref">RFC8555</a>]</span>.<a href="#section-3-7.8" class="pilcrow">¶</a>
 </li>
-        <li id="section-3-6.9">
+        <li id="section-3-7.9">
 Once the challenge is completed (successfully or not), the ACME client indicates to the BP agent that the validation source and <code>token-chal</code> is no longer usable.
-If the authorization fails, the ACME client MAY retry the challenge from Step <a href="#step-client-authorize" class="xref">3</a>.<a href="#section-3-6.9" class="pilcrow">¶</a>
+If the authorization fails, the ACME client <span class="bcp14">MAY</span> retry the challenge from Step <a href="#step-client-authorize" class="xref">3</a>.<a href="#section-3-7.9" class="pilcrow">¶</a>
 </li>
       </ol>
-<p id="section-3-7">
-The ACME server verifies the client's control over a Node ID by performing the following steps:<a href="#section-3-7" class="pilcrow">¶</a></p>
-<ol start="1" type="1" class="normal type-1" id="section-3-8">
-        <li id="section-3-8.1">
-The ACME server receives a newOrder or newAuthz request including the identifier of type "bundleEID", where the URI value is a Node ID.<a href="#section-3-8.1" class="pilcrow">¶</a>
+<p id="section-3-8">
+The ACME server verifies the client's control over a Node ID by performing the following steps:<a href="#section-3-8" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-3-9">
+        <li id="section-3-9.1">
+The ACME server receives a newOrder or newAuthz request including the identifier of type "bundleEID", where the URI value is a Node ID.<a href="#section-3-9.1" class="pilcrow">¶</a>
 </li>
-        <li id="section-3-8.2">
-The ACME server generates an authorization for the Node ID with challenge type "dtn-nodeid-01" in accordance with <a href="#sec-nodeid-challenge-request" class="xref">Section 3.1</a>.<a href="#section-3-8.2" class="pilcrow">¶</a>
+        <li id="section-3-9.2">
+The ACME server generates an authorization for the Node ID with challenge type "dtn-nodeid-01" in accordance with <a href="#sec-nodeid-challenge-request" class="xref">Section 3.1</a>.<a href="#section-3-9.2" class="pilcrow">¶</a>
 </li>
-        <li id="section-3-8.3">
+        <li id="section-3-9.3">
 <div id="step-server-authorize">
 The ACME server receives a POST to the challenge URL indicated from the authorization object.
 The payload is handled in accordance with <a href="#sec-nodeid-challenge-response" class="xref">Section 3.2</a>.<a href="#step-server-authorize" class="pilcrow">¶</a>
 </div>
         </li>
-<li id="section-3-8.4">
+<li id="section-3-9.4">
 The ACME server sends, via the administrative element of its BP agent, one or more Challenge Bundles in accordance with <a href="#sec-bundle-challenge" class="xref">Section 3.3</a>.
-Each challenge bundle SHALL contain a distinct <code>token-bundle</code> to be able to correlate with a response bundle.
-Computing an expected Key Authorization digest is not necessary until a response is received.<a href="#section-3-8.4" class="pilcrow">¶</a>
+Each challenge bundle <span class="bcp14">SHALL</span> contain a distinct <code>token-bundle</code> to be able to correlate with a response bundle.
+Computing an expected Key Authorization digest is not necessary until a response is received.<a href="#section-3-9.4" class="pilcrow">¶</a>
 </li>
-        <li id="section-3-8.5">
+        <li id="section-3-9.5">
 The ACME server waits for Response Bundle(s) for a limited interval of time (based on the challenge response object of <a href="#sec-nodeid-challenge-response" class="xref">Section 3.2</a>).
-Responses are encoded in accordance with <a href="#sec-bundle-response" class="xref">Section 3.4</a>.<a href="#section-3-8.5" class="pilcrow">¶</a>
+Responses are encoded in accordance with <a href="#sec-bundle-response" class="xref">Section 3.4</a>.<a href="#section-3-9.5" class="pilcrow">¶</a>
 </li>
-        <li id="section-3-8.6">
+        <li id="section-3-9.6">
 Once received and decoded, the ACME server checks the contents of each Response Bundle in accordance with <a href="#sec-response-check" class="xref">Section 3.4.1</a>.
-After all Challenge Bundles have either been responded to or timed-out, the validation procedure is successful only if all responses are successful.
-If validation is not successful, a client may retry the challenge which starts in Step <a href="#step-server-authorize" class="xref">3</a>.<a href="#section-3-8.6" class="pilcrow">¶</a>
+After all Challenge Bundles have either been responded to or timed-out, the ACME server policy (see <a href="#sec-multi-perspective" class="xref">Section 3.5</a>) determines whether the validation is successful.
+If validation is not successful, a client may retry the challenge which starts in Step <a href="#step-server-authorize" class="xref">3</a>.<a href="#section-3-9.6" class="pilcrow">¶</a>
 </li>
       </ol>
-<p id="section-3-9">
-An ACME server MAY send multiple challenges from different origins in the DTN network to avoid possible on-path attacks, as recommended in <span><a href="https://rfc-editor.org/rfc/rfc8555#section-10.2" class="relref">Section 10.2</a> of [<a href="#RFC8555" class="xref">RFC8555</a>]</span>.
-If responses are received from multiple challenges, any response failure SHALL cause a failure of the overall validation.
-Each response failure MAY be indicated to the ACME client as a validation subproblem.<a href="#section-3-9" class="pilcrow">¶</a></p>
 <p id="section-3-10">
-When responding to a Challenge Bundle, a BP agent SHALL send a single Response Bundle in accordance with <a href="#sec-bundle-response" class="xref">Section 3.4</a>.
-A BP agent SHALL respond to ACME challenges only within the interval of time, only for the Node ID, and only for the <code>token-chal</code> indicated by the ACME client.
-A BP agent SHALL respond to multiple challenges with the same parameters.
-These correspond with the ACME server validating via multiple routing paths.<a href="#section-3-10" class="pilcrow">¶</a></p>
+When responding to a Challenge Bundle, a BP agent <span class="bcp14">SHALL</span> send a single Response Bundle in accordance with <a href="#sec-bundle-response" class="xref">Section 3.4</a>.
+A BP agent <span class="bcp14">SHALL</span> respond to ACME challenges only within the interval of time, only for the Node ID, and only for the <code>token-chal</code> indicated by the ACME client.
+A BP agent <span class="bcp14">SHALL</span> respond to multiple Challenge Bundles with the same ACME parameters but different bundle identities (source Node ID and timestamp); these correspond with the ACME server validating via multiple routing paths.<a href="#section-3-10" class="pilcrow">¶</a></p>
 <div id="sec-nodeid-challenge-request">
 <section id="section-3.1">
         <h3 id="name-dtn-node-id-challenge-reque">
@@ -1752,17 +1748,20 @@ The DTN Node ID Challenge request object has the following content:<a href="#sec
 The string "dtn-nodeid-01".<a href="#section-3.1-3.2" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-3.1-3.3">source (required, string):</dt>
+<dt id="section-3.1-3.3">source (required, array of string):</dt>
           <dd style="margin-left: 1.5em" id="section-3.1-3.4">
-The source Node ID of bundles originating at the ACME server as a text URI.<a href="#section-3.1-3.4" class="pilcrow">¶</a>
+An unordered list of possible source Node ID of bundles originating at the ACME server.
+See <a href="#sec-multi-perspective" class="xref">Section 3.5</a> for a discussion of multi-perspective validation using multiple sources.
+The array <span class="bcp14">SHALL</span> be non-empty.
+The array <span class="bcp14">MAY</span> contain Node IDs which are not actually used as a challenge bundle source.<a href="#section-3.1-3.4" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
 <dt id="section-3.1-3.5">token-chal (required, string):</dt>
           <dd style="margin-left: 1.5em" id="section-3.1-3.6">
 A random value that uniquely identifies the challenge.
-This value MUST have at least 128 bits of entropy.
-It MUST NOT contain any characters outside the base64url alphabet as described in <span><a href="https://rfc-editor.org/rfc/rfc4648#section-5" class="relref">Section 5</a> of [<a href="#RFC4648" class="xref">RFC4648</a>]</span>.
-Trailing '=' padding characters MUST be stripped.
+This value <span class="bcp14">MUST</span> have at least 128 bits of entropy.
+It <span class="bcp14">MUST</span> contain any characters outside the base64url alphabet as described in <span><a href="https://rfc-editor.org/rfc/rfc4648#section-5" class="relref">Section 5</a> of [<a href="#RFC4648" class="xref">RFC4648</a>]</span>.
+Trailing '=' padding characters <span class="bcp14">MUST</span> be stripped.
 See <span>[<a href="#RFC4086" class="xref">RFC4086</a>]</span> for additional information on randomness requirements.<a href="#section-3.1-3.6" class="pilcrow">¶</a>
 </dd>
         <dd class="break"></dd>
@@ -1772,7 +1771,7 @@ See <span>[<a href="#RFC4086" class="xref">RFC4086</a>]</span> for additional in
 {
   "type": "dtn-nodeid-01",
   "url": "https://example.com/acme/chall/prV_B7yEyA4",
-  "source": "dtn://acme-server/",
+  "source": ["dtn://acme-server/"],
   "token-chal": "tPUZNY4ONIk6LxErRFEjVw"
 }
 </pre><a href="#section-3.1-4" class="pilcrow">¶</a>
@@ -1796,7 +1795,7 @@ The DTN Node ID Challenge response object has the following content:<a href="#se
           <dd style="margin-left: 1.5em" id="section-3.2-3.2">
 An expected round-trip time (RTT), in seconds, between sending a Challenge Bundle and receiving a Response Bundle.
 This value is a hint to the ACME server for how long to wait for responses but is not authoritative.
-The minimum RTT value SHALL be zero.
+The minimum RTT value <span class="bcp14">SHALL</span> be zero.
 There is no special significance to zero-value RTT, it simply indicates the response is expected in less than the least significant unit used by the ACME client.<a href="#section-3.2-3.2" class="pilcrow">¶</a>
 </dd>
         <dd class="break"></dd>
@@ -1810,12 +1809,12 @@ There is no special significance to zero-value RTT, it simply indicates the resp
 </div>
 <p id="section-3.2-5">
 A challenge response is not sent until the BP agent has been configured to properly respond to the challenge, so the RTT value is meant to indicate any node-specific path delays expected to encountered from the ACME server.
-Because there is no requirement on the path (or paths) which bundles may traverse between the ACME server and the BP agent, and the ACME server can attempt some path diversity, the RTT value SHOULD be pessimistic.<a href="#section-3.2-5" class="pilcrow">¶</a></p>
+Because there is no requirement on the path (or paths) which bundles may traverse between the ACME server and the BP agent, and the ACME server can attempt some path diversity, the RTT value <span class="bcp14">SHOULD</span> be pessimistic.<a href="#section-3.2-5" class="pilcrow">¶</a></p>
 <p id="section-3.2-6">
-A default bundle response interval, used when the object does not contain an RTT, SHOULD be a configurable parameter of the ACME server.
-If the ACME client indicated an RTT value in the object, the response interval SHOULD be twice the RTT (with limiting logic applied as described below).
-The lower limit on response interval is network-specific, but SHOULD NOT be shorter than one second.
-The upper limit on response interval is network-specific, but SHOULD NOT be longer than one minute (60 seconds) for a terrestrial-only DTN.<a href="#section-3.2-6" class="pilcrow">¶</a></p>
+A default bundle response interval, used when the object does not contain an RTT, <span class="bcp14">SHOULD</span> be a configurable parameter of the ACME server.
+If the ACME client indicated an RTT value in the object, the response interval <span class="bcp14">SHOULD</span> be twice the RTT (with limiting logic applied as described below).
+The lower limit on response interval is network-specific, but <span class="bcp14">SHOULD NOT</span> be shorter than one second.
+The upper limit on response interval is network-specific, but <span class="bcp14">SHOULD NOT</span> be longer than one minute (60 seconds) for a terrestrial-only DTN.<a href="#section-3.2-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="sec-bundle-challenge">
@@ -1824,51 +1823,51 @@ The upper limit on response interval is network-specific, but SHOULD NOT be long
 <a href="#section-3.3" class="section-number selfRef">3.3. </a><a href="#name-acme-node-id-validation-cha" class="section-name selfRef">ACME Node ID Validation Challenge Bundles</a>
         </h3>
 <p id="section-3.3-1">
-Each ACME Node ID Validation Challenge Bundle SHALL be structured and encoded in accordance with <span>[<a href="#I-D.ietf-dtn-bpbis" class="xref">I-D.ietf-dtn-bpbis</a>]</span>.<a href="#section-3.3-1" class="pilcrow">¶</a></p>
+Each ACME Node ID Validation Challenge Bundle <span class="bcp14">SHALL</span> be structured and encoded in accordance with <span>[<a href="#I-D.ietf-dtn-bpbis" class="xref">I-D.ietf-dtn-bpbis</a>]</span>.<a href="#section-3.3-1" class="pilcrow">¶</a></p>
 <p id="section-3.3-2">
 Each Challenge Bundle has parameters as listed here:<a href="#section-3.3-2" class="pilcrow">¶</a></p>
 <span class="break"></span><dl class="dlParallel" id="section-3.3-3">
           <dt id="section-3.3-3.1">Bundle Processing Control Flags:</dt>
           <dd style="margin-left: 1.5em" id="section-3.3-3.2">
-The primary block flags SHALL indicate that the payload is an administrative record.
-The primary block flags SHALL indicate that user application acknowledgement is requested; this flag distinguishes the Challenge Bundle from the Response Bundle.
-The primary block flags MAY indicate that status reports are requested; such status can be helpful to troubleshoot routing issues.<a href="#section-3.3-3.2" class="pilcrow">¶</a>
+The primary block flags <span class="bcp14">SHALL</span> indicate that the payload is an administrative record.
+The primary block flags <span class="bcp14">SHALL</span> indicate that user application acknowledgement is requested; this flag distinguishes the Challenge Bundle from the Response Bundle.
+The primary block flags <span class="bcp14">MAY</span> indicate that status reports are requested; such status can be helpful to troubleshoot routing issues.<a href="#section-3.3-3.2" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
 <dt id="section-3.3-3.3">Destination EID:</dt>
           <dd style="margin-left: 1.5em" id="section-3.3-3.4">
-The Destination EID SHALL be identical to the Node ID being validated.
-The ACME server SHOULD NOT perform URI normalization on the Node ID given by the ACME client.<a href="#section-3.3-3.4" class="pilcrow">¶</a>
+The Destination EID <span class="bcp14">SHALL</span> be the ACME-server-normalized Node ID being validated.<a href="#section-3.3-3.4" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
 <dt id="section-3.3-3.5">Source Node ID:</dt>
           <dd style="margin-left: 1.5em" id="section-3.3-3.6">
-The Source Node ID SHALL indicate the Node ID of the BP agent of the ACME server performing the challenge.<a href="#section-3.3-3.6" class="pilcrow">¶</a>
+The Source Node ID <span class="bcp14">SHALL</span> indicate the Node ID of the BP agent of the ACME server performing the challenge.
+The challenge bundle source <span class="bcp14">SHALL</span> be present in the "source" array of the challenge object (see <a href="#sec-nodeid-challenge-request" class="xref">Section 3.1</a>)<a href="#section-3.3-3.6" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
 <dt id="section-3.3-3.7">Creation Timestamp and Lifetime:</dt>
           <dd style="margin-left: 1.5em" id="section-3.3-3.8">
-The Creation Timestamp SHALL be set to the time at which the challenge was generated.
-The Lifetime SHALL indicate the response interval (of <a href="#sec-nodeid-challenge-response" class="xref">Section 3.2</a>) for which ACME server will accept responses to this challenge.<a href="#section-3.3-3.8" class="pilcrow">¶</a>
+The Creation Timestamp <span class="bcp14">SHALL</span> be set to the time at which the challenge was generated.
+The Lifetime <span class="bcp14">SHALL</span> indicate the response interval (of <a href="#sec-nodeid-challenge-response" class="xref">Section 3.2</a>) for which ACME server will accept responses to this challenge.<a href="#section-3.3-3.8" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
 <dt id="section-3.3-3.9">Administrative Record Type Code:</dt>
           <dd style="margin-left: 1.5em" id="section-3.3-3.10">
-Set to the ACME Node ID Validation type code defined in <a href="#sec-iana-bp-admin-type" class="xref">Section 9.3</a>.<a href="#section-3.3-3.10" class="pilcrow">¶</a>
+Set to the ACME Node ID Validation type code defined in <a href="#sec-iana-bp-admin-type" class="xref">Section 8.3</a>.<a href="#section-3.3-3.10" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
 <dt id="section-3.3-3.11">Administrative Record Content:</dt>
           <dd style="margin-left: 1.5em" id="section-3.3-3.12">
             <p id="section-3.3-3.12.1">
-The Challenge Bundle administrative record content SHALL consist of a CBOR map containing two pairs:<a href="#section-3.3-3.12.1" class="pilcrow">¶</a></p>
+The Challenge Bundle administrative record content <span class="bcp14">SHALL</span> consist of a CBOR map containing two pairs:<a href="#section-3.3-3.12.1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-3.3-3.12.2.1">
-One pair SHALL consist of key 1 with value of ACME challenge <code>token-chal</code>, copied from the challenge object, represented as a CBOR byte string.<a href="#section-3.3-3.12.2.1" class="pilcrow">¶</a>
+One pair <span class="bcp14">SHALL</span> consist of key 1 with value of ACME challenge <code>token-chal</code>, copied from the challenge object, represented as a CBOR byte string.<a href="#section-3.3-3.12.2.1" class="pilcrow">¶</a>
 </li>
               <li class="normal" id="section-3.3-3.12.2.2">
-One pair SHALL consist of key 2 with value of ACME challenge <code>token-bundle</code>, represented as a CBOR byte string.
+One pair <span class="bcp14">SHALL</span> consist of key 2 with value of ACME challenge <code>token-bundle</code>, represented as a CBOR byte string.
 The <code>token-bundle</code> is a random value that uniquely identifies the challenge bundle.
-This value MUST have at least 128 bits of entropy.
+This value <span class="bcp14">MUST</span> have at least 128 bits of entropy.
 See <span>[<a href="#RFC4086" class="xref">RFC4086</a>]</span> for additional information on randomness requirements.<a href="#section-3.3-3.12.2.2" class="pilcrow">¶</a>
 </li>
             </ul>
@@ -1879,10 +1878,10 @@ See <span>[<a href="#RFC4086" class="xref">RFC4086</a>]</span> for additional in
 This structure is part of the extension CDDL in <a href="#sec-cddl" class="xref">Appendix A</a>.
 An example full Challenge Bundle is included in <a href="#sec-example-bundle-challenge" class="xref">Appendix B.1</a><a href="#section-3.3-4" class="pilcrow">¶</a></p>
 <p id="section-3.3-5">
-If the BP agent generating a Challenge Bundle does not have a well-synchronized clock or the agent responding to the challenge is expected to not have a well-synchronized clock, the bundle SHALL include a Bundle Age extension block.<a href="#section-3.3-5" class="pilcrow">¶</a></p>
+If the BP agent generating a Challenge Bundle does not have a well-synchronized clock or the agent responding to the challenge is expected to not have a well-synchronized clock, the bundle <span class="bcp14">SHALL</span> include a Bundle Age extension block.<a href="#section-3.3-5" class="pilcrow">¶</a></p>
 <p id="section-3.3-6">
-Challenge Bundles SHALL include a Block Integrity Block (BIB) in accordance with <a href="#sec-bib-gateway" class="xref">Section 4</a> or with a Security Source identical to the bundle Source Node.
-Challenge Bundles SHALL NOT be directly encrypted by Block Confidentiality Block (BCB) or any other method (see <a href="#sec-security-leak" class="xref">Section 8.1</a>).<a href="#section-3.3-6" class="pilcrow">¶</a></p>
+Challenge Bundles <span class="bcp14">SHALL</span> include a Block Integrity Block (BIB) in accordance with <a href="#sec-bib-gateway" class="xref">Section 4</a> or with a Security Source identical to the bundle Source Node.
+Challenge Bundles <span class="bcp14">SHALL NOT</span> be directly encrypted by Block Confidentiality Block (BCB) or any other method (see <a href="#sec-security-leak" class="xref">Section 7.1</a>).<a href="#section-3.3-6" class="pilcrow">¶</a></p>
 <div id="sec-challenge-check">
 <section id="section-3.3.1">
           <h4 id="name-challenge-bundle-checks">
@@ -1897,7 +1896,7 @@ The allowed interval starts at the Creation Timestamp and extends for the Lifeti
 </li>
             <li class="normal" id="section-3.3.1-2.2">
 The Challenge Bundle Source Node ID is identical to the Node ID indicated in the ACME challenge object.
-The comparison of Node IDs SHALL use the comparison logic of <span>[<a href="#RFC3986" class="xref">RFC3986</a>]</span> and scheme-based normalization of those schemes specified in <span>[<a href="#I-D.ietf-dtn-bpbis" class="xref">I-D.ietf-dtn-bpbis</a>]</span>.<a href="#section-3.3.1-2.2" class="pilcrow">¶</a>
+The comparison of Node IDs <span class="bcp14">SHALL</span> use the comparison logic of the NODE-ID from <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-dtn-tcpclv4-28#section-4.4.1" class="relref">Section 4.4.1</a> of [<a href="#I-D.ietf-dtn-tcpclv4" class="xref">I-D.ietf-dtn-tcpclv4</a>]</span>.<a href="#section-3.3.1-2.2" class="pilcrow">¶</a>
 </li>
             <li class="normal" id="section-3.3.1-2.3">
 The Challenge Bundle contains a BIB which covers at least the primary block and payload.
@@ -1909,8 +1908,8 @@ The challenge payload contains a <code>token-bundle</code> meeting the definitio
 </li>
           </ul>
 <p id="section-3.3.1-3">
-Any of the failures above SHALL cause the challenge bundle to be deleted and otherwise ignored by the BP agent.
-The BP agent MAY send status reports about the deletion if allowed by security policy.<a href="#section-3.3.1-3" class="pilcrow">¶</a></p>
+Any of the failures above <span class="bcp14">SHALL</span> cause the challenge bundle to be deleted and otherwise ignored by the BP agent.
+The BP agent <span class="bcp14">MAY</span> send status reports about the deletion if allowed by security policy.<a href="#section-3.3.1-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1921,51 +1920,51 @@ The BP agent MAY send status reports about the deletion if allowed by security p
 <a href="#section-3.4" class="section-number selfRef">3.4. </a><a href="#name-acme-node-id-validation-res" class="section-name selfRef">ACME Node ID Validation Response Bundles</a>
         </h3>
 <p id="section-3.4-1">
-Each ACME Node ID Validation Response Bundle SHALL be structured and encoded in accordance with <span>[<a href="#I-D.ietf-dtn-bpbis" class="xref">I-D.ietf-dtn-bpbis</a>]</span>.<a href="#section-3.4-1" class="pilcrow">¶</a></p>
+Each ACME Node ID Validation Response Bundle <span class="bcp14">SHALL</span> be structured and encoded in accordance with <span>[<a href="#I-D.ietf-dtn-bpbis" class="xref">I-D.ietf-dtn-bpbis</a>]</span>.<a href="#section-3.4-1" class="pilcrow">¶</a></p>
 <p id="section-3.4-2">
 Each Response Bundle has parameters as listed here:<a href="#section-3.4-2" class="pilcrow">¶</a></p>
 <span class="break"></span><dl class="dlParallel" id="section-3.4-3">
           <dt id="section-3.4-3.1">Bundle Processing Control Flags:</dt>
           <dd style="margin-left: 1.5em" id="section-3.4-3.2">
-The primary block flags SHALL indicate that the payload is an administrative record.
-The primary block flags SHALL NOT indicate that user application acknowledgement is requested; this flag distinguishes the Response Bundle from the Challenge Bundle.
-The primary block flags MAY indicate that status reports are requested; such status can be helpful to troubleshoot routing issues.<a href="#section-3.4-3.2" class="pilcrow">¶</a>
+The primary block flags <span class="bcp14">SHALL</span> indicate that the payload is an administrative record.
+The primary block flags <span class="bcp14">SHALL NOT</span> indicate that user application acknowledgement is requested; this flag distinguishes the Response Bundle from the Challenge Bundle.
+The primary block flags <span class="bcp14">MAY</span> indicate that status reports are requested; such status can be helpful to troubleshoot routing issues.<a href="#section-3.4-3.2" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
 <dt id="section-3.4-3.3">Destination EID:</dt>
           <dd style="margin-left: 1.5em" id="section-3.4-3.4">
-The Destination EID SHALL be identical to the Source Node ID of the Challenge Bundle to which this response corresponds.<a href="#section-3.4-3.4" class="pilcrow">¶</a>
+The Destination EID <span class="bcp14">SHALL</span> be identical to the Source Node ID of the Challenge Bundle to which this response corresponds.<a href="#section-3.4-3.4" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
 <dt id="section-3.4-3.5">Source Node ID:</dt>
           <dd style="margin-left: 1.5em" id="section-3.4-3.6">
-The Source Node ID SHALL be identical to the Destination EID of the Challenge Bundle to which this response corresponds.<a href="#section-3.4-3.6" class="pilcrow">¶</a>
+The Source Node ID <span class="bcp14">SHALL</span> be identical to the Destination EID of the Challenge Bundle to which this response corresponds.<a href="#section-3.4-3.6" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
 <dt id="section-3.4-3.7">Creation Timestamp and Lifetime:</dt>
           <dd style="margin-left: 1.5em" id="section-3.4-3.8">
-The Creation Timestamp SHALL be set to the time at which the response was generated.
-The response Lifetime SHALL indicate the response interval remaining if the Challenge Bundle indicated a limited Lifetime.<a href="#section-3.4-3.8" class="pilcrow">¶</a>
+The Creation Timestamp <span class="bcp14">SHALL</span> be set to the time at which the response was generated.
+The response Lifetime <span class="bcp14">SHALL</span> indicate the response interval remaining if the Challenge Bundle indicated a limited Lifetime.<a href="#section-3.4-3.8" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
 <dt id="section-3.4-3.9">Administrative Record Type Code:</dt>
           <dd style="margin-left: 1.5em" id="section-3.4-3.10">
-Set to the ACME Node ID Validation type code defined in <a href="#sec-iana-bp-admin-type" class="xref">Section 9.3</a>.<a href="#section-3.4-3.10" class="pilcrow">¶</a>
+Set to the ACME Node ID Validation type code defined in <a href="#sec-iana-bp-admin-type" class="xref">Section 8.3</a>.<a href="#section-3.4-3.10" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
 <dt id="section-3.4-3.11">Administrative Record Content:</dt>
           <dd style="margin-left: 1.5em" id="section-3.4-3.12">
             <p id="section-3.4-3.12.1">
-The Response Bundle administrative record content SHALL consist of a CBOR map containing three pairs:<a href="#section-3.4-3.12.1" class="pilcrow">¶</a></p>
+The Response Bundle administrative record content <span class="bcp14">SHALL</span> consist of a CBOR map containing three pairs:<a href="#section-3.4-3.12.1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-3.4-3.12.2.1">
-One pair SHALL consist of key 1 with value of ACME challenge <code>token-chal</code>, copied from the Request Bundle, represented as a CBOR byte string.<a href="#section-3.4-3.12.2.1" class="pilcrow">¶</a>
+One pair <span class="bcp14">SHALL</span> consist of key 1 with value of ACME challenge <code>token-chal</code>, copied from the Request Bundle, represented as a CBOR byte string.<a href="#section-3.4-3.12.2.1" class="pilcrow">¶</a>
 </li>
               <li class="normal" id="section-3.4-3.12.2.2">
-One pair SHALL consist of key 2 with value of ACME challenge <code>token-bundle</code>, copied from the Request Bundle, represented as a CBOR byte string.<a href="#section-3.4-3.12.2.2" class="pilcrow">¶</a>
+One pair <span class="bcp14">SHALL</span> consist of key 2 with value of ACME challenge <code>token-bundle</code>, copied from the Request Bundle, represented as a CBOR byte string.<a href="#section-3.4-3.12.2.2" class="pilcrow">¶</a>
 </li>
               <li class="normal" id="section-3.4-3.12.2.3">
-One pair SHALL consist of key 3 with value of the SHA-256 digest <span>[<a href="#FIPS180-4" class="xref">FIPS180-4</a>]</span> of the ACME Key Authorization in accordance with <span><a href="https://rfc-editor.org/rfc/rfc8555#section-8.1" class="relref">Section 8.1</a> of [<a href="#RFC8555" class="xref">RFC8555</a>]</span>, represented as a CBOR byte string.<a href="#section-3.4-3.12.2.3" class="pilcrow">¶</a>
+One pair <span class="bcp14">SHALL</span> consist of key 3 with value of the SHA-256 digest <span>[<a href="#FIPS180-4" class="xref">FIPS180-4</a>]</span> of the ACME Key Authorization in accordance with <span><a href="https://rfc-editor.org/rfc/rfc8555#section-8.1" class="relref">Section 8.1</a> of [<a href="#RFC8555" class="xref">RFC8555</a>]</span>, represented as a CBOR byte string.<a href="#section-3.4-3.12.2.3" class="pilcrow">¶</a>
 </li>
             </ul>
 </dd>
@@ -1975,10 +1974,10 @@ One pair SHALL consist of key 3 with value of the SHA-256 digest <span>[<a href=
 This structure is part of the extension CDDL in <a href="#sec-cddl" class="xref">Appendix A</a>.
 An example full Response Bundle is included in <a href="#sec-example-bundle-response" class="xref">Appendix B.2</a><a href="#section-3.4-4" class="pilcrow">¶</a></p>
 <p id="section-3.4-5">
-If the BP agent responding to a Challenge Bundle does not have a well-synchronized clock, it SHALL use any information about last-hop delays and (if present) Bundle Age extension data to infer the age of the Challenge Bundle and lifetime of the Response Bundle.<a href="#section-3.4-5" class="pilcrow">¶</a></p>
+If the BP agent responding to a Challenge Bundle does not have a well-synchronized clock, it <span class="bcp14">SHALL</span> use any information about last-hop delays and (if present) Bundle Age extension data to infer the age of the Challenge Bundle and lifetime of the Response Bundle.<a href="#section-3.4-5" class="pilcrow">¶</a></p>
 <p id="section-3.4-6">
-Response Bundles SHALL include a BIB in accordance with <a href="#sec-bib-gateway" class="xref">Section 4</a>.
-Response Bundles SHALL NOT be directly encrypted by BCB or any other method (see <a href="#sec-security-leak" class="xref">Section 8.1</a> for explanation).<a href="#section-3.4-6" class="pilcrow">¶</a></p>
+Response Bundles <span class="bcp14">SHALL</span> include a BIB in accordance with <a href="#sec-bib-gateway" class="xref">Section 4</a>.
+Response Bundles <span class="bcp14">SHALL NOT</span> be directly encrypted by BCB or any other method (see <a href="#sec-security-leak" class="xref">Section 7.1</a> for explanation).<a href="#section-3.4-6" class="pilcrow">¶</a></p>
 <div id="sec-response-check">
 <section id="section-3.4.1">
           <h4 id="name-response-bundle-checks">
@@ -1989,28 +1988,48 @@ A proper Response Bundle meets all of the following criteria:<a href="#section-3
 <ul class="normal">
 <li class="normal" id="section-3.4.1-2.1">
 The Response Bundle was received within the time interval allowed for the challenge.
-The allowed interval starts at the Creation Timestamp and extends for the Lifetime of the Response Bundle.<a href="#section-3.4.1-2.1" class="pilcrow">¶</a>
+The allowed interval starts at the Creation Timestamp and extends for the Lifetime of the associated Challenge Bundle.
+The interval of the Challenge Bundle is used here because the interval of the Response Bundle could be made to disagree with the Challenge Bundle.<a href="#section-3.4.1-2.1" class="pilcrow">¶</a>
 </li>
             <li class="normal" id="section-3.4.1-2.2">
 The Response Bundle Source Node ID is identical to the Node ID being validated.
-The comparison of Node IDs SHALL use the comparison logic of <span>[<a href="#RFC3986" class="xref">RFC3986</a>]</span> and scheme-based normalization of those schemes specified in <span>[<a href="#I-D.ietf-dtn-bpbis" class="xref">I-D.ietf-dtn-bpbis</a>]</span>.<a href="#section-3.4.1-2.2" class="pilcrow">¶</a>
+The comparison of Node IDs <span class="bcp14">SHALL</span> use the comparison logic of the NODE-ID from <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-dtn-tcpclv4-28#section-4.4.1" class="relref">Section 4.4.1</a> of [<a href="#I-D.ietf-dtn-tcpclv4" class="xref">I-D.ietf-dtn-tcpclv4</a>]</span>.<a href="#section-3.4.1-2.2" class="pilcrow">¶</a>
 </li>
             <li class="normal" id="section-3.4.1-2.3">
 The Response Bundle contains a BIB which covers at least the primary block and payload.
 That BIB has a security source which is trusted and passes security-context-specific validation.<a href="#section-3.4.1-2.3" class="pilcrow">¶</a>
 </li>
             <li class="normal" id="section-3.4.1-2.4">
-The response payload contains the <code>token-chal</code> and <code>token-bundle</code> as sent in the Challenge Bundle.
-The response payload contains the expected Key Authorization digest computed by the ACME server.
-Because multiple Challenge Bundles can be sent to validate the same Node ID, the <code>token-bundle</code> in the response is needed to correlate with the expected Key Authorization digest.<a href="#section-3.4.1-2.4" class="pilcrow">¶</a>
+The response payload contains the same <code>token-chal</code> and <code>token-bundle</code> as sent in the Challenge Bundle (this is also how the two bundles are correlated).
+The response payload contains the expected Key Authorization digest computed by the ACME server.<a href="#section-3.4.1-2.4" class="pilcrow">¶</a>
 </li>
           </ul>
 <p id="section-3.4.1-3">
-Any of the failures above SHALL cause the validation to fail with an ACME error type of "incorrectResponse".
-Any of the failures above SHOULD be indicated as subproblems to the ACME client.
-The lack of a response within the expected response interval, as defined in <a href="#sec-nodeid-challenge-response" class="xref">Section 3.2</a>, SHALL also be treated as a validation failure.<a href="#section-3.4.1-3" class="pilcrow">¶</a></p>
+Any of the failures above <span class="bcp14">SHALL</span> cause that single-perspective validation to fail.
+Any of the failures above <span class="bcp14">SHOULD</span> be distinguished as subproblems to the ACME client.
+The lack of a response within the expected response interval, as defined in <a href="#sec-nodeid-challenge-response" class="xref">Section 3.2</a>, <span class="bcp14">SHALL</span> also be treated as a validation failure.<a href="#section-3.4.1-3" class="pilcrow">¶</a></p>
 </section>
 </div>
+</section>
+</div>
+<div id="sec-multi-perspective">
+<section id="section-3.5">
+        <h3 id="name-multi-perspective-validatio">
+<a href="#section-3.5" class="section-number selfRef">3.5. </a><a href="#name-multi-perspective-validatio" class="section-name selfRef">Multi-Perspective Validation</a>
+        </h3>
+<p id="section-3.5-1">
+To avoid possible on-path attacks in certain networks, an ACME server can perform a single validation using multiple challenge bundle sources or via multiple routing paths.
+This technique is called multi-perspective validation as recommended in <span><a href="https://rfc-editor.org/rfc/rfc8555#section-10.2" class="relref">Section 10.2</a> of [<a href="#RFC8555" class="xref">RFC8555</a>]</span> and an implementation used by Let's Encrypt is described in <span>[<a href="#LE-multi-perspective" class="xref">LE-multi-perspective</a>]</span>.<a href="#section-3.5-1" class="pilcrow">¶</a></p>
+<p id="section-3.5-2">
+When required by policy, an ACME server <span class="bcp14">SHALL</span> send multiple challenge bundles from different sources in the DTN network.
+When multiple Challenge Bundles are sent for a single validation, it is a matter of ACME server policy to determine whether or not the validation as a whole is successful.
+The result of each single-source validation is defined as success or failure in <a href="#sec-response-check" class="xref">Section 3.4.1</a>.<a href="#section-3.5-2" class="pilcrow">¶</a></p>
+<p id="section-3.5-3">
+A <span class="bcp14">RECOMMENDED</span> validation policy is to succeed if the challenge from a primary bundle source is successful and if there are no more than one failure from a secondary source.
+The determination of which perspectives are considered primary or secondary is an implementation matter.<a href="#section-3.5-3" class="pilcrow">¶</a></p>
+<p id="section-3.5-4">
+Regardless of whether a validation is single- or multi-perspective, a validation failure <span class="bcp14">SHALL</span> be indicated by an ACME error type of "incorrectResponse".
+Each specific perspective failure <span class="bcp14">SHOULD</span> be indicated to the ACME client as a validation subproblem.<a href="#section-3.5-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -2026,13 +2045,13 @@ In this mechanism a routing node in a DTN sub-network attests to the origination
 The bundle receiver then need not trust the source of the bundle, but only trust this security source node.
 The receiver needs policy configuration to know which security sources are permitted to attest for which bundle sources.<a href="#section-4-1" class="pilcrow">¶</a></p>
 <p id="section-4-2">
-An integrity gateway SHALL validate the Source Node ID of a bundle, using local-network-specific means, before adding a BIB to the bundle.
+An integrity gateway <span class="bcp14">SHALL</span> validate the Source Node ID of a bundle, using local-network-specific means, before adding a BIB to the bundle.
 The exact means by which an integrity gateway validates a bundle's source is network-specific, but could use physical-layer, network-layer or BP-convergence-layer authentication.
 The bundle source could also add its own BIB with a local-network-specific security context or local-network-specific key material (i.e. a group key shared within the local network).<a href="#section-4-2" class="pilcrow">¶</a></p>
 <p id="section-4-3">
-When an integrity gateway adds a BIB it SHALL be in accordance with <span>[<a href="#I-D.ietf-dtn-bpsec" class="xref">I-D.ietf-dtn-bpsec</a>]</span>.
-The BIB targets SHALL cover both the payload block and the primary block (either directly as a target or as additional authenticated data for the payload block MAC/signature).
-The Security Source of this BIB SHALL be either the bundle source Node ID itself or a routing node trusted by the destination node (see <a href="#sec-security-impersonate" class="xref">Section 8.2</a>).<a href="#section-4-3" class="pilcrow">¶</a></p>
+When an integrity gateway adds a BIB it <span class="bcp14">SHALL</span> be in accordance with <span>[<a href="#I-D.ietf-dtn-bpsec" class="xref">I-D.ietf-dtn-bpsec</a>]</span>.
+The BIB targets <span class="bcp14">SHALL</span> cover both the payload block and the primary block (either directly as a target or as additional authenticated data for the payload block MAC/signature).
+The Security Source of this BIB <span class="bcp14">SHALL</span> be either the bundle source Node ID itself or a routing node trusted by the destination node (see <a href="#sec-security-impersonate" class="xref">Section 7.2</a>).<a href="#section-4-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <section id="section-5">
@@ -2040,20 +2059,20 @@ The Security Source of this BIB SHALL be either the bundle source Node ID itself
 <a href="#section-5" class="section-number selfRef">5. </a><a href="#name-certificate-request-profile" class="section-name selfRef">Certificate Request Profile</a>
       </h2>
 <p id="section-5-1">
-The ultimate purpose of this ACME validation is to allow a CA to issue certificates following the profiles of <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-dtn-tcpclv4-27#section-4.4.2" class="relref">Section 4.4.2</a> of [<a href="#I-D.ietf-dtn-tcpclv4" class="xref">I-D.ietf-dtn-tcpclv4</a>]</span>, <span>[<a href="#I-D.sipos-dtn-udpcl" class="xref">I-D.sipos-dtn-udpcl</a>]</span>, and <span>[<a href="#I-D.bsipos-dtn-bpsec-cose" class="xref">I-D.bsipos-dtn-bpsec-cose</a>]</span>.
+The ultimate purpose of this ACME validation is to allow a CA to issue certificates following the profiles of <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-dtn-tcpclv4-28#section-4.4.2" class="relref">Section 4.4.2</a> of [<a href="#I-D.ietf-dtn-tcpclv4" class="xref">I-D.ietf-dtn-tcpclv4</a>]</span>, <span>[<a href="#I-D.sipos-dtn-udpcl" class="xref">I-D.sipos-dtn-udpcl</a>]</span>, and <span>[<a href="#I-D.bsipos-dtn-bpsec-cose" class="xref">I-D.bsipos-dtn-bpsec-cose</a>]</span>.
 These purposes are referred to here as bundle security certificates.<a href="#section-5-1" class="pilcrow">¶</a></p>
 <p id="section-5-2">
-One defining aspect of bundle security certificates is the Extended Key Usage key purpose "id-kp-bundleSecurity" of <span>[<a href="#IANA-SMI" class="xref">IANA-SMI</a>]</span>.
-When requesting a certificate which includes a Node ID SAN, the CSR SHOULD include an Extended Key Usage of id-kp-bundleSecurity.
-When a bundle security certificate is issued based on a validated Node ID SAN, the certificate SHALL include an Extended Key Usage of id-kp-bundleSecurity.<a href="#section-5-2" class="pilcrow">¶</a></p>
+One defining aspect of bundle security certificates is the Extended Key Usage key purpose <code>id-kp-bundleSecurity</code> of <span>[<a href="#IANA-SMI" class="xref">IANA-SMI</a>]</span>.
+When requesting a certificate which includes a Node ID SAN, the CSR <span class="bcp14">SHOULD</span> include an Extended Key Usage of <code>id-kp-bundleSecurity</code>.
+When a bundle security certificate is issued based on a validated Node ID SAN, the certificate <span class="bcp14">SHALL</span> include an Extended Key Usage of <code>id-kp-bundleSecurity</code>.<a href="#section-5-2" class="pilcrow">¶</a></p>
 <div id="sec-multiple-claims">
 <section id="section-5.1">
         <h3 id="name-multiple-identity-claims">
 <a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-multiple-identity-claims" class="section-name selfRef">Multiple Identity Claims</a>
         </h3>
 <p id="section-5.1-1">
-A single bundle security CSR MAY contain a mixed set of SAN claims, including combinations of "ip", "dns", and "bundleEID" claims.
-There is no restriction on how a certificate combines these claims, but each claim MUST be validated by an ACME server to issue such a certificate as part of an associated ACME order.
+A single bundle security CSR <span class="bcp14">MAY</span> contain a mixed set of SAN claims, including combinations of "ip", "dns", and "bundleEID" claims.
+There is no restriction on how a certificate combines these claims, but each claim <span class="bcp14">MUST</span> be validated by an ACME server to issue such a certificate as part of an associated ACME order.
 This is no different than the existing behavior of <span>[<a href="#RFC8555" class="xref">RFC8555</a>]</span> but is mentioned here to make sure that CA policy handles such situations; especially related to validation failure of an identifier in the presence of multiple identifiers.
 The specific use case of <span>[<a href="#I-D.ietf-dtn-tcpclv4" class="xref">I-D.ietf-dtn-tcpclv4</a>]</span> allows, and for some network policies requires, that a certificate authenticate both the DNS name of an entity as well as the Node ID of the entity.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
 </section>
@@ -2065,156 +2084,144 @@ The specific use case of <span>[<a href="#I-D.ietf-dtn-tcpclv4" class="xref">I-D
 <p id="section-5.2-1">
 ACME extensions specified in this document can be used to request encryption-only or signing-only bundle security certificates.<a href="#section-5.2-1" class="pilcrow">¶</a></p>
 <p id="section-5.2-2">
-In order to request signing only bundle security certificate, the CSR MUST include the key usage extension with digitalSignature and/or nonRepudiation bits set and no other bits set.<a href="#section-5.2-2" class="pilcrow">¶</a></p>
+In order to request signing only bundle security certificate, the CSR <span class="bcp14">MUST</span> include the key usage extension with digitalSignature and/or nonRepudiation bits set and no other bits set.<a href="#section-5.2-2" class="pilcrow">¶</a></p>
 <p id="section-5.2-3">
-In order to request encryption only bundle security certificate, the CSR MUST include the key usage extension with keyEncipherment or keyAgreement bits set and no other bits set.<a href="#section-5.2-3" class="pilcrow">¶</a></p>
+In order to request encryption only bundle security certificate, the CSR <span class="bcp14">MUST</span> include the key usage extension with keyEncipherment or keyAgreement bits set and no other bits set.<a href="#section-5.2-3" class="pilcrow">¶</a></p>
 <p id="section-5.2-4">
 Presence of both of the above sets of key usage bits in the CSR, as well as absence of key usage extension in the CSR, signals to ACME server to issue a bundle security certificate suitable for both signing and encryption.<a href="#section-5.2-4" class="pilcrow">¶</a></p>
 </section>
 </section>
-<div id="sec-bpv7-admin-type">
 <section id="section-6">
-      <h2 id="name-bundle-protocol-administrat">
-<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-bundle-protocol-administrat" class="section-name selfRef">Bundle Protocol Administrative Record Types Registry</a>
-      </h2>
-<p id="section-6-1">
-This document updates the requirements in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-dtn-bpbis-31#section-6.1" class="relref">Section 6.1</a> of [<a href="#I-D.ietf-dtn-bpbis" class="xref">I-D.ietf-dtn-bpbis</a>]</span> to use an existing IANA registry and updates that sub-registry in <a href="#sec-iana-bp-admin-type" class="xref">Section 9.3</a>.<a href="#section-6-1" class="pilcrow">¶</a></p>
-<p id="section-6-2">
-Instead of using the explicit list of types in Table 3 of <span>[<a href="#I-D.ietf-dtn-bpbis" class="xref">I-D.ietf-dtn-bpbis</a>]</span>, a BP Agent SHALL interpret administrative record type code values in accordance with the IANA "Administrative Record Types" sub-registry for entries having a "Bundle Protocol Version" of 7.
-Additionally, this document clarifies the zero-value reservation for BPv7 and makes a reservation of high-valued record type codes for "private or experimental use" which applies only to BPv7.<a href="#section-6-2" class="pilcrow">¶</a></p>
-</section>
-</div>
-<section id="section-7">
       <h2 id="name-implementation-status">
-<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-implementation-status" class="section-name selfRef">Implementation Status</a>
+<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-implementation-status" class="section-name selfRef">Implementation Status</a>
       </h2>
-<p id="section-7-1">This section is to be removed before publishing as an RFC.<a href="#section-7-1" class="pilcrow">¶</a></p>
-<p id="section-7-2">
-[NOTE to the RFC Editor: please remove this section before publication, as well as the reference to <span>[<a href="#RFC7942" class="xref">RFC7942</a>]</span> and <span>[<a href="#github-dtn-demo-agent" class="xref">github-dtn-demo-agent</a>]</span> and <span>[<a href="#github-dtn-wireshark" class="xref">github-dtn-wireshark</a>]</span>.]<a href="#section-7-2" class="pilcrow">¶</a></p>
-<p id="section-7-3">
+<p id="section-6-1">This section is to be removed before publishing as an RFC.<a href="#section-6-1" class="pilcrow">¶</a></p>
+<p id="section-6-2">
+[NOTE to the RFC Editor: please remove this section before publication, as well as the reference to <span>[<a href="#RFC7942" class="xref">RFC7942</a>]</span> and <span>[<a href="#github-dtn-demo-agent" class="xref">github-dtn-demo-agent</a>]</span> and <span>[<a href="#github-dtn-wireshark" class="xref">github-dtn-wireshark</a>]</span>.]<a href="#section-6-2" class="pilcrow">¶</a></p>
+<p id="section-6-3">
 This section records the status of known implementations of the protocol defined by this specification at the time of posting of this Internet-Draft, and is based on a proposal described in <span>[<a href="#RFC7942" class="xref">RFC7942</a>]</span>.
 The description of implementations in this section is intended to assist the IETF in its decision processes in progressing drafts to RFCs.
 Please note that the listing of any individual implementation here does not imply endorsement by the IETF.
 Furthermore, no effort has been spent to verify the information presented here that was supplied by IETF contributors.
 This is not intended as, and must not be construed to be, a catalog of available implementations or their features.
-Readers are advised to note that other implementations can exist.<a href="#section-7-3" class="pilcrow">¶</a></p>
-<p id="section-7-4">
-An example implementation of the this draft of ACME Node ID Validation has been created as a GitHub project <span>[<a href="#github-dtn-demo-agent" class="xref">github-dtn-demo-agent</a>]</span> and is intended to use as a proof-of-concept and as a possible source of interoperability testing.<a href="#section-7-4" class="pilcrow">¶</a></p>
-<p id="section-7-5">
-A Wireshark dissector for of the this draft of ACME Node ID Validation has been created as a GitHub project <span>[<a href="#github-dtn-wireshark" class="xref">github-dtn-wireshark</a>]</span> and is intended to be used to inspect and troubleshoot implementations.<a href="#section-7-5" class="pilcrow">¶</a></p>
+Readers are advised to note that other implementations can exist.<a href="#section-6-3" class="pilcrow">¶</a></p>
+<p id="section-6-4">
+An example implementation of the this draft of ACME Node ID Validation has been created as a GitHub project <span>[<a href="#github-dtn-demo-agent" class="xref">github-dtn-demo-agent</a>]</span> and is intended to use as a proof-of-concept and as a possible source of interoperability testing.<a href="#section-6-4" class="pilcrow">¶</a></p>
+<p id="section-6-5">
+A Wireshark dissector for of the this draft of ACME Node ID Validation has been created as a GitHub project <span>[<a href="#github-dtn-wireshark" class="xref">github-dtn-wireshark</a>]</span> and is intended to be used to inspect and troubleshoot implementations.<a href="#section-6-5" class="pilcrow">¶</a></p>
 </section>
 <div id="sec-security">
-<section id="section-8">
+<section id="section-7">
       <h2 id="name-security-considerations">
-<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
+<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
       </h2>
-<p id="section-8-1">
-This section separates security considerations into threat categories based on guidance of BCP 72 <span>[<a href="#RFC3552" class="xref">RFC3552</a>]</span>.<a href="#section-8-1" class="pilcrow">¶</a></p>
+<p id="section-7-1">
+This section separates security considerations into threat categories based on guidance of BCP 72 <span>[<a href="#RFC3552" class="xref">RFC3552</a>]</span>.<a href="#section-7-1" class="pilcrow">¶</a></p>
 <div id="sec-security-leak">
-<section id="section-8.1">
+<section id="section-7.1">
         <h3 id="name-threat-passive-leak-of-vali">
-<a href="#section-8.1" class="section-number selfRef">8.1. </a><a href="#name-threat-passive-leak-of-vali" class="section-name selfRef">Threat: Passive Leak of Validation Data</a>
+<a href="#section-7.1" class="section-number selfRef">7.1. </a><a href="#name-threat-passive-leak-of-vali" class="section-name selfRef">Threat: Passive Leak of Validation Data</a>
         </h3>
-<p id="section-8.1-1">
+<p id="section-7.1-1">
 Because this challenge mechanism is used to bootstrap security between DTN Nodes, the challenge and its response are likely to be transferred in plaintext.
 The only ACME data present on-the-wire is a random token and a cryptographic digest, so there is no sensitive data to be leaked within the Node ID Validation bundle exchange.
-Because each challenge uses a separate token, there is no value in an on-path attacker seeing the tokens from past challenges and/or responses.<a href="#section-8.1-1" class="pilcrow">¶</a></p>
-<p id="section-8.1-2">
-It is possible for intermediate BP nodes to encapsulate-and-encrypt Challenge and/or Response Bundles while they traverse untrusted networks, but that is a DTN configuration matter outside of the scope of this document.<a href="#section-8.1-2" class="pilcrow">¶</a></p>
+Because each challenge uses a separate token, there is no value in an on-path attacker seeing the tokens from past challenges and/or responses.<a href="#section-7.1-1" class="pilcrow">¶</a></p>
+<p id="section-7.1-2">
+It is possible for intermediate BP nodes to encapsulate-and-encrypt Challenge and/or Response Bundles while they traverse untrusted networks, but that is a DTN configuration matter outside of the scope of this document.<a href="#section-7.1-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="sec-security-impersonate">
-<section id="section-8.2">
+<section id="section-7.2">
         <h3 id="name-threat-bp-node-impersonatio">
-<a href="#section-8.2" class="section-number selfRef">8.2. </a><a href="#name-threat-bp-node-impersonatio" class="section-name selfRef">Threat: BP Node Impersonation</a>
+<a href="#section-7.2" class="section-number selfRef">7.2. </a><a href="#name-threat-bp-node-impersonatio" class="section-name selfRef">Threat: BP Node Impersonation</a>
         </h3>
-<p id="section-8.2-1">
-As described in <span><a href="https://rfc-editor.org/rfc/rfc8555#section-8.1" class="relref">Section 8.1</a> of [<a href="#RFC8555" class="xref">RFC8555</a>]</span>, it is possible for an active attacker to alter data on both ACME client channel and the DTN validation channel.<a href="#section-8.2-1" class="pilcrow">¶</a></p>
-<p id="section-8.2-2">
+<p id="section-7.2-1">
+As described in <span><a href="https://rfc-editor.org/rfc/rfc8555#section-8.1" class="relref">Section 8.1</a> of [<a href="#RFC8555" class="xref">RFC8555</a>]</span>, it is possible for an active attacker to alter data on both ACME client channel and the DTN validation channel.<a href="#section-7.2-1" class="pilcrow">¶</a></p>
+<p id="section-7.2-2">
 The primary mitigation is to delegate bundle integrity sourcing to a trusted routing node near, in the sense of bundle routing topology, to the bundle source node as defined in <a href="#sec-bib-gateway" class="xref">Section 4</a>.
-This is functionally similar to DKIM signing of <span>[<a href="#RFC6376" class="xref">RFC6376</a>]</span> and provides some level of bundle origination.<a href="#section-8.2-2" class="pilcrow">¶</a></p>
-<p id="section-8.2-3">
-Another way to mitigate single-path on-path attacks is to attempt validation of the same Node ID via multiple bundle routing paths, as recommended in <a href="#sec-validate-nodeid" class="xref">Section 3</a>.
-It is not a trivial task to guarantee bundle routing though, so more advanced techniques such as onion routing (using bundle-in-bundle encapsulation <span>[<a href="#I-D.ietf-dtn-bibect" class="xref">I-D.ietf-dtn-bibect</a>]</span>) could be employed.<a href="#section-8.2-3" class="pilcrow">¶</a></p>
+This is functionally similar to DKIM signing of <span>[<a href="#RFC6376" class="xref">RFC6376</a>]</span> and provides some level of bundle origination.<a href="#section-7.2-2" class="pilcrow">¶</a></p>
+<p id="section-7.2-3">
+Another way to mitigate single-path on-path attacks is to attempt validation of the same Node ID from multiple sources or via multiple bundle routing paths, as defined in <a href="#sec-multi-perspective" class="xref">Section 3.5</a>.
+It is not a trivial task to guarantee bundle routing though, so more advanced techniques such as onion routing (using bundle-in-bundle encapsulation <span>[<a href="#I-D.ietf-dtn-bibect" class="xref">I-D.ietf-dtn-bibect</a>]</span>) could be employed.<a href="#section-7.2-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="sec-security-replay">
-<section id="section-8.3">
+<section id="section-7.3">
         <h3 id="name-threat-bundle-replay">
-<a href="#section-8.3" class="section-number selfRef">8.3. </a><a href="#name-threat-bundle-replay" class="section-name selfRef">Threat: Bundle Replay</a>
+<a href="#section-7.3" class="section-number selfRef">7.3. </a><a href="#name-threat-bundle-replay" class="section-name selfRef">Threat: Bundle Replay</a>
         </h3>
-<p id="section-8.3-1">
+<p id="section-7.3-1">
 It is possible for an on-path attacker to replay both Challenge Bundles or Response Bundles.
-Even in a properly-configured DTN it is possible that intermediate bundle routers to use multicast forwarding of a unicast-destination bundle.<a href="#section-8.3-1" class="pilcrow">¶</a></p>
-<p id="section-8.3-2">
+Even in a properly-configured DTN it is possible that intermediate bundle routers to use multicast forwarding of a unicast-destination bundle.<a href="#section-7.3-1" class="pilcrow">¶</a></p>
+<p id="section-7.3-2">
 Ultimately, the point of the ACME bundle exchange is to derive a Key Authorization and its cryptographic digest and communicate it back to the ACME server for validation, so the uniqueness of the Key Authorization directly determines the scope of replay validity.
 The uniqueness of each <code>token-bundle</code> to each challenge bundle ensures that the Key Authorization is unique to the challenge bundle.
-The uniqueness of each <code>token-chal</code> to the ACME challenge ensures that the Key Authorization is unique to that ACME challenge.<a href="#section-8.3-2" class="pilcrow">¶</a></p>
-<p id="section-8.3-3">
+The uniqueness of each <code>token-chal</code> to the ACME challenge ensures that the Key Authorization is unique to that ACME challenge.<a href="#section-7.3-2" class="pilcrow">¶</a></p>
+<p id="section-7.3-3">
 Having each bundle's primary block and payload block covered by a BIB from a trusted security source (see <a href="#sec-bib-gateway" class="xref">Section 4</a>) ensures that a replayed bundle cannot be altered in the blocks used by ACME.
 All together, these properties mean that there is no degraded security caused by replay of either a Challenge Bundle or a Response Bundle even in the case where the primary or payload block is not covered by a BIB.
-The worst that can come of bundle replay is the waste of network resources as described in <a href="#sec-security-dos" class="xref">Section 8.4</a>.<a href="#section-8.3-3" class="pilcrow">¶</a></p>
+The worst that can come of bundle replay is the waste of network resources as described in <a href="#sec-security-dos" class="xref">Section 7.4</a>.<a href="#section-7.3-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="sec-security-dos">
-<section id="section-8.4">
+<section id="section-7.4">
         <h3 id="name-threat-denial-of-service">
-<a href="#section-8.4" class="section-number selfRef">8.4. </a><a href="#name-threat-denial-of-service" class="section-name selfRef">Threat: Denial of Service</a>
+<a href="#section-7.4" class="section-number selfRef">7.4. </a><a href="#name-threat-denial-of-service" class="section-name selfRef">Threat: Denial of Service</a>
         </h3>
-<p id="section-8.4-1">
-The behaviors described in this section all amount to a potential denial-of-service to a BP agent.<a href="#section-8.4-1" class="pilcrow">¶</a></p>
-<p id="section-8.4-2">
+<p id="section-7.4-1">
+The behaviors described in this section all amount to a potential denial-of-service to a BP agent.<a href="#section-7.4-1" class="pilcrow">¶</a></p>
+<p id="section-7.4-2">
 A malicious entity can continually send Challenge Bundles to a BP agent.
 The victim BP agent can ignore Challenge Bundles which do not conform to the specific time interval and challenge token for which the ACME client has informed the BP agent that challenges are expected.
-The victim BP agent can require all Challenge Bundles to be BIB-signed to ensure authenticity of the challenge.<a href="#section-8.4-2" class="pilcrow">¶</a></p>
-<p id="section-8.4-3">
+The victim BP agent can require all Challenge Bundles to be BIB-signed to ensure authenticity of the challenge.<a href="#section-7.4-2" class="pilcrow">¶</a></p>
+<p id="section-7.4-3">
 A malicious entity can continually send Response Bundles to a BP agent.
-The victim BP agent can ignore Response Bundles which do not conform to the specific time interval or Source Node ID or challenge token for an active Node ID validation.<a href="#section-8.4-3" class="pilcrow">¶</a></p>
-<p id="section-8.4-4">
+The victim BP agent can ignore Response Bundles which do not conform to the specific time interval or Source Node ID or challenge token for an active Node ID validation.<a href="#section-7.4-3" class="pilcrow">¶</a></p>
+<p id="section-7.4-4">
 Similar to other validation methods, an ACME server validating a DTN Node ID could be used as a denial of service amplifier.
-For this reason any ACME server can rate-limit validation activities for individual clients and individual certificate requests.<a href="#section-8.4-4" class="pilcrow">¶</a></p>
+For this reason any ACME server can rate-limit validation activities for individual clients and individual certificate requests.<a href="#section-7.4-4" class="pilcrow">¶</a></p>
 </section>
 </div>
-<section id="section-8.5">
+<section id="section-7.5">
         <h3 id="name-inherited-security-consider">
-<a href="#section-8.5" class="section-number selfRef">8.5. </a><a href="#name-inherited-security-consider" class="section-name selfRef">Inherited Security Considerations</a>
+<a href="#section-7.5" class="section-number selfRef">7.5. </a><a href="#name-inherited-security-consider" class="section-name selfRef">Inherited Security Considerations</a>
         </h3>
-<p id="section-8.5-1">
-Because this protocol relies on ACME for part of its operation, the security considerations of <span>[<a href="#RFC8555" class="xref">RFC8555</a>]</span> apply to all ACME client--server exchanges during Node ID validation.<a href="#section-8.5-1" class="pilcrow">¶</a></p>
-<p id="section-8.5-2">
-Because this protocol relies on BPv7 for part of its operation, the security considerations of <span>[<a href="#I-D.ietf-dtn-bpbis" class="xref">I-D.ietf-dtn-bpbis</a>]</span> and <span>[<a href="#I-D.ietf-dtn-bpsec" class="xref">I-D.ietf-dtn-bpsec</a>]</span> apply to all BP messaging during Node ID validation.<a href="#section-8.5-2" class="pilcrow">¶</a></p>
+<p id="section-7.5-1">
+Because this protocol relies on ACME for part of its operation, the security considerations of <span>[<a href="#RFC8555" class="xref">RFC8555</a>]</span> apply to all ACME client--server exchanges during Node ID validation.<a href="#section-7.5-1" class="pilcrow">¶</a></p>
+<p id="section-7.5-2">
+Because this protocol relies on BPv7 for part of its operation, the security considerations of <span>[<a href="#I-D.ietf-dtn-bpbis" class="xref">I-D.ietf-dtn-bpbis</a>]</span> and <span>[<a href="#I-D.ietf-dtn-bpsec" class="xref">I-D.ietf-dtn-bpsec</a>]</span> apply to all BP messaging during Node ID validation.<a href="#section-7.5-2" class="pilcrow">¶</a></p>
 </section>
-<section id="section-8.6">
+<section id="section-7.6">
         <h3 id="name-out-of-scope-bp-agent-commu">
-<a href="#section-8.6" class="section-number selfRef">8.6. </a><a href="#name-out-of-scope-bp-agent-commu" class="section-name selfRef">Out-of-Scope BP Agent Communication</a>
+<a href="#section-7.6" class="section-number selfRef">7.6. </a><a href="#name-out-of-scope-bp-agent-commu" class="section-name selfRef">Out-of-Scope BP Agent Communication</a>
         </h3>
-<p id="section-8.6-1">
+<p id="section-7.6-1">
 Although messaging between an ACME client or ACME server an its associated BP agent are out-of-scope for this document, both of those channels are critical to Node ID validation security.
 Either channel can potentially leak data or provide attack vectors if not properly secured.
-These channels need to protect against spoofing of messaging in both directions to avoid interruption of normal validation sequencing and to prevent false validations from succeeding.<a href="#section-8.6-1" class="pilcrow">¶</a></p>
-<p id="section-8.6-2">
-The ACME server and its BP agent exchange the outgoing <code>token-chal</code>, <code>token-bundle</code>, and Key Authorization digest but these values do not need to be confidential (they are also in plaintext over the BP channel).<a href="#section-8.6-2" class="pilcrow">¶</a></p>
-<p id="section-8.6-3">
+These channels need to protect against spoofing of messaging in both directions to avoid interruption of normal validation sequencing and to prevent false validations from succeeding.<a href="#section-7.6-1" class="pilcrow">¶</a></p>
+<p id="section-7.6-2">
+The ACME server and its BP agent exchange the outgoing <code>token-chal</code>, <code>token-bundle</code>, and Key Authorization digest but these values do not need to be confidential (they are also in plaintext over the BP channel).<a href="#section-7.6-2" class="pilcrow">¶</a></p>
+<p id="section-7.6-3">
 Depending on implementation details, the ACME client might transmit the client account key thumbprint to its BP agent to allow computing the Key Authorization digest on the BP agent.
 If an ACME client does transmit its client account key thumbprint to a BP agent, it is important that this data is kept confidential because it provides the binding of the client account key to the Node ID validation (as well as for all other types of ACME validation).
-Avoiding this transmission would require a full round-trip between BP agent and ACME client, which can be undesirable if the two are separated by a long-delay network.<a href="#section-8.6-3" class="pilcrow">¶</a></p>
+Avoiding this transmission would require a full round-trip between BP agent and ACME client, which can be undesirable if the two are separated by a long-delay network.<a href="#section-7.6-3" class="pilcrow">¶</a></p>
 </section>
 </section>
 </div>
 <div id="sec-iana">
-<section id="section-9">
+<section id="section-8">
       <h2 id="name-iana-considerations">
-<a href="#section-9" class="section-number selfRef">9. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
+<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
       </h2>
-<p id="section-9-1">
-This specification adds to the ACME registry and BP registry for this behavior.<a href="#section-9-1" class="pilcrow">¶</a></p>
+<p id="section-8-1">
+This specification adds to the ACME registry and BP registry for this behavior.<a href="#section-8-1" class="pilcrow">¶</a></p>
 <div id="sec-iana-acme-identifier">
-<section id="section-9.1">
+<section id="section-8.1">
         <h3 id="name-acme-identifier-types">
-<a href="#section-9.1" class="section-number selfRef">9.1. </a><a href="#name-acme-identifier-types" class="section-name selfRef">ACME Identifier Types</a>
+<a href="#section-8.1" class="section-number selfRef">8.1. </a><a href="#name-acme-identifier-types" class="section-name selfRef">ACME Identifier Types</a>
         </h3>
-<p id="section-9.1-1">
-Within the "Automated Certificate Management Environment (ACME) Protocol" registry <span>[<a href="#IANA-ACME" class="xref">IANA-ACME</a>]</span>, the following entry has been added to the "ACME Identifier Types" sub-registry.<a href="#section-9.1-1" class="pilcrow">¶</a></p>
+<p id="section-8.1-1">
+Within the "Automated Certificate Management Environment (ACME) Protocol" registry <span>[<a href="#IANA-ACME" class="xref">IANA-ACME</a>]</span>, the following entry has been added to the "ACME Identifier Types" sub-registry.<a href="#section-8.1-1" class="pilcrow">¶</a></p>
 <table class="center" id="table-1">
           <caption><a href="#table-1" class="selfRef">Table 1</a></caption>
 <thead>
@@ -2234,12 +2241,12 @@ Within the "Automated Certificate Management Environment (ACME) Protocol" regist
 </section>
 </div>
 <div id="sec-iana-acme-method">
-<section id="section-9.2">
+<section id="section-8.2">
         <h3 id="name-acme-validation-methods">
-<a href="#section-9.2" class="section-number selfRef">9.2. </a><a href="#name-acme-validation-methods" class="section-name selfRef">ACME Validation Methods</a>
+<a href="#section-8.2" class="section-number selfRef">8.2. </a><a href="#name-acme-validation-methods" class="section-name selfRef">ACME Validation Methods</a>
         </h3>
-<p id="section-9.2-1">
-Within the "Automated Certificate Management Environment (ACME) Protocol" registry <span>[<a href="#IANA-ACME" class="xref">IANA-ACME</a>]</span>, the following entry has been added to the "ACME Validation Methods" sub-registry.<a href="#section-9.2-1" class="pilcrow">¶</a></p>
+<p id="section-8.2-1">
+Within the "Automated Certificate Management Environment (ACME) Protocol" registry <span>[<a href="#IANA-ACME" class="xref">IANA-ACME</a>]</span>, the following entry has been added to the "ACME Validation Methods" sub-registry.<a href="#section-8.2-1" class="pilcrow">¶</a></p>
 <table class="center" id="table-2">
           <caption><a href="#table-2" class="selfRef">Table 2</a></caption>
 <thead>
@@ -2262,13 +2269,14 @@ Within the "Automated Certificate Management Environment (ACME) Protocol" regist
 </section>
 </div>
 <div id="sec-iana-bp-admin-type">
-<section id="section-9.3">
+<section id="section-8.3">
         <h3 id="name-bundle-administrative-recor">
-<a href="#section-9.3" class="section-number selfRef">9.3. </a><a href="#name-bundle-administrative-recor" class="section-name selfRef">Bundle Administrative Record Types</a>
+<a href="#section-8.3" class="section-number selfRef">8.3. </a><a href="#name-bundle-administrative-recor" class="section-name selfRef">Bundle Administrative Record Types</a>
         </h3>
-<p id="section-9.3-1">
-Within the "Bundle Protocol" registry <span>[<a href="#IANA-BP" class="xref">IANA-BP</a>]</span>, the "Bundle Administrative Record Types" sub-registry has been updated to include a leftmost "Bundle Protocol Version" column.
-The existing sub-registry entries have been updated to have BP versions as in the following table.<a href="#section-9.3-1" class="pilcrow">¶</a></p>
+<p id="section-8.3-1">
+Within the "Bundle Protocol" registry <span>[<a href="#IANA-BP" class="xref">IANA-BP</a>]</span>, the following entries have been added to the "Bundle Administrative Record Types" sub-registry.<a href="#section-8.3-1" class="pilcrow">¶</a></p>
+<p id="section-8.3-2">
+[NOTE to the RFC Editor: For <span>[<a href="#RFC5050" class="xref">RFC5050</a>]</span> compatibility the AR-TBD value needs to be no larger than 15, but such compatibility is not needed. For BPbis the AR-TBD value needs to be no larger than 65535 as defined by <span>[<a href="#I-D.sipos-bpv7-admin-iana" class="xref">I-D.sipos-bpv7-admin-iana</a>]</span>.]<a href="#section-8.3-2" class="pilcrow">¶</a></p>
 <table class="center" id="table-3">
           <caption><a href="#table-3" class="selfRef">Table 3</a></caption>
 <thead>
@@ -2281,68 +2289,9 @@ The existing sub-registry entries have been updated to have BP versions as in th
           </thead>
           <tbody>
             <tr>
-              <td class="text-left" rowspan="1" colspan="1">6,7</td>
-              <td class="text-left" rowspan="1" colspan="1">0</td>
-              <td class="text-left" rowspan="1" colspan="1">Reserved</td>
-              <td class="text-left" rowspan="1" colspan="1">
-                <span>[<a href="#RFC7116" class="xref">RFC7116</a>]</span>
-              </td>
-            </tr>
-            <tr>
-              <td class="text-left" rowspan="1" colspan="1">6,7</td>
-              <td class="text-left" rowspan="1" colspan="1">1</td>
-              <td class="text-left" rowspan="1" colspan="1">Bundle status report</td>
-              <td class="text-left" rowspan="1" colspan="1">
-                <span>[<a href="#RFC5050" class="xref">RFC5050</a>]</span>
-                <span>[<a href="#I-D.ietf-dtn-bpbis" class="xref">I-D.ietf-dtn-bpbis</a>]</span>
-              </td>
-            </tr>
-            <tr>
-              <td class="text-left" rowspan="1" colspan="1">6</td>
-              <td class="text-left" rowspan="1" colspan="1">2</td>
-              <td class="text-left" rowspan="1" colspan="1">Custody signal</td>
-              <td class="text-left" rowspan="1" colspan="1">
-                <span>[<a href="#RFC5050" class="xref">RFC5050</a>]</span>
-              </td>
-            </tr>
-            <tr>
-              <td class="text-left" rowspan="1" colspan="1">6,7</td>
-              <td class="text-left" rowspan="1" colspan="1">3-15</td>
-              <td class="text-left" rowspan="1" colspan="1">Unassigned</td>
-              <td class="text-left" rowspan="1" colspan="1"></td>
-            </tr>
-          </tbody>
-        </table>
-<p id="section-9.3-3">
-Within the "Bundle Protocol" registry <span>[<a href="#IANA-BP" class="xref">IANA-BP</a>]</span>, the following entries have been added to the "Bundle Administrative Record Types" sub-registry.
-[NOTE to the RFC Editor: For RFC5050 compatibility the TBD value needs to be no larger than 15, but such compatibility is not needed. For BPbis the TBD value needs to be no larger than 65535.]<a href="#section-9.3-3" class="pilcrow">¶</a></p>
-<table class="center" id="table-4">
-          <caption><a href="#table-4" class="selfRef">Table 4</a></caption>
-<thead>
-            <tr>
-              <th class="text-left" rowspan="1" colspan="1">Bundle Protocol Version</th>
-              <th class="text-left" rowspan="1" colspan="1">Value</th>
-              <th class="text-left" rowspan="1" colspan="1">Description</th>
-              <th class="text-left" rowspan="1" colspan="1">Reference</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
               <td class="text-left" rowspan="1" colspan="1">7</td>
-              <td class="text-left" rowspan="1" colspan="1">TBD</td>
+              <td class="text-left" rowspan="1" colspan="1">AR-TBD</td>
               <td class="text-left" rowspan="1" colspan="1">ACME Node ID Validation</td>
-              <td class="text-left" rowspan="1" colspan="1">This specification</td>
-            </tr>
-            <tr>
-              <td class="text-left" rowspan="1" colspan="1">7</td>
-              <td class="text-left" rowspan="1" colspan="1">16-65535</td>
-              <td class="text-left" rowspan="1" colspan="1">Unassigned</td>
-              <td class="text-left" rowspan="1" colspan="1"></td>
-            </tr>
-            <tr>
-              <td class="text-left" rowspan="1" colspan="1">7</td>
-              <td class="text-left" rowspan="1" colspan="1">&gt;= 65536</td>
-              <td class="text-left" rowspan="1" colspan="1">Reserved for Private or Experimental Use</td>
               <td class="text-left" rowspan="1" colspan="1">This specification</td>
             </tr>
           </tbody>
@@ -2352,23 +2301,23 @@ Within the "Bundle Protocol" registry <span>[<a href="#IANA-BP" class="xref">IAN
 </section>
 </div>
 <div id="sec-doc-ack">
-<section id="section-10">
+<section id="section-9">
       <h2 id="name-acknowledgments">
-<a href="#section-10" class="section-number selfRef">10. </a><a href="#name-acknowledgments" class="section-name selfRef">Acknowledgments</a>
+<a href="#section-9" class="section-number selfRef">9. </a><a href="#name-acknowledgments" class="section-name selfRef">Acknowledgments</a>
       </h2>
-<p id="section-10-1">
-This specification is based on DTN use cases related to PKIX certificate issuance.<a href="#section-10-1" class="pilcrow">¶</a></p>
-<p id="section-10-2">
-The workflow and terminology of this validation method was originally copied from the work of Alexey Melnikov in <span>[<a href="#RFC8823" class="xref">RFC8823</a>]</span>.<a href="#section-10-2" class="pilcrow">¶</a></p>
+<p id="section-9-1">
+This specification is based on DTN use cases related to PKIX certificate issuance.<a href="#section-9-1" class="pilcrow">¶</a></p>
+<p id="section-9-2">
+The workflow and terminology of this validation method was originally copied from the work of Alexey Melnikov in <span>[<a href="#RFC8823" class="xref">RFC8823</a>]</span>.<a href="#section-9-2" class="pilcrow">¶</a></p>
 </section>
 </div>
-<section id="section-11">
+<section id="section-10">
       <h2 id="name-references">
-<a href="#section-11" class="section-number selfRef">11. </a><a href="#name-references" class="section-name selfRef">References</a>
+<a href="#section-10" class="section-number selfRef">10. </a><a href="#name-references" class="section-name selfRef">References</a>
       </h2>
-<section id="section-11.1">
+<section id="section-10.1">
         <h3 id="name-normative-references">
-<a href="#section-11.1" class="section-number selfRef">11.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
+<a href="#section-10.1" class="section-number selfRef">10.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
         </h3>
 <dl class="references">
 <dt id="FIPS180-4">[FIPS180-4]</dt>
@@ -2445,9 +2394,9 @@ The workflow and terminology of this validation method was originally copied fro
 <dd class="break"></dd>
 </dl>
 </section>
-<section id="section-11.2">
+<section id="section-10.2">
         <h3 id="name-informative-references">
-<a href="#section-11.2" class="section-number selfRef">11.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
+<a href="#section-10.2" class="section-number selfRef">10.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
         </h3>
 <dl class="references">
 <dt id="RFC5050">[RFC5050]</dt>
@@ -2457,10 +2406,6 @@ The workflow and terminology of this validation method was originally copied fro
 <dt id="RFC6376">[RFC6376]</dt>
         <dd>
 <span class="refAuthor">Crocker, D., Ed.</span>, <span class="refAuthor">Hansen, T., Ed.</span>, and <span class="refAuthor">M. Kucherawy, Ed.</span>, <span class="refTitle">"DomainKeys Identified Mail (DKIM) Signatures"</span>, <span class="seriesInfo">STD 76</span>, <span class="seriesInfo">RFC 6376</span>, <span class="seriesInfo">DOI 10.17487/RFC6376</span>, <time datetime="2011-09" class="refDate">September 2011</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc6376">https://www.rfc-editor.org/info/rfc6376</a>&gt;</span>. </dd>
-<dd class="break"></dd>
-<dt id="RFC7116">[RFC7116]</dt>
-        <dd>
-<span class="refAuthor">Scott, K.</span> and <span class="refAuthor">M. Blanchet</span>, <span class="refTitle">"Licklider Transmission Protocol (LTP), Compressed Bundle Header Encoding (CBHE), and Bundle Protocol IANA Registries"</span>, <span class="seriesInfo">RFC 7116</span>, <span class="seriesInfo">DOI 10.17487/RFC7116</span>, <time datetime="2014-02" class="refDate">February 2014</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc7116">https://www.rfc-editor.org/info/rfc7116</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC8823">[RFC8823]</dt>
         <dd>
@@ -2472,11 +2417,15 @@ The workflow and terminology of this validation method was originally copied fro
 <dd class="break"></dd>
 <dt id="I-D.ietf-dtn-tcpclv4">[I-D.ietf-dtn-tcpclv4]</dt>
         <dd>
-<span class="refAuthor">Sipos, B.</span>, <span class="refAuthor">Demmer, M.</span>, <span class="refAuthor">Ott, J.</span>, and <span class="refAuthor">S. Perreault</span>, <span class="refTitle">"Delay-Tolerant Networking TCP Convergence Layer Protocol Version 4"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-dtn-tcpclv4-27</span>, <time datetime="2021-09-22" class="refDate">22 September 2021</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-dtn-tcpclv4-27">https://datatracker.ietf.org/doc/html/draft-ietf-dtn-tcpclv4-27</a>&gt;</span>. </dd>
+<span class="refAuthor">Sipos, B.</span>, <span class="refAuthor">Demmer, M.</span>, <span class="refAuthor">Ott, J.</span>, and <span class="refAuthor">S. Perreault</span>, <span class="refTitle">"Delay-Tolerant Networking TCP Convergence Layer Protocol Version 4"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-dtn-tcpclv4-28</span>, <time datetime="2021-10-06" class="refDate">6 October 2021</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-dtn-tcpclv4-28">https://datatracker.ietf.org/doc/html/draft-ietf-dtn-tcpclv4-28</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.sipos-dtn-udpcl">[I-D.sipos-dtn-udpcl]</dt>
         <dd>
 <span class="refAuthor">Sipos, B.</span>, <span class="refTitle">"Delay-Tolerant Networking UDP Convergence Layer Protocol"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-sipos-dtn-udpcl-01</span>, <time datetime="2021-03-26" class="refDate">26 March 2021</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-sipos-dtn-udpcl-01">https://datatracker.ietf.org/doc/html/draft-sipos-dtn-udpcl-01</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="I-D.sipos-bpv7-admin-iana">[I-D.sipos-bpv7-admin-iana]</dt>
+        <dd>
+<span class="refAuthor">Sipos, B.</span>, <span class="refTitle">"Bundle Protocol Version 7 Administrative Record Types Registry"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-sipos-bpv7-admin-iana-00</span>, <time datetime="2021-10-13" class="refDate">13 October 2021</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-sipos-bpv7-admin-iana-00">https://datatracker.ietf.org/doc/html/draft-sipos-bpv7-admin-iana-00</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.bsipos-dtn-bpsec-cose">[I-D.bsipos-dtn-bpsec-cose]</dt>
         <dd>
@@ -2487,8 +2436,12 @@ The workflow and terminology of this validation method was originally copied fro
 <span class="refAuthor">Sipos, B.</span>, <span class="refTitle">"Python implementation of basic BPv7-related protocols"</span>, <span>&lt;<a href="https://github.com/BSipos-RKF/dtn-demo-agent/">https://github.com/BSipos-RKF/dtn-demo-agent/</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="github-dtn-wireshark">[github-dtn-wireshark]</dt>
-      <dd>
+        <dd>
 <span class="refAuthor">Sipos, B.</span>, <span class="refTitle">"Wireshark Dissectors for BPv7-related Protocols"</span>, <span>&lt;<a href="https://github.com/BSipos-RKF/dtn-wireshark/">https://github.com/BSipos-RKF/dtn-wireshark/</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="LE-multi-perspective">[LE-multi-perspective]</dt>
+      <dd>
+<span class="refAuthor">Aas, J.</span>, <span class="refAuthor">McCarney, D.</span>, and <span class="refAuthor">R. Shoemaker</span>, <span class="refTitle">"Multi-Perspective Validation Improves Domain Validation Security"</span>, <time datetime="2020-02-19" class="refDate">19 February 2020</time>, <span>&lt;<a href="https://letsencrypt.org/2020/02/19/multi-perspective-validation.html">https://letsencrypt.org/2020/02/19/multi-perspective-validation.html</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>
@@ -2665,7 +2618,7 @@ This response indicates that there is 30 seconds remaining in the response time 
 <div dir="auto" class="left"><span class="country-name">United States of America</span></div>
 <div class="email">
 <span>Email:</span>
-<a href="mailto:BSipos@rkf-eng.com" class="email">BSipos@rkf-eng.com</a>
+<a href="mailto:brian.sipos+ietf@gmail.com" class="email">brian.sipos+ietf@gmail.com</a>
 </div>
 </address>
 </section>
