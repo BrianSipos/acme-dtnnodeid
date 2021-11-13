@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?rfc toc="yes"?>
-<rfc xmlns:xi="http://www.w3.org/2001/XInclude" category="exp" docName="draft-ietf-acme-dtnnodeid-06" ipr="trust200902" submissionType="IETF" tocInclude="true" version="3">
+<rfc xmlns:xi="http://www.w3.org/2001/XInclude" category="exp" docName="draft-ietf-acme-dtnnodeid-07" ipr="trust200902" submissionType="IETF" tocInclude="true" version="3">
   <front>
     <title abbrev="ACME DTN Node ID">
 Automated Certificate Management Environment (ACME)
 Delay-Tolerant Networking (DTN) Node ID Validation Extension
     </title>
-    <seriesInfo name="Internet-Draft" value="draft-ietf-acme-dtnnodeid-06"/>
+    <seriesInfo name="Internet-Draft" value="draft-ietf-acme-dtnnodeid-07"/>
     <author fullname="Brian Sipos" initials="B." surname="Sipos">
       <organization abbrev="RKF Engineering">RKF Engineering Solutions, LLC</organization>
       <address>
@@ -237,7 +237,7 @@ The token parts are:
       </t>
       <dl>
         <dt>
-          <tt>token-chal</tt>
+          <tt>token-chal</tt>:
         </dt>
         <dd>
 This token is unique to, and identifies, each ACME authorization.
@@ -247,7 +247,7 @@ This ensures that the Key Authorization is bound to the specific ACME challenge 
 This token is also accessible to DTN on-path eavesdroppers.
         </dd>
         <dt>
-          <tt>token-bundle</tt>
+          <tt>token-bundle</tt>:
         </dt>
         <dd>
 This token is unique to each Challenge Bundle sent by the ACME server.
@@ -360,7 +360,7 @@ The array <bcp14>MAY</bcp14> contain Node IDs which are not actually used as a c
           <dd>
 A random value that uniquely identifies the challenge.
 This value <bcp14>MUST</bcp14> have at least 128 bits of entropy.
-It <bcp14>MUST</bcp14> contain any characters outside the base64url alphabet as described in <xref section="5" target="RFC4648"/>.
+It <bcp14>MUST NOT</bcp14> contain any characters outside the base64url alphabet as described in <xref section="5" target="RFC4648"/>.
 Trailing '=' padding characters <bcp14>MUST</bcp14> be stripped.
 See <xref target="RFC4086"/> for additional information on randomness requirements.
           </dd>
@@ -801,7 +801,7 @@ Within the "Automated Certificate Management Environment (ACME) Protocol" regist
           </thead>
           <tbody>
             <tr>
-              <td>uri</td>
+              <td>bundleEID</td>
               <td>This specification and <xref target="RFC3986"/></td>
             </tr>
           </tbody>
@@ -824,7 +824,7 @@ Within the "Automated Certificate Management Environment (ACME) Protocol" regist
           <tbody>
             <tr>
               <td>dtn-nodeid-01</td>
-              <td>uri</td>
+              <td>bundleEID</td>
               <td>Y</td>
               <td>This specification</td>
             </tr>
@@ -1023,7 +1023,7 @@ This challenge requires that the ACME client respond within a 60 second time win
         <figure anchor="fig-example-bundle-challenge">
           <name>Example Challenge Bundle</name>
           <sourcecode type="cbor">
-[
+[_
   [
     7, / BP version /
     0x22, / flags: user-app-ack, payload-is-an-admin-record /
@@ -1067,7 +1067,7 @@ This response indicates that there is 30 seconds remaining in the response time 
         <figure anchor="fig-example-bundle-response">
           <name>Example Response Bundle</name>
           <sourcecode type="cbor">
-[
+[_
   [
     7, / BP version /
     0x02, / flags: payload-is-an-admin-record /
