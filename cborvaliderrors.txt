@@ -8,7 +8,7 @@ INFO:root:Processing element text:
 "p3yRYFU4KxwQaHQjJ2RdiQ"
 *** Unused rule bpv7_start
 INFO:root:Processing element text:
-[_
+[
   [
     7, / BP version /
     0x22, / flags: user-app-ack, payload-is-an-admin-record /
@@ -33,7 +33,7 @@ INFO:root:Processing element text:
     ]>>
   ]
 ]
-/usr/lib/ruby/2.7.0/json/common.rb:156:in `parse': 783: unexpected token at '*** can't parse [_ (JSON::ParserError)
+/usr/lib/ruby/2.7.0/json/common.rb:156:in `parse': 783: unexpected token at '*** can't parse [ (JSON::ParserError)
   [
     7, / BP version /
     0x22, / flags: user-app-ack, payload-is-an-admin-record /
@@ -58,7 +58,7 @@ INFO:root:Processing element text:
     ]>>
   ]
 ]
-*** Expected one of [ \\t\\n\\r], "/", ',', '}' at line 21, column 9 (byte 585) after [_
+*** Expected one of [ \\t\\n\\r], "/", ',', '}' at line 21, column 9 (byte 584) after [
   [
     7, / BP version /
     0x22, / flags: user-app-ack, payload-is-an-admin-record /
@@ -118,7 +118,7 @@ INFO:root:Processing element text:
 	from /usr/local/bin/cddl:23:in `load'
 	from /usr/local/bin/cddl:23:in `<main>'
 INFO:root:Processing element text:
-[_
+[
   [
     7, / BP version /
     0x02, / flags: payload-is-an-admin-record /
@@ -145,7 +145,7 @@ INFO:root:Processing element text:
     ]>>
   ]
 ]
-/usr/lib/ruby/2.7.0/json/common.rb:156:in `parse': 783: unexpected token at '*** can't parse [_ (JSON::ParserError)
+/usr/lib/ruby/2.7.0/json/common.rb:156:in `parse': 783: unexpected token at '*** can't parse [ (JSON::ParserError)
   [
     7, / BP version /
     0x02, / flags: payload-is-an-admin-record /
@@ -172,7 +172,7 @@ INFO:root:Processing element text:
     ]>>
   ]
 ]
-*** Expected one of [ \\t\\n\\r], "/", ',', '}' at line 21, column 9 (byte 568) after [_
+*** Expected one of [ \\t\\n\\r], "/", ',', '}' at line 21, column 9 (byte 567) after [
   [
     7, / BP version /
     0x02, / flags: payload-is-an-admin-record /
