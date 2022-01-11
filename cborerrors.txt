@@ -18,7 +18,7 @@ INFO:root:Processing element text:
     0, / CRC type: none /
     [1, "//acme-client/"], / destination /
     [1, "//acme-server/"], / source /
-    [1, "//acme-server/"], / report-to /
+    [1, 0], / report-to: none /
     [1000000, 0], / timestamp: 2000-01-01T00:16:40+00:00 /
     60000 / lifetime: 60s /
   ],
@@ -30,58 +30,40 @@ INFO:root:Processing element text:
     <<[ / type-specific data /
       0xFFFF, / record-type-code /
       { / record-content /
-        1: b64'dDtaviYTPUWFS3NK37YWfQ' / id-chal /
+        1: b64'dDtaviYTPUWFS3NK37YWfQ', / id-chal /
         2: b64'p3yRYFU4KxwQaHQjJ2RdiQ' / token-bundle /
       }
     ]>>
   ]
 ]
-*** can't parse [_
-  [
-    7, / BP version /
-    0x22, / flags: user-app-ack, payload-is-an-admin-record /
-    0, / CRC type: none /
-    [1, "//acme-client/"], / destination /
-    [1, "//acme-server/"], / source /
-    [1, "//acme-server/"], / report-to /
-    [1000000, 0], / timestamp: 2000-01-01T00:16:40+00:00 /
-    60000 / lifetime: 60s /
-  ],
-  [
-    1, / block type code /
-    1, / block number /
-    0, / flags /
-    0, / CRC type: none /
-    <<[ / type-specific data /
-      0xFFFF, / record-type-code /
-      { / record-content /
-        1: b64'dDtaviYTPUWFS3NK37YWfQ' / id-chal /
-        2: b64'p3yRYFU4KxwQaHQjJ2RdiQ' / token-bundle /
-      }
-    ]>>
-  ]
-]
-*** Expected one of [ \t\n\r], "/", ',', '}' at line 21, column 9 (byte 582) after [_
-  [
-    7, / BP version /
-    0x22, / flags: user-app-ack, payload-is-an-admin-record /
-    0, / CRC type: none /
-    [1, "//acme-client/"], / destination /
-    [1, "//acme-server/"], / source /
-    [1, "//acme-server/"], / report-to /
-    [1000000, 0], / timestamp: 2000-01-01T00:16:40+00:00 /
-    60000 / lifetime: 60s /
-  ],
-  [
-    1, / block type code /
-    1, / block number /
-    0, / flags /
-    0, / CRC type: none /
-    <<[ / type-specific data /
-      0xFFFF, / record-type-code /
-      { / record-content /
-        1: b64'dDtaviYTPUWFS3NK37YWfQ' / id-chal /
-        
+9f                                      # array(*)
+   88                                   # array(8)
+      07                                # unsigned(7)
+      18 22                             # unsigned(34)
+      00                                # unsigned(0)
+      82                                # array(2)
+         01                             # unsigned(1)
+         6e                             # text(14)
+            2f2f61636d652d636c69656e742f # "//acme-client/"
+      82                                # array(2)
+         01                             # unsigned(1)
+         6e                             # text(14)
+            2f2f61636d652d7365727665722f # "//acme-server/"
+      82                                # array(2)
+         01                             # unsigned(1)
+         00                             # unsigned(0)
+      82                                # array(2)
+         1a 000f4240                    # unsigned(1000000)
+         00                             # unsigned(0)
+      19 ea60                           # unsigned(60000)
+   85                                   # array(5)
+      01                                # unsigned(1)
+      01                                # unsigned(1)
+      00                                # unsigned(0)
+      00                                # unsigned(0)
+      58 29                             # bytes(41)
+         8219ffffa20150743b5abe26133d45854b734adfb6167d0250a77c916055382b1c1068742327645d89 # "\x82\x19\xFF\xFF\xA2\x01Pt;Z\xBE&\x13=E\x85KsJ\xDF\xB6\x16}\x02P\xA7|\x91`U8+\x1C\x10ht#'d]\x89"
+   ff                                   # primitive(*)
 INFO:root:Processing element text:
 "p3yRYFU4KxwQaHQjJ2RdiQtPUZNY4ONIk6LxErRFEjVw."
 "LPJNul-wow4m6DsqxbninhsWHlwfp0JecwQzYpOLmCQ"
@@ -108,59 +90,39 @@ INFO:root:Processing element text:
     <<[ / block-type-specific data /
       0xFFFF, / record-type-code /
       { / record-content /
-        1: b64'dDtaviYTPUWFS3NK37YWfQ' / id-chal /
-        2: b64'p3yRYFU4KxwQaHQjJ2RdiQ' / token-bundle /
+        1: b64'dDtaviYTPUWFS3NK37YWfQ', / id-chal /
+        2: b64'p3yRYFU4KxwQaHQjJ2RdiQ', / token-bundle /
         3: b64'mVIOJEQZie8XpYM6MMVSQUiNPH64URnhM9niJ5XHrew'
         / key auth. digest /
       }
     ]>>
   ]
 ]
-*** can't parse [_
-  [
-    7, / BP version /
-    0x02, / flags: payload-is-an-admin-record /
-    0, / CRC type: none /
-    [1, "//acme-server/"], / destination /
-    [1, "//acme-client/"], / source /
-    [1, 0], / report-to: none /
-    [1030000, 0], / timestamp: 2000-01-01T00:17:10+00:00 /
-    30000 / lifetime: 30s /
-  ],
-  [
-    1, / block type code /
-    1, / block number /
-    0, / flags /
-    0, / CRC type: none /
-    <<[ / block-type-specific data /
-      0xFFFF, / record-type-code /
-      { / record-content /
-        1: b64'dDtaviYTPUWFS3NK37YWfQ' / id-chal /
-        2: b64'p3yRYFU4KxwQaHQjJ2RdiQ' / token-bundle /
-        3: b64'mVIOJEQZie8XpYM6MMVSQUiNPH64URnhM9niJ5XHrew'
-        / key auth. digest /
-      }
-    ]>>
-  ]
-]
-*** Expected one of [ \t\n\r], "/", ',', '}' at line 21, column 9 (byte 565) after [_
-  [
-    7, / BP version /
-    0x02, / flags: payload-is-an-admin-record /
-    0, / CRC type: none /
-    [1, "//acme-server/"], / destination /
-    [1, "//acme-client/"], / source /
-    [1, 0], / report-to: none /
-    [1030000, 0], / timestamp: 2000-01-01T00:17:10+00:00 /
-    30000 / lifetime: 30s /
-  ],
-  [
-    1, / block type code /
-    1, / block number /
-    0, / flags /
-    0, / CRC type: none /
-    <<[ / block-type-specific data /
-      0xFFFF, / record-type-code /
-      { / record-content /
-        1: b64'dDtaviYTPUWFS3NK37YWfQ' / id-chal /
-        
+9f                                      # array(*)
+   88                                   # array(8)
+      07                                # unsigned(7)
+      02                                # unsigned(2)
+      00                                # unsigned(0)
+      82                                # array(2)
+         01                             # unsigned(1)
+         6e                             # text(14)
+            2f2f61636d652d7365727665722f # "//acme-server/"
+      82                                # array(2)
+         01                             # unsigned(1)
+         6e                             # text(14)
+            2f2f61636d652d636c69656e742f # "//acme-client/"
+      82                                # array(2)
+         01                             # unsigned(1)
+         00                             # unsigned(0)
+      82                                # array(2)
+         1a 000fb770                    # unsigned(1030000)
+         00                             # unsigned(0)
+      19 7530                           # unsigned(30000)
+   85                                   # array(5)
+      01                                # unsigned(1)
+      01                                # unsigned(1)
+      00                                # unsigned(0)
+      00                                # unsigned(0)
+      58 4c                             # bytes(76)
+         8219ffffa30150743b5abe26133d45854b734adfb6167d0250a77c916055382b1c1068742327645d8903582099520e24441989ef17a5833a30c55241488d3c7eb85119e133d9e22795c7adec # "\x82\x19\xFF\xFF\xA3\x01Pt;Z\xBE&\x13=E\x85KsJ\xDF\xB6\x16}\x02P\xA7|\x91`U8+\x1C\x10ht#'d]\x89\x03X \x99R\x0E$D\x19\x89\xEF\x17\xA5\x83:0\xC5RAH\x8D<~\xB8Q\x19\xE13\xD9\xE2'\x95\xC7\xAD\xEC"
+   ff                                   # primitive(*)

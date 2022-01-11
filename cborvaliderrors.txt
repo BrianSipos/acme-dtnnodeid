@@ -15,7 +15,7 @@ INFO:root:Processing element text:
     0, / CRC type: none /
     [1, "//acme-client/"], / destination /
     [1, "//acme-server/"], / source /
-    [1, "//acme-server/"], / report-to /
+    [1, 0], / report-to: none /
     [1000000, 0], / timestamp: 2000-01-01T00:16:40+00:00 /
     60000 / lifetime: 60s /
   ],
@@ -27,74 +27,13 @@ INFO:root:Processing element text:
     <<[ / type-specific data /
       0xFFFF, / record-type-code /
       { / record-content /
-        1: b64'dDtaviYTPUWFS3NK37YWfQ' / id-chal /
+        1: b64'dDtaviYTPUWFS3NK37YWfQ', / id-chal /
         2: b64'p3yRYFU4KxwQaHQjJ2RdiQ' / token-bundle /
       }
     ]>>
   ]
 ]
-/usr/lib/ruby/2.7.0/json/common.rb:156:in `parse': 783: unexpected token at '*** can't parse [_ (JSON::ParserError)
-  [
-    7, / BP version /
-    0x22, / flags: user-app-ack, payload-is-an-admin-record /
-    0, / CRC type: none /
-    [1, "//acme-client/"], / destination /
-    [1, "//acme-server/"], / source /
-    [1, "//acme-server/"], / report-to /
-    [1000000, 0], / timestamp: 2000-01-01T00:16:40+00:00 /
-    60000 / lifetime: 60s /
-  ],
-  [
-    1, / block type code /
-    1, / block number /
-    0, / flags /
-    0, / CRC type: none /
-    <<[ / type-specific data /
-      0xFFFF, / record-type-code /
-      { / record-content /
-        1: b64'dDtaviYTPUWFS3NK37YWfQ' / id-chal /
-        2: b64'p3yRYFU4KxwQaHQjJ2RdiQ' / token-bundle /
-      }
-    ]>>
-  ]
-]
-*** Expected one of [ \\t\\n\\r], "/", ',', '}' at line 21, column 9 (byte 582) after [_
-  [
-    7, / BP version /
-    0x22, / flags: user-app-ack, payload-is-an-admin-record /
-    0, / CRC type: none /
-    [1, "//acme-client/"], / destination /
-    [1, "//acme-server/"], / source /
-    [1, "//acme-server/"], / report-to /
-    [1000000, 0], / timestamp: 2000-01-01T00:16:40+00:00 /
-    60000 / lifetime: 60s /
-  ],
-  [
-    1, / block type code /
-    1, / block number /
-    0, / flags /
-    0, / CRC type: none /
-    <<[ / type-specific data /
-      0xFFFF, / record-type-code /
-      { / record-content /
-        1: b64'dDtaviYTPUWFS3NK37YWfQ' / id-chal /
-        
-'
-	from /usr/lib/ruby/2.7.0/json/common.rb:156:in `parse'
-	from /usr/lib/ruby/2.7.0/json/common.rb:335:in `load'
-	from /var/lib/gems/2.7.0/gems/cddl-0.8.26/bin/cddl:99:in `rescue in block in <top (required)>'
-	from /var/lib/gems/2.7.0/gems/cddl-0.8.26/bin/cddl:99:in `block in <top (required)>'
-	from /var/lib/gems/2.7.0/gems/cddl-0.8.26/bin/cddl:94:in `each'
-	from /var/lib/gems/2.7.0/gems/cddl-0.8.26/bin/cddl:94:in `<top (required)>'
-	from /usr/local/bin/cddl:23:in `load'
-	from /usr/local/bin/cddl:23:in `<main>'
-/var/lib/gems/2.7.0/gems/cbor-diag-0.7.1/lib/cbor-pure.rb:310:in `decode_item_final': extra bytes follow after a deserialized object of 1 bytes (RuntimeError)
-	from /var/lib/gems/2.7.0/gems/cbor-diag-0.7.1/lib/cbor-pure.rb:88:in `decode'
-	from /var/lib/gems/2.7.0/gems/cddl-0.8.26/bin/cddl:99:in `block in <top (required)>'
-	from /var/lib/gems/2.7.0/gems/cddl-0.8.26/bin/cddl:94:in `each'
-	from /var/lib/gems/2.7.0/gems/cddl-0.8.26/bin/cddl:94:in `<top (required)>'
-	from /usr/local/bin/cddl:23:in `load'
-	from /usr/local/bin/cddl:23:in `<main>'
+*** Unused rule bpv7_start
 INFO:root:Processing element text:
 "p3yRYFU4KxwQaHQjJ2RdiQtPUZNY4ONIk6LxErRFEjVw."
 "LPJNul-wow4m6DsqxbninhsWHlwfp0JecwQzYpOLmCQ"
@@ -137,75 +76,12 @@ INFO:root:Processing element text:
     <<[ / block-type-specific data /
       0xFFFF, / record-type-code /
       { / record-content /
-        1: b64'dDtaviYTPUWFS3NK37YWfQ' / id-chal /
-        2: b64'p3yRYFU4KxwQaHQjJ2RdiQ' / token-bundle /
+        1: b64'dDtaviYTPUWFS3NK37YWfQ', / id-chal /
+        2: b64'p3yRYFU4KxwQaHQjJ2RdiQ', / token-bundle /
         3: b64'mVIOJEQZie8XpYM6MMVSQUiNPH64URnhM9niJ5XHrew'
         / key auth. digest /
       }
     ]>>
   ]
 ]
-/usr/lib/ruby/2.7.0/json/common.rb:156:in `parse': 783: unexpected token at '*** can't parse [_ (JSON::ParserError)
-  [
-    7, / BP version /
-    0x02, / flags: payload-is-an-admin-record /
-    0, / CRC type: none /
-    [1, "//acme-server/"], / destination /
-    [1, "//acme-client/"], / source /
-    [1, 0], / report-to: none /
-    [1030000, 0], / timestamp: 2000-01-01T00:17:10+00:00 /
-    30000 / lifetime: 30s /
-  ],
-  [
-    1, / block type code /
-    1, / block number /
-    0, / flags /
-    0, / CRC type: none /
-    <<[ / block-type-specific data /
-      0xFFFF, / record-type-code /
-      { / record-content /
-        1: b64'dDtaviYTPUWFS3NK37YWfQ' / id-chal /
-        2: b64'p3yRYFU4KxwQaHQjJ2RdiQ' / token-bundle /
-        3: b64'mVIOJEQZie8XpYM6MMVSQUiNPH64URnhM9niJ5XHrew'
-        / key auth. digest /
-      }
-    ]>>
-  ]
-]
-*** Expected one of [ \\t\\n\\r], "/", ',', '}' at line 21, column 9 (byte 565) after [_
-  [
-    7, / BP version /
-    0x02, / flags: payload-is-an-admin-record /
-    0, / CRC type: none /
-    [1, "//acme-server/"], / destination /
-    [1, "//acme-client/"], / source /
-    [1, 0], / report-to: none /
-    [1030000, 0], / timestamp: 2000-01-01T00:17:10+00:00 /
-    30000 / lifetime: 30s /
-  ],
-  [
-    1, / block type code /
-    1, / block number /
-    0, / flags /
-    0, / CRC type: none /
-    <<[ / block-type-specific data /
-      0xFFFF, / record-type-code /
-      { / record-content /
-        1: b64'dDtaviYTPUWFS3NK37YWfQ' / id-chal /
-        
-'
-	from /usr/lib/ruby/2.7.0/json/common.rb:156:in `parse'
-	from /usr/lib/ruby/2.7.0/json/common.rb:335:in `load'
-	from /var/lib/gems/2.7.0/gems/cddl-0.8.26/bin/cddl:99:in `rescue in block in <top (required)>'
-	from /var/lib/gems/2.7.0/gems/cddl-0.8.26/bin/cddl:99:in `block in <top (required)>'
-	from /var/lib/gems/2.7.0/gems/cddl-0.8.26/bin/cddl:94:in `each'
-	from /var/lib/gems/2.7.0/gems/cddl-0.8.26/bin/cddl:94:in `<top (required)>'
-	from /usr/local/bin/cddl:23:in `load'
-	from /usr/local/bin/cddl:23:in `<main>'
-/var/lib/gems/2.7.0/gems/cbor-diag-0.7.1/lib/cbor-pure.rb:310:in `decode_item_final': extra bytes follow after a deserialized object of 1 bytes (RuntimeError)
-	from /var/lib/gems/2.7.0/gems/cbor-diag-0.7.1/lib/cbor-pure.rb:88:in `decode'
-	from /var/lib/gems/2.7.0/gems/cddl-0.8.26/bin/cddl:99:in `block in <top (required)>'
-	from /var/lib/gems/2.7.0/gems/cddl-0.8.26/bin/cddl:94:in `each'
-	from /var/lib/gems/2.7.0/gems/cddl-0.8.26/bin/cddl:94:in `<top (required)>'
-	from /usr/local/bin/cddl:23:in `load'
-	from /usr/local/bin/cddl:23:in `<main>'
+*** Unused rule bpv7_start
