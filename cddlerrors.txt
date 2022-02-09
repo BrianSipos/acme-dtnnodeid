@@ -1,2 +1,11 @@
-*** Unused rule bpv7_start
-[[7, 2044929, 0, [1, "tic"], [1, "tac"], [2, [2994, 2486]], [3318, 2147], 4303, 1469, 1020], [10, 3077, 245, 1, h'746F65', h'BFD1'], [1, 1, 250, 0, h'746963', h'0D86']]
+*** Look for syntax problems around the [0;39;103m%%%[0m markers:
+=> bstr)
+key-auth-digest = (3 => [
+    alg: alg-id,
+    value: bstr
+])
+alg-list = (4 => [+ alg-id])
+[0;32;103m%%%[0m[0;31;103m%%%[0m# From the IANA registry, only hash algorithms allowed
+alg-id: tstr / int
+bpv7_start = bundle / #6.5
+*** Parse error at 408 upto 408 of 5034 (6380).

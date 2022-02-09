@@ -7,8 +7,15 @@ $admin-record /= [0xFFFF, acme-record]
 acme-record = {
   id-chal,
   token-bundle,
-  ? key-auth-digest ; present for Response Bundles
+  ? key-auth-digest ; present in Response Bundles
+  ? alg-list ; present in Challenge Bundles
 }
 id-chal = (1 => bstr)
 token-bundle = (2 => bstr)
-key-auth-digest = (3 => bstr)
+key-auth-digest = (3 => [
+    alg: alg-id,
+    value: bstr
+])
+alg-list = (4 => [+ alg-id])
+# From the IANA registry, only hash algorithms allowed
+alg-id: tstr / int

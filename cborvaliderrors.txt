@@ -1,12 +1,42 @@
 INFO:root:Processing element text:
 "LPJNul-wow4m6DsqxbninhsWHlwfp0JecwQzYpOLmCQ"
-*** Unused rule bpv7_start
+*** Look for syntax problems around the [0;39;103m%%%[0m markers:
+=> bstr)
+key-auth-digest = (3 => [
+    alg: alg-id,
+    value: bstr
+])
+alg-list = (4 => [+ alg-id])
+[0;32;103m%%%[0m[0;31;103m%%%[0m# From the IANA registry, only hash algorithms allowed
+alg-id: tstr / int
+bpv7_start = bundle / #6.5
+*** Parse error at 408 upto 408 of 5034 (6380).
 INFO:root:Processing element text:
 "tPUZNY4ONIk6LxErRFEjVw"
-*** Unused rule bpv7_start
+*** Look for syntax problems around the [0;39;103m%%%[0m markers:
+=> bstr)
+key-auth-digest = (3 => [
+    alg: alg-id,
+    value: bstr
+])
+alg-list = (4 => [+ alg-id])
+[0;32;103m%%%[0m[0;31;103m%%%[0m# From the IANA registry, only hash algorithms allowed
+alg-id: tstr / int
+bpv7_start = bundle / #6.5
+*** Parse error at 408 upto 408 of 5034 (6380).
 INFO:root:Processing element text:
 "p3yRYFU4KxwQaHQjJ2RdiQ"
-*** Unused rule bpv7_start
+*** Look for syntax problems around the [0;39;103m%%%[0m markers:
+=> bstr)
+key-auth-digest = (3 => [
+    alg: alg-id,
+    value: bstr
+])
+alg-list = (4 => [+ alg-id])
+[0;32;103m%%%[0m[0;31;103m%%%[0m# From the IANA registry, only hash algorithms allowed
+alg-id: tstr / int
+bpv7_start = bundle / #6.5
+*** Parse error at 408 upto 408 of 5034 (6380).
 INFO:root:Processing element text:
 [_
   [
@@ -33,7 +63,17 @@ INFO:root:Processing element text:
     ]>>
   ]
 ]
-*** Unused rule bpv7_start
+*** Look for syntax problems around the [0;39;103m%%%[0m markers:
+=> bstr)
+key-auth-digest = (3 => [
+    alg: alg-id,
+    value: bstr
+])
+alg-list = (4 => [+ alg-id])
+[0;32;103m%%%[0m[0;31;103m%%%[0m# From the IANA registry, only hash algorithms allowed
+alg-id: tstr / int
+bpv7_start = bundle / #6.5
+*** Parse error at 408 upto 408 of 5034 (6380).
 INFO:root:Processing element text:
 "p3yRYFU4KxwQaHQjJ2RdiQtPUZNY4ONIk6LxErRFEjVw."
 "LPJNul-wow4m6DsqxbninhsWHlwfp0JecwQzYpOLmCQ"
@@ -49,8 +89,8 @@ INFO:root:Processing element text:
 	from /var/lib/gems/2.7.0/gems/cddl-0.8.26/bin/cddl:94:in `<top (required)>'
 	from /usr/local/bin/cddl:23:in `load'
 	from /usr/local/bin/cddl:23:in `<main>'
-/var/lib/gems/2.7.0/gems/cbor-diag-0.7.4/lib/cbor-pure.rb:310:in `decode_item_final': extra bytes follow after a deserialized object of 1 bytes (RuntimeError)
-	from /var/lib/gems/2.7.0/gems/cbor-diag-0.7.4/lib/cbor-pure.rb:88:in `decode'
+/var/lib/gems/2.7.0/gems/cbor-diag-0.7.5/lib/cbor-pure.rb:310:in `decode_item_final': extra bytes follow after a deserialized object of 1 bytes (RuntimeError)
+	from /var/lib/gems/2.7.0/gems/cbor-diag-0.7.5/lib/cbor-pure.rb:88:in `decode'
 	from /var/lib/gems/2.7.0/gems/cddl-0.8.26/bin/cddl:99:in `block in <top (required)>'
 	from /var/lib/gems/2.7.0/gems/cddl-0.8.26/bin/cddl:94:in `each'
 	from /var/lib/gems/2.7.0/gems/cddl-0.8.26/bin/cddl:94:in `<top (required)>'
@@ -84,4 +124,14 @@ INFO:root:Processing element text:
     ]>>
   ]
 ]
-*** Unused rule bpv7_start
+*** Look for syntax problems around the [0;39;103m%%%[0m markers:
+=> bstr)
+key-auth-digest = (3 => [
+    alg: alg-id,
+    value: bstr
+])
+alg-list = (4 => [+ alg-id])
+[0;32;103m%%%[0m[0;31;103m%%%[0m# From the IANA registry, only hash algorithms allowed
+alg-id: tstr / int
+bpv7_start = bundle / #6.5
+*** Parse error at 408 upto 408 of 5034 (6380).

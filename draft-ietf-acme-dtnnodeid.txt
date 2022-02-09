@@ -4,8 +4,8 @@
 
 Automated Certificate Management Environment                    B. Sipos
 Internet-Draft                                           RKF Engineering
-Intended status: Experimental                            23 January 2022
-Expires: 27 July 2022
+Intended status: Experimental                            9 February 2022
+Expires: 13 August 2022
 
 
    Automated Certificate Management Environment (ACME) Delay-Tolerant
@@ -36,7 +36,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 27 July 2022.
+   This Internet-Draft will expire on 13 August 2022.
 
 Copyright Notice
 
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-Sipos                     Expires 27 July 2022                  [Page 1]
+Sipos                    Expires 13 August 2022                 [Page 1]
 
-Internet-Draft              ACME DTN Node ID                January 2022
+Internet-Draft              ACME DTN Node ID               February 2022
 
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -71,53 +71,53 @@ Table of Contents
 
    1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   3
      1.1.  Scope . . . . . . . . . . . . . . . . . . . . . . . . . .   3
-     1.2.  Authorization Strategy  . . . . . . . . . . . . . . . . .   4
+     1.2.  Authorization Strategy  . . . . . . . . . . . . . . . . .   5
      1.3.  Use of CDDL . . . . . . . . . . . . . . . . . . . . . . .   6
-     1.4.  Terminology . . . . . . . . . . . . . . . . . . . . . . .   6
+     1.4.  Terminology . . . . . . . . . . . . . . . . . . . . . . .   7
    2.  Bundle Endpoint ID ACME Identifier  . . . . . . . . . . . . .   8
-     2.1.  Subsets of Endpoint ID  . . . . . . . . . . . . . . . . .   8
+     2.1.  Subsets of Endpoint ID  . . . . . . . . . . . . . . . . .   9
    3.  DTN Node ID Validation  . . . . . . . . . . . . . . . . . . .   9
      3.1.  DTN Node ID Challenge Request Object  . . . . . . . . . .  12
      3.2.  DTN Node ID Challenge Response Object . . . . . . . . . .  13
-     3.3.  ACME Node ID Validation Challenge Bundles . . . . . . . .  13
+     3.3.  ACME Node ID Validation Challenge Bundles . . . . . . . .  14
        3.3.1.  Challenge Bundle Checks . . . . . . . . . . . . . . .  15
-     3.4.  ACME Node ID Validation Response Bundles  . . . . . . . .  15
-       3.4.1.  Response Bundle Checks  . . . . . . . . . . . . . . .  16
-     3.5.  Multi-Perspective Validation  . . . . . . . . . . . . . .  17
-   4.  Bundle Integrity Gateway  . . . . . . . . . . . . . . . . . .  17
-   5.  Certificate Request Profile . . . . . . . . . . . . . . . . .  18
-     5.1.  Multiple Identity Claims  . . . . . . . . . . . . . . . .  18
+     3.4.  ACME Node ID Validation Response Bundles  . . . . . . . .  16
+       3.4.1.  Response Bundle Checks  . . . . . . . . . . . . . . .  17
+     3.5.  Multi-Perspective Validation  . . . . . . . . . . . . . .  18
+   4.  Bundle Integrity Gateway  . . . . . . . . . . . . . . . . . .  18
+   5.  Certificate Request Profile . . . . . . . . . . . . . . . . .  19
+     5.1.  Multiple Identity Claims  . . . . . . . . . . . . . . . .  19
      5.2.  Generating Encryption-only or Signing-only Bundle Security
-           Certificates  . . . . . . . . . . . . . . . . . . . . . .  19
-   6.  Implementation Status . . . . . . . . . . . . . . . . . . . .  19
-   7.  Security Considerations . . . . . . . . . . . . . . . . . . .  20
-     7.1.  Threat: Passive Leak of Validation Data . . . . . . . . .  20
-     7.2.  Threat: BP Node Impersonation . . . . . . . . . . . . . .  20
-     7.3.  Threat: Bundle Replay . . . . . . . . . . . . . . . . . .  21
-     7.4.  Threat: Denial of Service . . . . . . . . . . . . . . . .  21
-     7.5.  Inherited Security Considerations . . . . . . . . . . . .  22
-     7.6.  Out-of-Scope BP Agent Communication . . . . . . . . . . .  22
-   8.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  22
-     8.1.  ACME Identifier Types . . . . . . . . . . . . . . . . . .  22
-     8.2.  ACME Validation Methods . . . . . . . . . . . . . . . . .  23
-     8.3.  Bundle Administrative Record Types  . . . . . . . . . . .  23
-   9.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  23
-     9.1.  Normative References  . . . . . . . . . . . . . . . . . .  23
-     9.2.  Informative References  . . . . . . . . . . . . . . . . .  25
-   Appendix A.  Administrative Record Types CDDL . . . . . . . . . .  27
-   Appendix B.  Example Authorization  . . . . . . . . . . . . . . .  28
+           Certificates  . . . . . . . . . . . . . . . . . . . . . .  20
+   6.  Implementation Status . . . . . . . . . . . . . . . . . . . .  20
+   7.  Security Considerations . . . . . . . . . . . . . . . . . . .  21
+     7.1.  Threat: Passive Leak of Validation Data . . . . . . . . .  21
+     7.2.  Threat: BP Node Impersonation . . . . . . . . . . . . . .  21
+     7.3.  Threat: Bundle Replay . . . . . . . . . . . . . . . . . .  22
+     7.4.  Threat: Denial of Service . . . . . . . . . . . . . . . .  22
+     7.5.  Inherited Security Considerations . . . . . . . . . . . .  23
+     7.6.  Out-of-Scope BP Agent Communication . . . . . . . . . . .  23
+   8.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  23
+     8.1.  ACME Identifier Types . . . . . . . . . . . . . . . . . .  23
+     8.2.  ACME Validation Methods . . . . . . . . . . . . . . . . .  24
+     8.3.  Bundle Administrative Record Types  . . . . . . . . . . .  24
+   9.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  24
+     9.1.  Normative References  . . . . . . . . . . . . . . . . . .  24
+     9.2.  Informative References  . . . . . . . . . . . . . . . . .  26
+   Appendix A.  Administrative Record Types CDDL . . . . . . . . . .  28
+   Appendix B.  Example Authorization  . . . . . . . . . . . . . . .  29
 
 
 
-Sipos                     Expires 27 July 2022                  [Page 2]
+Sipos                    Expires 13 August 2022                 [Page 2]
 
-Internet-Draft              ACME DTN Node ID                January 2022
+Internet-Draft              ACME DTN Node ID               February 2022
 
 
-     B.1.  Challenge Bundle  . . . . . . . . . . . . . . . . . . . .  28
-     B.2.  Response Bundle . . . . . . . . . . . . . . . . . . . . .  29
-   Acknowledgments . . . . . . . . . . . . . . . . . . . . . . . . .  30
-   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .  30
+     B.1.  Challenge Bundle  . . . . . . . . . . . . . . . . . . . .  29
+     B.2.  Response Bundle . . . . . . . . . . . . . . . . . . . . .  30
+   Acknowledgments . . . . . . . . . . . . . . . . . . . . . . . . .  31
+   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .  31
 
 1.  Introduction
 
@@ -131,10 +131,10 @@ Internet-Draft              ACME DTN Node ID                January 2022
    Subject Alternative Name (SAN) of type otherName with a name form of
    BundleEID, which used to represent an Endpoint ID (EID) for a Delay-
    Tolerant Networking (DTN) bundle.  Currently the URI schemes "dtn"
-   and "ipn" as defined in [I-D.ietf-dtn-bpbis] are valid for an
-   Endpoint ID.  A DTN Node ID is an Endpoint ID with scheme-specific
-   restrictions to identify it as such; currently the "dtn" scheme uses
-   an empty demux part and the "ipn" scheme uses service number zero.
+   and "ipn" as defined in [RFC9171] are valid for an Endpoint ID.  A
+   DTN Node ID is an Endpoint ID with scheme-specific restrictions to
+   identify it as such; currently the "dtn" scheme uses an empty demux
+   part and the "ipn" scheme uses service number zero.
 
    Because the BundleEID claim is new to ACME, a new ACME Identifier
    type "bundleEID" is needed to manage this claim within ACME
@@ -165,9 +165,9 @@ Internet-Draft              ACME DTN Node ID                January 2022
 
 
 
-Sipos                     Expires 27 July 2022                  [Page 3]
+Sipos                    Expires 13 August 2022                 [Page 3]
 
-Internet-Draft              ACME DTN Node ID                January 2022
+Internet-Draft              ACME DTN Node ID               February 2022
 
 
    *  Mechanisms for communication between ACME client or ACME server
@@ -198,6 +198,10 @@ Internet-Draft              ACME DTN Node ID                January 2022
       transfers.  The ACME server is responsible for rate control of
       validation requests.
 
+   *  Policies or mechanisms for an ACME server to choose a prioritized
+      list of acceptable hash algorithms, or for an ACME client to
+      choose a set of acceptable hash algorithms.
+
    *  Policies or mechanisms for provisioning, deploying, or accessing
       certificates and private keys; deploying or accessing certificate
       revocation lists (CRLs); or configuring security parameters on an
@@ -207,31 +211,38 @@ Internet-Draft              ACME DTN Node ID                January 2022
       certificate requests.  This specification is focused only on
       single-use DTN-specific PKIX profiles.
 
+
+
+
+
+
+
+
+
+
+
+Sipos                    Expires 13 August 2022                 [Page 4]
+
+Internet-Draft              ACME DTN Node ID               February 2022
+
+
 1.2.  Authorization Strategy
 
-   The basic unit of data exchange in a DTN is a Bundle
-   [I-D.ietf-dtn-bpbis], which consists of a data payload with
-   accompanying metadata.  An Endpoint ID is used as the destination of
-   a Bundle and can indicate both a unicast or a multicast destination.
-   A Node ID is used to identify the source of a Bundle and is used for
-   routing through intermediate nodes, including the final node(s) used
-   to deliver a Bundle to its destination endpoint.  A Node ID can also
-   be used as an endpoint for administrative bundles.  More detailed
-   descriptions of the rationale and capabilities of these networks can
-
-
-
-Sipos                     Expires 27 July 2022                  [Page 4]
-
-Internet-Draft              ACME DTN Node ID                January 2022
-
-
-   be found in "Delay-Tolerant Network Architecture" [RFC4838].
+   The basic unit of data exchange in a DTN is a Bundle [RFC9171], which
+   consists of a data payload with accompanying metadata.  An Endpoint
+   ID is used as the destination of a Bundle and can indicate both a
+   unicast or a multicast destination.  A Node ID is used to identify
+   the source of a Bundle and is used for routing through intermediate
+   nodes, including the final node(s) used to deliver a Bundle to its
+   destination endpoint.  A Node ID can also be used as an endpoint for
+   administrative bundles.  More detailed descriptions of the rationale
+   and capabilities of these networks can be found in "Delay-Tolerant
+   Network Architecture" [RFC4838].
 
    When an ACME client requests a pre-authorization or an order with a
    "bundleEID" identifier type having a value consistent with a Node ID
-   (see Section 4.2.5 of [I-D.ietf-dtn-bpbis]), the ACME server offers a
-   "dtn-nodeid-01" challenge type to validate that Node ID.  If the ACME
+   (see Section 4.2.5 of [RFC9171]), the ACME server offers a "dtn-
+   nodeid-01" challenge type to validate that Node ID.  If the ACME
    client attempts the authorization challenge to validate a Node ID,
    the ACME server sends an ACME Node ID Validation Challenge Bundle
    with a destination of the Node ID being validated.  The BP agent on
@@ -244,6 +255,32 @@ Internet-Draft              ACME DTN Node ID                January 2022
    client account key associated with the original request.  This
    workflow is shown in the diagram of Figure 1 and defined in
    Section 3.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Sipos                    Expires 13 August 2022                 [Page 5]
+
+Internet-Draft              ACME DTN Node ID               February 2022
+
 
         +------------+                             +------------+
         |    ACME    |<===== HTTPS exchanges =====>|    ACME    |
@@ -270,18 +307,6 @@ Internet-Draft              ACME DTN Node ID                January 2022
       Figure 1: The relationships and flows between Node ID Validation
                                   entities
 
-
-
-
-
-
-
-
-Sipos                     Expires 27 July 2022                  [Page 5]
-
-Internet-Draft              ACME DTN Node ID                January 2022
-
-
    Because the DTN Node ID is used both for routing bundles between BP
    agents and for multiplexing administrative services within a BP
    agent, there is no possibility to separate the ACME validation of a
@@ -304,6 +329,14 @@ Internet-Draft              ACME DTN Node ID                January 2022
    Definition Language (CDDL) of [RFC8610].  The entire CDDL structure
    can be extracted from the XML version of this document using the
    XPath expression:
+
+
+
+
+Sipos                    Expires 13 August 2022                 [Page 6]
+
+Internet-Draft              ACME DTN Node ID               February 2022
+
 
    '//sourcecode[@type="cddl"]'
 
@@ -330,14 +363,6 @@ Internet-Draft              ACME DTN Node ID                January 2022
    terseness.  These terms are:
 
    Challenge Request:  This is a shortened form of the full "DTN Node ID
-
-
-
-Sipos                     Expires 27 July 2022                  [Page 6]
-
-Internet-Draft              ACME DTN Node ID                January 2022
-
-
       Challenge Request Object".  It is a JSON object created by the
       ACME server for challenge type "dtn-nodeid-01".
 
@@ -358,18 +383,29 @@ Internet-Draft              ACME DTN Node ID                January 2022
    identifier type and validation mechanism.
 
    Endpoint ID:  An Endpoint ID is an identifier for the ultimate
+
+
+
+
+
+
+Sipos                    Expires 13 August 2022                 [Page 7]
+
+Internet-Draft              ACME DTN Node ID               February 2022
+
+
       destination of a bundle, independent of any intermediate
       forwarding needed to reach that destination.  An endpoint can be a
       singleton (unicast) or not (anycast or multicast) so an Endpoint
       ID can also represent a single entity or a set of entities.  This
-      is formally defined in Section 4.2.5.1 of [I-D.ietf-dtn-bpbis].
+      is formally defined in Section 4.2.5.1 of [RFC9171].
 
    Node ID:  A Node ID is a (not guaranteed unique) identifier for a
       specific node in a network in the form of a singleton Endpoint ID.
       A single node can have any number of Node IDs but a typical (and
       expected) form of Node ID is the Administrative Endpoint ID
       (described below).  This is formally defined in Section 4.2.5.2 of
-      [I-D.ietf-dtn-bpbis].
+      [RFC9171].
 
    Administrative Endpoint ID:  An Administrative Endpoint ID is unique
       for a node within a specific URI scheme.  Although any Node ID can
@@ -378,21 +414,7 @@ Internet-Draft              ACME DTN Node ID                January 2022
       in a particular URI scheme.  For the "dtn" scheme this is the
       empty demux part and for the "ipn" scheme this is the service
       number zero.  These is formally defined under Section 4.2.5.1 of
-      [I-D.ietf-dtn-bpbis].
-
-
-
-
-
-
-
-
-
-
-Sipos                     Expires 27 July 2022                  [Page 7]
-
-Internet-Draft              ACME DTN Node ID                January 2022
-
+      [RFC9171].
 
 2.  Bundle Endpoint ID ACME Identifier
 
@@ -407,11 +429,11 @@ Internet-Draft              ACME DTN Node ID                January 2022
    in an extensionRequest attribute [RFC2985] containing a
    subjectAltName extension of type otherName with a name form of
    BundleEID, identified by id-on-bundleEID of [IANA-SMI], consistent
-   with the requirements of Section 4.4.2.1 of [I-D.ietf-dtn-tcpclv4].
-   Because the BundleEID is encoded as an IA5String it SHALL be treated
-   as being in the percent-encoded form of Section 2.1 of [RFC3986].
-   Any "bundleEID" identifier which fails to properly percent-decode
-   SHALL be rejected with an ACME error type of "malformed".
+   with the requirements of Section 4.4.2.1 of [RFC9174].  Because the
+   BundleEID is encoded as an IA5String it SHALL be treated as being in
+   the percent-encoded form of Section 2.1 of [RFC3986].  Any
+   "bundleEID" identifier which fails to properly percent-decode SHALL
+   be rejected with an ACME error type of "malformed".
 
    The ACME server SHALL decode and normalize (based on scheme-specific
    syntax) all received identifiers of type "bundleEID".  Any
@@ -419,6 +441,14 @@ Internet-Draft              ACME DTN Node ID                January 2022
    ACME server or for which the EID does not match the scheme-specific
    syntax SHALL be rejected with an ACME error type of
    "rejectedIdentifier".
+
+
+
+
+Sipos                    Expires 13 August 2022                 [Page 8]
+
+Internet-Draft              ACME DTN Node ID               February 2022
+
 
    When an ACME server needs to request proof that a client controls a
    BundleEID, it SHALL create an authorization with the identifier type
@@ -438,17 +468,9 @@ Internet-Draft              ACME DTN Node ID                January 2022
 2.1.  Subsets of Endpoint ID
 
    While the PKIX other name form of BundleEID can hold any Endpoint ID
-   value, the certificate profile used by [I-D.ietf-dtn-tcpclv4] and
-   supported by this ACME validation method in Section 3 requires that
-   the value hold a Node ID.
-
-
-
-
-Sipos                     Expires 27 July 2022                  [Page 8]
-
-Internet-Draft              ACME DTN Node ID                January 2022
-
+   value, the certificate profile used by [RFC9174] and supported by
+   this ACME validation method in Section 3 requires that the value hold
+   a Node ID.
 
    In addition to the narrowing of that certificate profile, this
    validation method requires that the client's BP agent responds to
@@ -471,6 +493,18 @@ Internet-Draft              ACME DTN Node ID                January 2022
    server validates control of the Node ID by verifying that received
    Response Bundles correspond with the BP Node and client account key
    being validated.
+
+
+
+
+
+
+
+
+Sipos                    Expires 13 August 2022                 [Page 9]
+
+Internet-Draft              ACME DTN Node ID               February 2022
+
 
    Similar to the ACME use case for validating email address ownership
    [RFC8823], this challenge splits the token into several parts, each
@@ -499,23 +533,16 @@ Internet-Draft              ACME DTN Node ID                January 2022
       Object.  This token is also accessible to DTN on-path
       eavesdroppers.
 
-
-
-Sipos                     Expires 27 July 2022                  [Page 9]
-
-Internet-Draft              ACME DTN Node ID                January 2022
-
-
    Because multiple Challenge Bundles can be sent to validate the same
    Node ID, the token-bundle in the response is needed to correlate with
    the expected Key Authorization digest.
 
    The DTN Node ID Challenge SHALL only be allowed for an EID usable as
    a DTN Node ID, which is defined per-scheme in Section 4.2.5.1 of
-   [I-D.ietf-dtn-bpbis].  When an ACME server supports Node ID
-   validation, the ACME server SHALL define a challenge object in
-   accordance with Section 3.1.  Once this challenge object is defined,
-   the ACME client may begin the validation.
+   [RFC9171].  When an ACME server supports Node ID validation, the ACME
+   server SHALL define a challenge object in accordance with
+   Section 3.1.  Once this challenge object is defined, the ACME client
+   may begin the validation.
 
    To initiate a Node ID validation, the ACME client performs the
    following steps:
@@ -525,6 +552,15 @@ Internet-Draft              ACME DTN Node ID                January 2022
        either of these entry points an authorization for the "bundleEID"
        type is indicated by the ACME server.  See Section 7.4 of
        [RFC8555] for more details.
+
+
+
+
+
+Sipos                    Expires 13 August 2022                [Page 10]
+
+Internet-Draft              ACME DTN Node ID               February 2022
+
 
    2.  The ACME client obtains the id-chal and token-chal from the
        challenge object in accordance with Section 3.1.
@@ -548,19 +584,14 @@ Internet-Draft              ACME DTN Node ID                January 2022
        Key Authorization in accordance with Section 8.1 of [RFC8555]
        using the full token and client account key thumbprint.
 
-   7.  The administrative element computes the SHA-256 digest of the Key
-       Authorization result and generates a Response Bundle to send back
-       to the ACME server in accordance with Section 3.4.
+   7.  The administrative element chooses the highest-priority hash
+       algorithm supported by both the client and server, uses that
+       algorithm to compute the digest of the Key Authorization result,
+       and generates a Response Bundle to send back to the ACME server
+       in accordance with Section 3.4.
 
    8.  The ACME client waits for the authorization to be finalized on
        the ACME server in accordance with Section 7.5.1 of [RFC8555].
-
-
-
-Sipos                     Expires 27 July 2022                 [Page 10]
-
-Internet-Draft              ACME DTN Node ID                January 2022
-
 
    9.  Once the challenge is completed (successfully or not), the ACME
        client indicates to the BP agent that the id-chal is no longer
@@ -577,6 +608,16 @@ Internet-Draft              ACME DTN Node ID                January 2022
    2.  The ACME server generates an authorization for the Node ID with
        challenge type "dtn-nodeid-01" in accordance with Section 3.1.
 
+
+
+
+
+
+Sipos                    Expires 13 August 2022                [Page 11]
+
+Internet-Draft              ACME DTN Node ID               February 2022
+
+
    3.  The ACME server receives a POST to the challenge URL indicated
        from the authorization object.  The payload is handled in
        accordance with Section 3.2.
@@ -586,7 +627,7 @@ Internet-Draft              ACME DTN Node ID                January 2022
        Section 3.3.  Each challenge bundle SHALL contain a distinct
        token-bundle to be able to correlate with a response bundle.
        Computing an expected Key Authorization digest is not necessary
-       until a response is received.
+       until a response is received with a chosen hash algorithm.
 
    5.  The ACME server waits for Response Bundle(s) for a limited
        interval of time (based on the challenge response object of
@@ -609,15 +650,6 @@ Internet-Draft              ACME DTN Node ID                January 2022
    correspond with the ACME server validating via multiple routing
    paths.
 
-
-
-
-
-Sipos                     Expires 27 July 2022                 [Page 11]
-
-Internet-Draft              ACME DTN Node ID                January 2022
-
-
 3.1.  DTN Node ID Challenge Request Object
 
    The DTN Node ID Challenge request object is defined by the ACME
@@ -634,6 +666,14 @@ Internet-Draft              ACME DTN Node ID                January 2022
       multiple sources as described in Section 3.5.  This value SHALL
       have at least 128 bits of entropy.  It SHALL NOT contain any
       characters outside the base64url alphabet as described in
+
+
+
+Sipos                    Expires 13 August 2022                [Page 12]
+
+Internet-Draft              ACME DTN Node ID               February 2022
+
+
       Section 5 of [RFC4648].  Trailing '=' padding characters SHALL be
       stripped.  See [RFC4086] for additional information on randomness
       requirements.
@@ -659,21 +699,6 @@ Internet-Draft              ACME DTN Node ID                January 2022
    values when multiple Challenge Bundles are sent for a single
    validation.
 
-
-
-
-
-
-
-
-
-
-
-Sipos                     Expires 27 July 2022                 [Page 12]
-
-Internet-Draft              ACME DTN Node ID                January 2022
-
-
 3.2.  DTN Node ID Challenge Response Object
 
    The DTN Node ID Challenge response object is defined by the ACME
@@ -697,6 +722,14 @@ Internet-Draft              ACME DTN Node ID                January 2022
      "rtt": 300.0
    }
 
+
+
+
+Sipos                    Expires 13 August 2022                [Page 13]
+
+Internet-Draft              ACME DTN Node ID               February 2022
+
+
    A challenge response is not sent until the BP agent has been
    configured to properly respond to the challenge, so the RTT value is
    meant to indicate any node-specific path delays expected to
@@ -717,19 +750,11 @@ Internet-Draft              ACME DTN Node ID                January 2022
 3.3.  ACME Node ID Validation Challenge Bundles
 
    Each ACME Node ID Validation Challenge Bundle SHALL be structured and
-   encoded in accordance with [I-D.ietf-dtn-bpbis].
+   encoded in accordance with [RFC9171].
 
    Each Challenge Bundle has parameters as listed here:
 
    Bundle Processing Control Flags:  The primary block flags SHALL
-
-
-
-Sipos                     Expires 27 July 2022                 [Page 13]
-
-Internet-Draft              ACME DTN Node ID                January 2022
-
-
       indicate that the payload is an administrative record.  The
       primary block flags SHALL indicate that user application
       acknowledgement is requested; this flag distinguishes the
@@ -752,6 +777,15 @@ Internet-Draft              ACME DTN Node ID                January 2022
    Administrative Record Content:  The Challenge Bundle administrative
       record content SHALL consist of a CBOR map containing two pairs:
 
+
+
+
+
+Sipos                    Expires 13 August 2022                [Page 14]
+
+Internet-Draft              ACME DTN Node ID               February 2022
+
+
       *  One pair SHALL consist of key 1 with value of ACME challenge
          id-chal, copied from the challenge object, represented as a
          CBOR byte string.
@@ -763,8 +797,22 @@ Internet-Draft              ACME DTN Node ID                January 2022
          See [RFC4086] for additional information on randomness
          requirements.
 
+      *  One pair SHALL consist of key 4 with value of an array
+         containing acceptable hash algorithm identifiers.  The array
+         SHALL be ordered in descending preference, with the first item
+         being the most preferred.  The array SHALL contain at least one
+         item.  Each algorithim identifier SHALL correspond to the Value
+         column (integer or text string) of the algorithm registered in
+         the "COSE Algorithms" registry of [IANA-COSE].
+
    This structure is part of the extension CDDL in Appendix A.  An
    example full Challenge Bundle is included in Appendix B.1
+
+   For interoperability, entities which use this validation method SHALL
+   support the hash algorithm "SHA-256" of [I-D.ietf-cose-hash-algs],
+   but can use other hash algorithms.  This requirement allows for
+   different implementations to be configured to use an interoperable
+   algorithm, but does not preclude the use of other algorithms.
 
    If the BP agent generating a Challenge Bundle does not have a well-
    synchronized clock or the agent responding to the challenge is
@@ -777,15 +825,6 @@ Internet-Draft              ACME DTN Node ID                January 2022
    encrypted by Block Confidentiality Block (BCB) or any other method
    (see Section 7.1).
 
-
-
-
-
-Sipos                     Expires 27 July 2022                 [Page 14]
-
-Internet-Draft              ACME DTN Node ID                January 2022
-
-
 3.3.1.  Challenge Bundle Checks
 
    A proper Challenge Bundle meets all of the following criteria:
@@ -794,6 +833,15 @@ Internet-Draft              ACME DTN Node ID                January 2022
       for the challenge.  The allowed interval starts at the Creation
       Timestamp and extends for the Lifetime of the Challenge Bundle.
 
+
+
+
+
+Sipos                    Expires 13 August 2022                [Page 15]
+
+Internet-Draft              ACME DTN Node ID               February 2022
+
+
    *  The Challenge Bundle contains a BIB which covers at least the
       primary block and payload.  That BIB has a security source which
       is trusted and passes security-context-specific validation (i.e.
@@ -801,7 +849,9 @@ Internet-Draft              ACME DTN Node ID                January 2022
 
    *  The challenge payload contains the id-chal as indicated in the
       ACME challenge object.  The challenge payload contains a token-
-      bundle meeting the definition in Section 3.3.
+      bundle meeting the definition in Section 3.3.  The challenge
+      payload contains at least one hash algorithm identifier acceptable
+      to the client.
 
    Any of the failures above SHALL cause the challenge bundle to be
    deleted and otherwise ignored by the BP agent.
@@ -809,7 +859,7 @@ Internet-Draft              ACME DTN Node ID                January 2022
 3.4.  ACME Node ID Validation Response Bundles
 
    Each ACME Node ID Validation Response Bundle SHALL be structured and
-   encoded in accordance with [I-D.ietf-dtn-bpbis].
+   encoded in accordance with [RFC9171].
 
    Each Response Bundle has parameters as listed here:
 
@@ -835,15 +885,18 @@ Internet-Draft              ACME DTN Node ID                January 2022
    Administrative Record Type Code:  Set to the ACME Node ID Validation
       type code defined in Section 8.3.
 
-
-
-Sipos                     Expires 27 July 2022                 [Page 15]
-
-Internet-Draft              ACME DTN Node ID                January 2022
-
-
    Administrative Record Content:  The Response Bundle administrative
       record content SHALL consist of a CBOR map containing three pairs:
+
+
+
+
+
+
+Sipos                    Expires 13 August 2022                [Page 16]
+
+Internet-Draft              ACME DTN Node ID               February 2022
+
 
       *  One pair SHALL consist of key 1 with value of ACME challenge
          id-chal, copied from the Request Bundle, represented as a CBOR
@@ -853,10 +906,12 @@ Internet-Draft              ACME DTN Node ID                January 2022
          token-bundle, copied from the Request Bundle, represented as a
          CBOR byte string.
 
-      *  One pair SHALL consist of key 3 with value of the SHA-256
-         digest [FIPS180-4] of the ACME Key Authorization in accordance
-         with Section 8.1 of [RFC8555], represented as a CBOR byte
-         string.
+      *  One pair SHALL consist of key 3 with value of a two-element
+         array containing the pair of a hash algorithm identifier and
+         the hash byte string.  The algorithim identifier SHALL
+         correspond to the Value column (integer or text string) of the
+         algorithm registered in the "COSE Algorithms" registry of
+         [IANA-COSE].
 
    This structure is part of the extension CDDL in Appendix A.  An
    example full Response Bundle is included in Appendix B.2
@@ -883,8 +938,7 @@ Internet-Draft              ACME DTN Node ID                January 2022
 
    *  The Response Bundle Source Node ID is identical to the Node ID
       being validated.  The comparison of Node IDs SHALL use the
-      comparison logic of the NODE-ID from Section 4.4.1 of
-      [I-D.ietf-dtn-tcpclv4].
+      comparison logic of the NODE-ID from Section 4.4.1 of [RFC9174].
 
    *  The Response Bundle contains a BIB which covers at least the
       primary block and payload.  That BIB has a security source which
@@ -893,14 +947,18 @@ Internet-Draft              ACME DTN Node ID                January 2022
 
 
 
-Sipos                     Expires 27 July 2022                 [Page 16]
+
+
+Sipos                    Expires 13 August 2022                [Page 17]
 
-Internet-Draft              ACME DTN Node ID                January 2022
+Internet-Draft              ACME DTN Node ID               February 2022
 
 
    *  The response payload contains the same id-chal and token-bundle as
       sent in the Challenge Bundle (this is also how the two bundles are
-      correlated).  The response payload contains the expected Key
+      correlated).  The response payload contains a hash algorithm
+      identifier acceptable to the server (as indicated in the challenge
+      bundle).  The response payload contains the expected Key
       Authorization digest computed by the ACME server.
 
    Any of the failures above SHALL cause that single-perspective
@@ -944,15 +1002,15 @@ Internet-Draft              ACME DTN Node ID                January 2022
    BIB before forwarding it.  The bundle receiver then need not trust
    the source of the bundle, but only trust this security source node.
    The receiver needs policy configuration to know which security
-   sources are permitted to attest for which bundle sources.
 
 
 
-
-Sipos                     Expires 27 July 2022                 [Page 17]
+Sipos                    Expires 13 August 2022                [Page 18]
 
-Internet-Draft              ACME DTN Node ID                January 2022
+Internet-Draft              ACME DTN Node ID               February 2022
 
+
+   sources are permitted to attest for which bundle sources.
 
    An integrity gateway SHALL validate the Source Node ID of a bundle,
    using local-network-specific means, before adding a BIB to the
@@ -964,20 +1022,19 @@ Internet-Draft              ACME DTN Node ID                January 2022
    key shared within the local network).
 
    When an integrity gateway adds a BIB it SHALL be in accordance with
-   [I-D.ietf-dtn-bpsec].  The BIB targets SHALL cover both the payload
-   block and the primary block (either directly as a target or as
-   additional authenticated data for the payload block MAC/signature).
-   The Security Source of this BIB SHALL be either the bundle source
-   Node ID itself or a routing node trusted by the destination node (see
+   [RFC9172].  The BIB targets SHALL cover both the payload block and
+   the primary block (either directly as a target or as additional
+   authenticated data for the payload block MAC/signature).  The
+   Security Source of this BIB SHALL be either the bundle source Node ID
+   itself or a routing node trusted by the destination node (see
    Section 7.2).
 
 5.  Certificate Request Profile
 
    The ultimate purpose of this ACME validation is to allow a CA to
    issue certificates following the profiles of Section 4.4.2 of
-   [I-D.ietf-dtn-tcpclv4], [I-D.sipos-dtn-udpcl], and
-   [I-D.bsipos-dtn-bpsec-cose].  These purposes are referred to here as
-   bundle security certificates.
+   [RFC9174], [I-D.sipos-dtn-udpcl], and [I-D.bsipos-dtn-bpsec-cose].
+   These purposes are referred to here as bundle security certificates.
 
    One defining aspect of bundle security certificates is the Extended
    Key Usage key purpose id-kp-bundleSecurity of [IANA-SMI].  When
@@ -999,18 +1056,17 @@ Internet-Draft              ACME DTN Node ID                January 2022
    related to validation failure of an identifier in the presence of
    multiple identifiers.  The initial "ip" validations are defined in
    [RFC8738] and initial "dns" validations are defined in [RFC8555] and
-   [RFC8737].  The specific use case of [I-D.ietf-dtn-tcpclv4] allows,
-   and for some network policies requires, that a certificate
-   authenticate both the DNS name of an entity as well as the Node ID of
+   [RFC8737].  The specific use case of [RFC9174] allows, and for some
+   network policies requires, that a certificate authenticate both the
 
 
 
-Sipos                     Expires 27 July 2022                 [Page 18]
+Sipos                    Expires 13 August 2022                [Page 19]
 
-Internet-Draft              ACME DTN Node ID                January 2022
+Internet-Draft              ACME DTN Node ID               February 2022
 
 
-   the entity.
+   DNS name of an entity as well as the Node ID of the entity.
 
 5.2.  Generating Encryption-only or Signing-only Bundle Security
       Certificates
@@ -1061,9 +1117,9 @@ Internet-Draft              ACME DTN Node ID                January 2022
 
 
 
-Sipos                     Expires 27 July 2022                 [Page 19]
+Sipos                    Expires 13 August 2022                [Page 20]
 
-Internet-Draft              ACME DTN Node ID                January 2022
+Internet-Draft              ACME DTN Node ID               February 2022
 
 
    A Wireshark dissector for of the this draft of ACME Node ID
@@ -1117,9 +1173,9 @@ Internet-Draft              ACME DTN Node ID                January 2022
 
 
 
-Sipos                     Expires 27 July 2022                 [Page 20]
+Sipos                    Expires 13 August 2022                [Page 21]
 
-Internet-Draft              ACME DTN Node ID                January 2022
+Internet-Draft              ACME DTN Node ID               February 2022
 
 
 7.3.  Threat: Bundle Replay
@@ -1173,9 +1229,9 @@ Internet-Draft              ACME DTN Node ID                January 2022
 
 
 
-Sipos                     Expires 27 July 2022                 [Page 21]
+Sipos                    Expires 13 August 2022                [Page 22]
 
-Internet-Draft              ACME DTN Node ID                January 2022
+Internet-Draft              ACME DTN Node ID               February 2022
 
 
 7.5.  Inherited Security Considerations
@@ -1185,9 +1241,8 @@ Internet-Draft              ACME DTN Node ID                January 2022
    exchanges during Node ID validation.
 
    Because this protocol relies on BPv7 for part of its operation, the
-   security considerations of [I-D.ietf-dtn-bpbis] and
-   [I-D.ietf-dtn-bpsec] apply to all BP messaging during Node ID
-   validation.
+   security considerations of [RFC9171] and [RFC9172] apply to all BP
+   messaging during Node ID validation.
 
 7.6.  Out-of-Scope BP Agent Communication
 
@@ -1229,9 +1284,10 @@ Internet-Draft              ACME DTN Node ID                January 2022
 
 
 
-Sipos                     Expires 27 July 2022                 [Page 22]
+
+Sipos                    Expires 13 August 2022                [Page 23]
 
-Internet-Draft              ACME DTN Node ID                January 2022
+Internet-Draft              ACME DTN Node ID               February 2022
 
 
              +===========+==================================+
@@ -1285,16 +1341,10 @@ Internet-Draft              ACME DTN Node ID                January 2022
 
 
 
-Sipos                     Expires 27 July 2022                 [Page 23]
+Sipos                    Expires 13 August 2022                [Page 24]
 
-Internet-Draft              ACME DTN Node ID                January 2022
+Internet-Draft              ACME DTN Node ID               February 2022
 
-
-   [FIPS180-4]
-              National Institute of Standards and Technology, "Secure
-              Hash Standard (SHS)", FIPS PUB 180-4, August 2015,
-              <https://csrc.nist.gov/publications/detail/fips/180/4/
-              final>.
 
    [IANA-ACME]
               IANA, "Automated Certificate Management Environment (ACME)
@@ -1302,6 +1352,10 @@ Internet-Draft              ACME DTN Node ID                January 2022
 
    [IANA-BP]  IANA, "Bundle Protocol",
               <https://www.iana.org/assignments/bundle/>.
+
+   [IANA-COSE]
+              IANA, "CBOR Object Signing and Encryption (COSE)",
+              <https://www.iana.org/assignments/cose/>.
 
    [IANA-SMI] IANA, "Structure of Management Information (SMI) Numbers",
               <https://www.iana.org/assignments/smi-numbers/>.
@@ -1335,21 +1389,18 @@ Internet-Draft              ACME DTN Node ID                January 2022
               Encodings", RFC 4648, DOI 10.17487/RFC4648, October 2006,
               <https://www.rfc-editor.org/info/rfc4648>.
 
-
-
-
-
-
-
-Sipos                     Expires 27 July 2022                 [Page 24]
-
-Internet-Draft              ACME DTN Node ID                January 2022
-
-
    [RFC4838]  Cerf, V., Burleigh, S., Hooke, A., Torgerson, L., Durst,
               R., Scott, K., Fall, K., and H. Weiss, "Delay-Tolerant
               Networking Architecture", RFC 4838, DOI 10.17487/RFC4838,
               April 2007, <https://www.rfc-editor.org/info/rfc4838>.
+
+
+
+
+Sipos                    Expires 13 August 2022                [Page 25]
+
+Internet-Draft              ACME DTN Node ID               February 2022
+
 
    [RFC5280]  Cooper, D., Santesson, S., Farrell, S., Boeyen, S.,
               Housley, R., and W. Polk, "Internet X.509 Public Key
@@ -1377,34 +1428,35 @@ Internet-Draft              ACME DTN Node ID                January 2022
               JSON Data Structures", RFC 8610, DOI 10.17487/RFC8610,
               June 2019, <https://www.rfc-editor.org/info/rfc8610>.
 
-   [I-D.ietf-dtn-bpbis]
-              Burleigh, S., Fall, K., and E. J. Birrane, "Bundle
-              Protocol Version 7", Work in Progress, Internet-Draft,
-              draft-ietf-dtn-bpbis-31, 25 January 2021,
-              <https://datatracker.ietf.org/doc/html/draft-ietf-dtn-
-              bpbis-31>.
+   [RFC9171]  Burleigh, S., Fall, K., Birrane, E., and , "Bundle
+              Protocol Version 7", RFC 9171, DOI 10.17487/RFC9171,
+              January 2022, <https://www.rfc-editor.org/info/rfc9171>.
 
-   [I-D.ietf-dtn-bpsec]
-              III, E. J. B. and K. McKeever, "Bundle Protocol Security
-              Specification", Work in Progress, Internet-Draft, draft-
-              ietf-dtn-bpsec-27, 16 February 2021,
-              <https://datatracker.ietf.org/doc/html/draft-ietf-dtn-
-              bpsec-27>.
+   [RFC9172]  Birrane, E., and K. McKeever, "Bundle Protocol Security
+              (BPSec)", RFC 9172, DOI 10.17487/RFC9172, January 2022,
+              <https://www.rfc-editor.org/info/rfc9172>.
+
+   [I-D.ietf-cose-hash-algs]
+              Schaad, J., "CBOR Object Signing and Encryption (COSE):
+              Hash Algorithms", Work in Progress, Internet-Draft, draft-
+              ietf-cose-hash-algs-09, 14 September 2020,
+              <https://datatracker.ietf.org/doc/html/draft-ietf-cose-
+              hash-algs-09>.
 
 9.2.  Informative References
-
-
-
-
-
-Sipos                     Expires 27 July 2022                 [Page 25]
-
-Internet-Draft              ACME DTN Node ID                January 2022
-
 
    [RFC5050]  Scott, K. and S. Burleigh, "Bundle Protocol
               Specification", RFC 5050, DOI 10.17487/RFC5050, November
               2007, <https://www.rfc-editor.org/info/rfc5050>.
+
+
+
+
+
+Sipos                    Expires 13 August 2022                [Page 26]
+
+Internet-Draft              ACME DTN Node ID               February 2022
+
 
    [RFC6376]  Crocker, D., Ed., Hansen, T., Ed., and M. Kucherawy, Ed.,
               "DomainKeys Identified Mail (DKIM) Signatures", STD 76,
@@ -1427,19 +1479,16 @@ Internet-Draft              ACME DTN Node ID                January 2022
               RFC 8823, DOI 10.17487/RFC8823, April 2021,
               <https://www.rfc-editor.org/info/rfc8823>.
 
+   [RFC9174]  Sipos, B., Demmer, M., Ott, J., and S. Perreault, "Delay-
+              Tolerant Networking TCP Convergence-Layer Protocol Version
+              4", RFC 9174, DOI 10.17487/RFC9174, January 2022,
+              <https://www.rfc-editor.org/info/rfc9174>.
+
    [I-D.ietf-dtn-bibect]
               Burleigh, S., "Bundle-in-Bundle Encapsulation", Work in
               Progress, Internet-Draft, draft-ietf-dtn-bibect-03, 18
               February 2020, <https://datatracker.ietf.org/doc/html/
               draft-ietf-dtn-bibect-03>.
-
-   [I-D.ietf-dtn-tcpclv4]
-              Sipos, B., Demmer, M., Ott, J., and S. Perreault, "Delay-
-              Tolerant Networking TCP Convergence Layer Protocol Version
-              4", Work in Progress, Internet-Draft, draft-ietf-dtn-
-              tcpclv4-28, 6 October 2021,
-              <https://datatracker.ietf.org/doc/html/draft-ietf-dtn-
-              tcpclv4-28>.
 
    [I-D.sipos-dtn-udpcl]
               Sipos, B., "Delay-Tolerant Networking UDP Convergence
@@ -1448,22 +1497,22 @@ Internet-Draft              ACME DTN Node ID                January 2022
               <https://datatracker.ietf.org/doc/html/draft-sipos-dtn-
               udpcl-01>.
 
-
-
-
-
-
-Sipos                     Expires 27 July 2022                 [Page 26]
-
-Internet-Draft              ACME DTN Node ID                January 2022
-
-
    [I-D.sipos-bpv7-admin-iana]
               Sipos, B., "Bundle Protocol Version 7 Administrative
               Record Types Registry", Work in Progress, Internet-Draft,
               draft-sipos-bpv7-admin-iana-00, 13 October 2021,
               <https://datatracker.ietf.org/doc/html/draft-sipos-bpv7-
               admin-iana-00>.
+
+
+
+
+
+
+Sipos                    Expires 13 August 2022                [Page 27]
+
+Internet-Draft              ACME DTN Node ID               February 2022
+
 
    [I-D.bsipos-dtn-bpsec-cose]
               Sipos, B., "DTN Bundle Protocol Security COSE Security
@@ -1494,36 +1543,32 @@ Appendix A.  Administrative Record Types CDDL
    [NOTE to the RFC Editor: The "0xFFFF" in this CDDL is replaced by the
    "ACME Node ID Validation" administrative record type code.]
 
-   The CDDL extension of BP [I-D.ietf-dtn-bpbis] for the ACME bundles
-   is:
-
-
-
-
-
-
-
-
-
-
-
-
-
-Sipos                     Expires 27 July 2022                 [Page 27]
-
-Internet-Draft              ACME DTN Node ID                January 2022
-
+   The CDDL extension of BP [RFC9171] for the ACME bundles is:
 
    ; All ACME records have the same structure
    $admin-record /= [0xFFFF, acme-record]
    acme-record = {
      id-chal,
      token-bundle,
-     ? key-auth-digest ; present for Response Bundles
+     ? key-auth-digest ; present in Response Bundles
+     ? alg-list ; present in Challenge Bundles
    }
    id-chal = (1 => bstr)
    token-bundle = (2 => bstr)
-   key-auth-digest = (3 => bstr)
+   key-auth-digest = (3 => [
+       alg: alg-id,
+       value: bstr
+   ])
+   alg-list = (4 => [+ alg-id])
+   # From the IANA registry, only hash algorithms allowed
+   alg-id: tstr / int
+
+
+
+Sipos                    Expires 13 August 2022                [Page 28]
+
+Internet-Draft              ACME DTN Node ID               February 2022
+
 
 Appendix B.  Example Authorization
 
@@ -1565,9 +1610,20 @@ B.1.  Challenge Bundle
 
 
 
-Sipos                     Expires 27 July 2022                 [Page 28]
+
+
+
+
+
+
+
+
+
+
+
+Sipos                    Expires 13 August 2022                [Page 29]
 
-Internet-Draft              ACME DTN Node ID                January 2022
+Internet-Draft              ACME DTN Node ID               February 2022
 
 
    [_
@@ -1621,9 +1677,9 @@ B.2.  Response Bundle
 
 
 
-Sipos                     Expires 27 July 2022                 [Page 29]
+Sipos                    Expires 13 August 2022                [Page 30]
 
-Internet-Draft              ACME DTN Node ID                January 2022
+Internet-Draft              ACME DTN Node ID               February 2022
 
 
    [_
@@ -1677,4 +1733,4 @@ Author's Address
 
 
 
-Sipos                     Expires 27 July 2022                 [Page 30]
+Sipos                    Expires 13 August 2022                [Page 31]
