@@ -87,6 +87,9 @@ Logic for performing rate control and congestion control of bundle transfers.
 The ACME server is responsible for rate control of validation requests.
           </li>
           <li>
+Policies or mechanisms for an ACME server to choose a prioritized list of acceptable hash algorithms, or for an ACME client to choose a set of acceptable hash algorithms.
+          </li>
+          <li>
 Policies or mechanisms for provisioning, deploying, or accessing certificates and private keys; deploying or accessing certificate revocation lists (CRLs); or configuring security parameters on an individual entity or across a network.
           </li>
           <li>
@@ -335,7 +338,7 @@ The administrative element waits for a Challenge Bundle to be received with the 
 The administrative element concatenates <tt>token-bundle</tt> with <tt>token-chal</tt> (each as base64url-encoded text strings) and computes the Key Authorization in accordance with <xref section="8.1" target="RFC8555"/> using the full token and client account key thumbprint.
         </li>
         <li>
-The administrative element computes the SHA-256 digest of the Key Authorization result and generates a Response Bundle to send back to the ACME server in accordance with <xref target="sec-bundle-response"/>.
+The administrative element chooses the highest-priority hash algorithm supported by both the client and server, uses that algorithm to compute the digest of the Key Authorization result, and generates a Response Bundle to send back to the ACME server in accordance with <xref target="sec-bundle-response"/>.
         </li>
         <li>
 The ACME client waits for the authorization to be finalized on the ACME server in accordance with <xref section="7.5.1" target="RFC8555"/>.
@@ -362,7 +365,7 @@ The payload is handled in accordance with <xref target="sec-nodeid-challenge-res
         <li>
 The ACME server sends, via the administrative element of its BP agent, one or more Challenge Bundles in accordance with <xref target="sec-bundle-challenge"/>.
 Each challenge bundle <bcp14>SHALL</bcp14> contain a distinct <tt>token-bundle</tt> to be able to correlate with a response bundle.
-Computing an expected Key Authorization digest is not necessary until a response is received.
+Computing an expected Key Authorization digest is not necessary until a response is received with a chosen hash algorithm.
         </li>
         <li>
 The ACME server waits for Response Bundle(s) for a limited interval of time (based on the challenge response object of <xref target="sec-nodeid-challenge-response"/>).
@@ -502,12 +505,22 @@ The <tt>token-bundle</tt> is a random value that uniquely identifies the challen
 This value <bcp14>SHALL</bcp14> have at least 128 bits of entropy.
 See <xref target="RFC4086"/> for additional information on randomness requirements.
               </li>
+              <li>
+One pair <bcp14>SHALL</bcp14> consist of key 4 with value of an array containing acceptable hash algorithm identifiers.
+The array <bcp14>SHALL</bcp14> be ordered in descending preference, with the first item being the most preferred.
+The array <bcp14>SHALL</bcp14> contain at least one item.
+Each algorithim identifier <bcp14>SHALL</bcp14> correspond to the Value column (integer or text string) of the algorithm registered in the "COSE Algorithms" registry of <xref target="IANA-COSE"/>.
+              </li>
             </ul>
           </dd>
         </dl>
         <t>
 This structure is part of the extension CDDL in <xref target="sec-cddl"/>.
 An example full Challenge Bundle is included in <xref target="sec-example-bundle-challenge"/>
+        </t>
+        <t>
+For interoperability, entities which use this validation method <bcp14>SHALL</bcp14> support the hash algorithm "SHA-256" of <xref target="I-D.ietf-cose-hash-algs"/>, but can use other hash algorithms.
+This requirement allows for different implementations to be configured to use an interoperable algorithm, but does not preclude the use of other algorithms.
         </t>
         <t>
 If the BP agent generating a Challenge Bundle does not have a well-synchronized clock or the agent responding to the challenge is expected to not have a well-synchronized clock, the bundle <bcp14>SHALL</bcp14> include a Bundle Age extension block.
@@ -533,6 +546,7 @@ That BIB has a security source which is trusted and passes security-context-spec
             <li>
 The challenge payload contains the <tt>id-chal</tt> as indicated in the ACME challenge object.
 The challenge payload contains a <tt>token-bundle</tt> meeting the definition in <xref target="sec-bundle-challenge"/>.
+The challenge payload contains at least one hash algorithm identifier acceptable to the client.
             </li>
           </ul>
           <t>
@@ -584,7 +598,8 @@ One pair <bcp14>SHALL</bcp14> consist of key 1 with value of ACME challenge <tt>
 One pair <bcp14>SHALL</bcp14> consist of key 2 with value of ACME challenge <tt>token-bundle</tt>, copied from the Request Bundle, represented as a CBOR byte string.
               </li>
               <li>
-One pair <bcp14>SHALL</bcp14> consist of key 3 with value of the SHA-256 digest <xref target="FIPS180-4"/> of the ACME Key Authorization in accordance with <xref section="8.1" target="RFC8555"/>, represented as a CBOR byte string.
+One pair <bcp14>SHALL</bcp14> consist of key 3 with value of a two-element array containing the pair of a hash algorithm identifier and the hash byte string.
+The algorithim identifier <bcp14>SHALL</bcp14> correspond to the Value column (integer or text string) of the algorithm registered in the "COSE Algorithms" registry of <xref target="IANA-COSE"/>.
               </li>
             </ul>
           </dd>
@@ -621,6 +636,7 @@ That BIB has a security source which is trusted and passes security-context-spec
             </li>
             <li>
 The response payload contains the same <tt>id-chal</tt> and <tt>token-bundle</tt> as sent in the Challenge Bundle (this is also how the two bundles are correlated).
+The response payload contains a hash algorithm identifier acceptable to the server (as indicated in the challenge bundle).
 The response payload contains the expected Key Authorization digest computed by the ACME server.
             </li>
           </ul>
@@ -903,16 +919,6 @@ Within the "Bundle Protocol" registry <xref target="IANA-BP"/>, the following en
       <name>References</name>
       <references>
         <name>Normative References</name>
-        <reference anchor="FIPS180-4" target="https://csrc.nist.gov/publications/detail/fips/180/4/final">
-          <front>
-            <title>Secure Hash Standard (SHS)</title>
-            <author>
-              <organization>National Institute of Standards and Technology</organization>
-            </author>
-            <date month="August" year="2015"/>
-          </front>
-          <seriesInfo name="FIPS" value="PUB 180-4"/>
-        </reference>
         <reference anchor="IANA-ACME" target="https://www.iana.org/assignments/acme/">
           <front>
             <title>Automated Certificate Management Environment (ACME) Protocol</title>
@@ -925,6 +931,15 @@ Within the "Bundle Protocol" registry <xref target="IANA-BP"/>, the following en
         <reference anchor="IANA-BP" target="https://www.iana.org/assignments/bundle/">
           <front>
             <title>Bundle Protocol</title>
+            <author>
+              <organization>IANA</organization>
+            </author>
+            <date/>
+          </front>
+        </reference>
+        <reference anchor="IANA-COSE" target="https://www.iana.org/assignments/cose/">
+          <front>
+            <title>CBOR Object Signing and Encryption (COSE)</title>
             <author>
               <organization>IANA</organization>
             </author>
@@ -954,6 +969,7 @@ Within the "Bundle Protocol" registry <xref target="IANA-BP"/>, the following en
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8610.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml-ids/reference.I-D.ietf-dtn-bpbis.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml-ids/reference.I-D.ietf-dtn-bpsec.xml"/>
+        <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml-ids/reference.I-D.ietf-cose-hash-algs.xml"/>
       </references>
       <references>
         <name>Informative References</name>
@@ -1008,11 +1024,18 @@ $admin-record /= [0xFFFF, acme-record]
 acme-record = {
   id-chal,
   token-bundle,
-  ? key-auth-digest ; present for Response Bundles
+  ? key-auth-digest ; present in Response Bundles
+  ? alg-list ; present in Challenge Bundles
 }
 id-chal = (1 =&gt; bstr)
 token-bundle = (2 =&gt; bstr)
-key-auth-digest = (3 =&gt; bstr)
+key-auth-digest = (3 =&gt; [
+    alg: alg-id,
+    value: bstr
+])
+alg-list = (4 =&gt; [+ alg-id])
+# From the IANA registry, only hash algorithms allowed
+alg-id: tstr / int
 </sourcecode>
     </section>
     <section>
