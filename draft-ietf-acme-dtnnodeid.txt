@@ -4,8 +4,8 @@
 
 Automated Certificate Management Environment                    B. Sipos
 Internet-Draft                                           RKF Engineering
-Intended status: Experimental                            9 February 2022
-Expires: 13 August 2022
+Intended status: Experimental                               2 March 2022
+Expires: 3 September 2022
 
 
    Automated Certificate Management Environment (ACME) Delay-Tolerant
@@ -36,7 +36,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 13 August 2022.
+   This Internet-Draft will expire on 3 September 2022.
 
 Copyright Notice
 
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-Sipos                    Expires 13 August 2022                 [Page 1]
+Sipos                   Expires 3 September 2022                [Page 1]
 
-Internet-Draft              ACME DTN Node ID               February 2022
+Internet-Draft              ACME DTN Node ID                  March 2022
 
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Sipos                    Expires 13 August 2022                 [Page 2]
+Sipos                   Expires 3 September 2022                [Page 2]
 
-Internet-Draft              ACME DTN Node ID               February 2022
+Internet-Draft              ACME DTN Node ID                  March 2022
 
 
      B.1.  Challenge Bundle  . . . . . . . . . . . . . . . . . . . .  29
@@ -165,9 +165,9 @@ Internet-Draft              ACME DTN Node ID               February 2022
 
 
 
-Sipos                    Expires 13 August 2022                 [Page 3]
+Sipos                   Expires 3 September 2022                [Page 3]
 
-Internet-Draft              ACME DTN Node ID               February 2022
+Internet-Draft              ACME DTN Node ID                  March 2022
 
 
    *  Mechanisms for communication between ACME client or ACME server
@@ -221,9 +221,9 @@ Internet-Draft              ACME DTN Node ID               February 2022
 
 
 
-Sipos                    Expires 13 August 2022                 [Page 4]
+Sipos                   Expires 3 September 2022                [Page 4]
 
-Internet-Draft              ACME DTN Node ID               February 2022
+Internet-Draft              ACME DTN Node ID                  March 2022
 
 
 1.2.  Authorization Strategy
@@ -277,9 +277,9 @@ Internet-Draft              ACME DTN Node ID               February 2022
 
 
 
-Sipos                    Expires 13 August 2022                 [Page 5]
+Sipos                   Expires 3 September 2022                [Page 5]
 
-Internet-Draft              ACME DTN Node ID               February 2022
+Internet-Draft              ACME DTN Node ID                  March 2022
 
 
         +------------+                             +------------+
@@ -333,9 +333,9 @@ Internet-Draft              ACME DTN Node ID               February 2022
 
 
 
-Sipos                    Expires 13 August 2022                 [Page 6]
+Sipos                   Expires 3 September 2022                [Page 6]
 
-Internet-Draft              ACME DTN Node ID               February 2022
+Internet-Draft              ACME DTN Node ID                  March 2022
 
 
    '//sourcecode[@type="cddl"]'
@@ -389,9 +389,9 @@ Internet-Draft              ACME DTN Node ID               February 2022
 
 
 
-Sipos                    Expires 13 August 2022                 [Page 7]
+Sipos                   Expires 3 September 2022                [Page 7]
 
-Internet-Draft              ACME DTN Node ID               February 2022
+Internet-Draft              ACME DTN Node ID                  March 2022
 
 
       destination of a bundle, independent of any intermediate
@@ -445,9 +445,9 @@ Internet-Draft              ACME DTN Node ID               February 2022
 
 
 
-Sipos                    Expires 13 August 2022                 [Page 8]
+Sipos                   Expires 3 September 2022                [Page 8]
 
-Internet-Draft              ACME DTN Node ID               February 2022
+Internet-Draft              ACME DTN Node ID                  March 2022
 
 
    When an ACME server needs to request proof that a client controls a
@@ -501,9 +501,9 @@ Internet-Draft              ACME DTN Node ID               February 2022
 
 
 
-Sipos                    Expires 13 August 2022                 [Page 9]
+Sipos                   Expires 3 September 2022                [Page 9]
 
-Internet-Draft              ACME DTN Node ID               February 2022
+Internet-Draft              ACME DTN Node ID                  March 2022
 
 
    Similar to the ACME use case for validating email address ownership
@@ -557,9 +557,9 @@ Internet-Draft              ACME DTN Node ID               February 2022
 
 
 
-Sipos                    Expires 13 August 2022                [Page 10]
+Sipos                   Expires 3 September 2022               [Page 10]
 
-Internet-Draft              ACME DTN Node ID               February 2022
+Internet-Draft              ACME DTN Node ID                  March 2022
 
 
    2.  The ACME client obtains the id-chal and token-chal from the
@@ -613,9 +613,9 @@ Internet-Draft              ACME DTN Node ID               February 2022
 
 
 
-Sipos                    Expires 13 August 2022                [Page 11]
+Sipos                   Expires 3 September 2022               [Page 11]
 
-Internet-Draft              ACME DTN Node ID               February 2022
+Internet-Draft              ACME DTN Node ID                  March 2022
 
 
    3.  The ACME server receives a POST to the challenge URL indicated
@@ -669,9 +669,9 @@ Internet-Draft              ACME DTN Node ID               February 2022
 
 
 
-Sipos                    Expires 13 August 2022                [Page 12]
+Sipos                   Expires 3 September 2022               [Page 12]
 
-Internet-Draft              ACME DTN Node ID               February 2022
+Internet-Draft              ACME DTN Node ID                  March 2022
 
 
       Section 5 of [RFC4648].  Trailing '=' padding characters SHALL be
@@ -725,9 +725,9 @@ Internet-Draft              ACME DTN Node ID               February 2022
 
 
 
-Sipos                    Expires 13 August 2022                [Page 13]
+Sipos                   Expires 3 September 2022               [Page 13]
 
-Internet-Draft              ACME DTN Node ID               February 2022
+Internet-Draft              ACME DTN Node ID                  March 2022
 
 
    A challenge response is not sent until the BP agent has been
@@ -781,9 +781,9 @@ Internet-Draft              ACME DTN Node ID               February 2022
 
 
 
-Sipos                    Expires 13 August 2022                [Page 14]
+Sipos                   Expires 3 September 2022               [Page 14]
 
-Internet-Draft              ACME DTN Node ID               February 2022
+Internet-Draft              ACME DTN Node ID                  March 2022
 
 
       *  One pair SHALL consist of key 1 with value of ACME challenge
@@ -837,9 +837,9 @@ Internet-Draft              ACME DTN Node ID               February 2022
 
 
 
-Sipos                    Expires 13 August 2022                [Page 15]
+Sipos                   Expires 3 September 2022               [Page 15]
 
-Internet-Draft              ACME DTN Node ID               February 2022
+Internet-Draft              ACME DTN Node ID                  March 2022
 
 
    *  The Challenge Bundle contains a BIB which covers at least the
@@ -893,9 +893,9 @@ Internet-Draft              ACME DTN Node ID               February 2022
 
 
 
-Sipos                    Expires 13 August 2022                [Page 16]
+Sipos                   Expires 3 September 2022               [Page 16]
 
-Internet-Draft              ACME DTN Node ID               February 2022
+Internet-Draft              ACME DTN Node ID                  March 2022
 
 
       *  One pair SHALL consist of key 1 with value of ACME challenge
@@ -949,9 +949,9 @@ Internet-Draft              ACME DTN Node ID               February 2022
 
 
 
-Sipos                    Expires 13 August 2022                [Page 17]
+Sipos                   Expires 3 September 2022               [Page 17]
 
-Internet-Draft              ACME DTN Node ID               February 2022
+Internet-Draft              ACME DTN Node ID                  March 2022
 
 
    *  The response payload contains the same id-chal and token-bundle as
@@ -1005,9 +1005,9 @@ Internet-Draft              ACME DTN Node ID               February 2022
 
 
 
-Sipos                    Expires 13 August 2022                [Page 18]
+Sipos                   Expires 3 September 2022               [Page 18]
 
-Internet-Draft              ACME DTN Node ID               February 2022
+Internet-Draft              ACME DTN Node ID                  March 2022
 
 
    sources are permitted to attest for which bundle sources.
@@ -1061,9 +1061,9 @@ Internet-Draft              ACME DTN Node ID               February 2022
 
 
 
-Sipos                    Expires 13 August 2022                [Page 19]
+Sipos                   Expires 3 September 2022               [Page 19]
 
-Internet-Draft              ACME DTN Node ID               February 2022
+Internet-Draft              ACME DTN Node ID                  March 2022
 
 
    DNS name of an entity as well as the Node ID of the entity.
@@ -1117,9 +1117,9 @@ Internet-Draft              ACME DTN Node ID               February 2022
 
 
 
-Sipos                    Expires 13 August 2022                [Page 20]
+Sipos                   Expires 3 September 2022               [Page 20]
 
-Internet-Draft              ACME DTN Node ID               February 2022
+Internet-Draft              ACME DTN Node ID                  March 2022
 
 
    A Wireshark dissector for of the this draft of ACME Node ID
@@ -1173,9 +1173,9 @@ Internet-Draft              ACME DTN Node ID               February 2022
 
 
 
-Sipos                    Expires 13 August 2022                [Page 21]
+Sipos                   Expires 3 September 2022               [Page 21]
 
-Internet-Draft              ACME DTN Node ID               February 2022
+Internet-Draft              ACME DTN Node ID                  March 2022
 
 
 7.3.  Threat: Bundle Replay
@@ -1229,9 +1229,9 @@ Internet-Draft              ACME DTN Node ID               February 2022
 
 
 
-Sipos                    Expires 13 August 2022                [Page 22]
+Sipos                   Expires 3 September 2022               [Page 22]
 
-Internet-Draft              ACME DTN Node ID               February 2022
+Internet-Draft              ACME DTN Node ID                  March 2022
 
 
 7.5.  Inherited Security Considerations
@@ -1285,9 +1285,9 @@ Internet-Draft              ACME DTN Node ID               February 2022
 
 
 
-Sipos                    Expires 13 August 2022                [Page 23]
+Sipos                   Expires 3 September 2022               [Page 23]
 
-Internet-Draft              ACME DTN Node ID               February 2022
+Internet-Draft              ACME DTN Node ID                  March 2022
 
 
              +===========+==================================+
@@ -1341,9 +1341,9 @@ Internet-Draft              ACME DTN Node ID               February 2022
 
 
 
-Sipos                    Expires 13 August 2022                [Page 24]
+Sipos                   Expires 3 September 2022               [Page 24]
 
-Internet-Draft              ACME DTN Node ID               February 2022
+Internet-Draft              ACME DTN Node ID                  March 2022
 
 
    [IANA-ACME]
@@ -1397,9 +1397,9 @@ Internet-Draft              ACME DTN Node ID               February 2022
 
 
 
-Sipos                    Expires 13 August 2022                [Page 25]
+Sipos                   Expires 3 September 2022               [Page 25]
 
-Internet-Draft              ACME DTN Node ID               February 2022
+Internet-Draft              ACME DTN Node ID                  March 2022
 
 
    [RFC5280]  Cooper, D., Santesson, S., Farrell, S., Boeyen, S.,
@@ -1453,9 +1453,9 @@ Internet-Draft              ACME DTN Node ID               February 2022
 
 
 
-Sipos                    Expires 13 August 2022                [Page 26]
+Sipos                   Expires 3 September 2022               [Page 26]
 
-Internet-Draft              ACME DTN Node ID               February 2022
+Internet-Draft              ACME DTN Node ID                  March 2022
 
 
    [RFC6376]  Crocker, D., Ed., Hansen, T., Ed., and M. Kucherawy, Ed.,
@@ -1509,9 +1509,9 @@ Internet-Draft              ACME DTN Node ID               February 2022
 
 
 
-Sipos                    Expires 13 August 2022                [Page 27]
+Sipos                   Expires 3 September 2022               [Page 27]
 
-Internet-Draft              ACME DTN Node ID               February 2022
+Internet-Draft              ACME DTN Node ID                  March 2022
 
 
    [I-D.bsipos-dtn-bpsec-cose]
@@ -1565,9 +1565,9 @@ Appendix A.  Administrative Record Types CDDL
 
 
 
-Sipos                    Expires 13 August 2022                [Page 28]
+Sipos                   Expires 3 September 2022               [Page 28]
 
-Internet-Draft              ACME DTN Node ID               February 2022
+Internet-Draft              ACME DTN Node ID                  March 2022
 
 
 Appendix B.  Example Authorization
@@ -1621,9 +1621,9 @@ B.1.  Challenge Bundle
 
 
 
-Sipos                    Expires 13 August 2022                [Page 29]
+Sipos                   Expires 3 September 2022               [Page 29]
 
-Internet-Draft              ACME DTN Node ID               February 2022
+Internet-Draft              ACME DTN Node ID                  March 2022
 
 
    [_
@@ -1677,9 +1677,9 @@ B.2.  Response Bundle
 
 
 
-Sipos                    Expires 13 August 2022                [Page 30]
+Sipos                   Expires 3 September 2022               [Page 30]
 
-Internet-Draft              ACME DTN Node ID               February 2022
+Internet-Draft              ACME DTN Node ID                  March 2022
 
 
    [_
@@ -1728,9 +1728,9 @@ Author's Address
    Suite 1275
    Bethesda, MD 20814-6198
    United States of America
-
    Email: brian.sipos+ietf@gmail.com
 
 
 
-Sipos                    Expires 13 August 2022                [Page 31]
+
+Sipos                   Expires 3 September 2022               [Page 31]
