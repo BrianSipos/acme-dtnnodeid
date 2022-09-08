@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?rfc toc="yes"?>
-<rfc xmlns:xi="http://www.w3.org/2001/XInclude" category="exp" docName="draft-ietf-acme-dtnnodeid-09" ipr="trust200902" submissionType="IETF" tocInclude="true" version="3">
+<rfc xmlns:xi="http://www.w3.org/2001/XInclude" category="exp" docName="draft-ietf-acme-dtnnodeid-10" ipr="trust200902" submissionType="IETF" tocInclude="true" version="3">
   <front>
     <title abbrev="ACME DTN Node ID">
 Automated Certificate Management Environment (ACME)
 Delay-Tolerant Networking (DTN) Node ID Validation Extension
     </title>
-    <seriesInfo name="Internet-Draft" value="draft-ietf-acme-dtnnodeid-09"/>
+    <seriesInfo name="Internet-Draft" value="draft-ietf-acme-dtnnodeid-10"/>
     <author fullname="Brian Sipos" initials="B." surname="Sipos">
       <organization abbrev="RKF Engineering">RKF Engineering Solutions, LLC</organization>
       <address>
@@ -37,7 +37,7 @@ The DTN Node ID is encoded as a certificate Subject Alternative Name (SAN) of ty
     <section anchor="sec-intro">
       <name>Introduction</name>
       <t>
-Although the original purpose of the Automatic Certificate Management Environment (ACME) <xref target="RFC8555"/> was to allow Public Key Infrastructure Using X.509 (PKIX) certificate authorities to validate network domain names of clients, the same mechanism can be used to validate any of the subject claims supported by the PKIX profile <xref target="RFC5280"/>.
+Although the original purpose of the Automatic Certificate Management Environment (ACME) <xref target="RFC8555"/> was to allow Public Key Infrastructure Using X.509 (PKIX) Certification Authorities (CAs) to validate network domain names of clients, the same mechanism can be used to validate any of the subject claims supported by the PKIX profile <xref target="RFC5280"/>.
       </t>
       <t>
 In the case of this specification, the claim being validated is a Subject Alternative Name (SAN) of type otherName with a name form of <tt>BundleEID</tt>, which used to represent an Endpoint ID (EID) for a Delay-Tolerant Networking (DTN) bundle.
@@ -58,6 +58,11 @@ The scope and behavior of this validation mechanism is similar to that of secure
       </t>
       <section>
         <name>Scope</name>
+        <t>
+The emergent properties of DTN naming and BP security are still being developed and explored, especially between different organizational and administrative domains, so the "experimental" status of this document is related more to the practical utility of this kind of Node ID validation than to the validation method itself.
+The original use case is in large or cross-organizational networks where a BP node can be trusted to be allocated and added to a network, but the method of certificate validation and issuance is desired to be in-band on the network rather than configured solely through a side channel using bespoke or manual protocols.
+Because this mechanism is so similar to other validation methods, specifically <xref target="RFC8823"/>, it is expected to have few implementation difficulties or interoperability issues.
+        </t>
         <t>
 This document describes the ACME messages, BPv7 payloads, and BPSec requirements needed to validate Node ID ownership.
 This document does not address:
@@ -519,7 +524,7 @@ This structure is part of the extension CDDL in <xref target="sec-cddl"/>.
 An example full Challenge Bundle is included in <xref target="sec-example-bundle-challenge"/>
         </t>
         <t>
-For interoperability, entities which use this validation method <bcp14>SHALL</bcp14> support the hash algorithm "SHA-256" of <xref target="I-D.ietf-cose-hash-algs"/>, but can use other hash algorithms.
+For interoperability, entities which use this validation method <bcp14>SHALL</bcp14> support the hash algorithm "SHA-256" of <xref target="RFC9054"/>, but can use other hash algorithms.
 This requirement allows for different implementations to be configured to use an interoperable algorithm, but does not preclude the use of other algorithms.
         </t>
         <t>
@@ -694,7 +699,7 @@ The ultimate purpose of this ACME validation is to allow a CA to issue certifica
 These purposes are referred to here as bundle security certificates.
       </t>
       <t>
-One defining aspect of bundle security certificates is the Extended Key Usage key purpose <tt>id-kp-bundleSecurity</tt> of <xref target="IANA-SMI"/>.
+One defining aspect of bundle security certificates is the Extended Key Usage key purpose <tt>id-kp-bundleSecurity</tt> of <xref target="IANA-SMI"/>, as defined in <xref section="4.4.2.1" target="RFC9174"/>.
 When requesting a certificate which includes a Node ID SAN, the CSR <bcp14>SHOULD</bcp14> include an Extended Key Usage of <tt>id-kp-bundleSecurity</tt>.
 When a bundle security certificate is issued based on a validated Node ID SAN, the certificate <bcp14>SHALL</bcp14> include an Extended Key Usage of <tt>id-kp-bundleSecurity</tt>.
       </t>
@@ -712,6 +717,7 @@ The specific use case of <xref target="RFC9174"/> allows, and for some network p
         <name>Generating Encryption-only or Signing-only Bundle Security Certificates</name>
         <t>
 ACME extensions specified in this document can be used to request encryption-only or signing-only bundle security certificates.
+The validity of a request for either a restricted-use or unrestricted-use certificate is dependent on both CA policy to issue such certificates as well as constraints based on the requested key and algorithm types.
         </t>
         <t>
 In order to request signing only bundle security certificate, the CSR <bcp14>SHALL</bcp14> include the key usage extension with digitalSignature and/or nonRepudiation bits set and no other bits set.
@@ -967,9 +973,9 @@ Within the "Bundle Protocol" registry <xref target="IANA-BP"/>, the following en
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8174.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8555.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8610.xml"/>
+        <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.9054.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.9171.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.9172.xml"/>
-        <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml-ids/reference.I-D.ietf-cose-hash-algs.xml"/>
       </references>
       <references>
         <name>Informative References</name>
@@ -1016,7 +1022,7 @@ Within the "Bundle Protocol" registry <xref target="IANA-BP"/>, the following en
 [NOTE to the RFC Editor: The "0xFFFF" in this CDDL is replaced by the "ACME Node ID Validation" administrative record type code.]
       </t>
       <t keepWithNext="true">
-The CDDL extension of BP <xref target="RFC9171"/> for the ACME bundles is:
+The normative CDDL extension of BP <xref target="RFC9171"/> for the ACME bundles is:
       </t>
       <sourcecode type="cddl">
 ; All ACME records have the same structure
@@ -1034,7 +1040,7 @@ key-auth-digest = (3 =&gt; [
     value: bstr
 ])
 alg-list = (4 =&gt; [+ alg-id])
-# From the IANA registry, only hash algorithms allowed
+; From the IANA registry, only hash algorithms allowed
 alg-id: tstr / int
 </sourcecode>
     </section>
@@ -1095,7 +1101,8 @@ This challenge requires that the ACME client respond within a 60 second time win
       0xFFFF, / record-type-code /
       { / record-content /
         1: b64'dDtaviYTPUWFS3NK37YWfQ', / id-chal /
-        2: b64'p3yRYFU4KxwQaHQjJ2RdiQ' / token-bundle /
+        2: b64'p3yRYFU4KxwQaHQjJ2RdiQ', / token-bundle /
+        4: [-16] / alg-list: SHA-256 /
       }
     ]&gt;&gt;
   ]
@@ -1140,8 +1147,8 @@ This response indicates that there is 30 seconds remaining in the response time 
       { / record-content /
         1: b64'dDtaviYTPUWFS3NK37YWfQ', / id-chal /
         2: b64'p3yRYFU4KxwQaHQjJ2RdiQ', / token-bundle /
-        3: b64'mVIOJEQZie8XpYM6MMVSQUiNPH64URnhM9niJ5XHrew'
-        / key auth. digest /
+        3: [-16, b64'mVIOJEQZie8XpYM6MMVSQUiNPH64URnhM9niJ5XHrew']
+        / SHA-256 key auth. digest /
       }
     ]&gt;&gt;
   ]
