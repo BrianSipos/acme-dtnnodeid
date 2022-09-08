@@ -31,7 +31,8 @@ INFO:root:Processing element text:
       0xFFFF, / record-type-code /
       { / record-content /
         1: b64'dDtaviYTPUWFS3NK37YWfQ', / id-chal /
-        2: b64'p3yRYFU4KxwQaHQjJ2RdiQ' / token-bundle /
+        2: b64'p3yRYFU4KxwQaHQjJ2RdiQ', / token-bundle /
+        4: [-16] / alg-list: SHA-256 /
       }
     ]>>
   ]
@@ -61,8 +62,8 @@ INFO:root:Processing element text:
       01                                # unsigned(1)
       00                                # unsigned(0)
       00                                # unsigned(0)
-      58 29                             # bytes(41)
-         8219ffffa20150743b5abe26133d45854b734adfb6167d0250a77c916055382b1c1068742327645d89 # "\x82\u0019\xFF\xFF\xA2\u0001Pt;Z\xBE&\u0013=E\x85KsJ߶\u0016}\u0002P\xA7|\x91`U8+\u001C\u0010ht#'d]\x89"
+      58 2c                             # bytes(44)
+         8219ffffa30150743b5abe26133d45854b734adfb6167d0250a77c916055382b1c1068742327645d8904812f # "\x82\u0019\xFF\xFF\xA3\u0001Pt;Z\xBE&\u0013=E\x85KsJ߶\u0016}\u0002P\xA7|\x91`U8+\u001C\u0010ht#'d]\x89\u0004\x81/"
    ff                                   # primitive(*)
 INFO:root:Processing element text:
 "p3yRYFU4KxwQaHQjJ2RdiQtPUZNY4ONIk6LxErRFEjVw."
@@ -92,8 +93,8 @@ INFO:root:Processing element text:
       { / record-content /
         1: b64'dDtaviYTPUWFS3NK37YWfQ', / id-chal /
         2: b64'p3yRYFU4KxwQaHQjJ2RdiQ', / token-bundle /
-        3: b64'mVIOJEQZie8XpYM6MMVSQUiNPH64URnhM9niJ5XHrew'
-        / key auth. digest /
+        3: [-16, b64'mVIOJEQZie8XpYM6MMVSQUiNPH64URnhM9niJ5XHrew']
+        / SHA-256 key auth. digest /
       }
     ]>>
   ]
@@ -123,6 +124,6 @@ INFO:root:Processing element text:
       01                                # unsigned(1)
       00                                # unsigned(0)
       00                                # unsigned(0)
-      58 4c                             # bytes(76)
-         8219ffffa30150743b5abe26133d45854b734adfb6167d0250a77c916055382b1c1068742327645d8903582099520e24441989ef17a5833a30c55241488d3c7eb85119e133d9e22795c7adec # "\x82\u0019\xFF\xFF\xA3\u0001Pt;Z\xBE&\u0013=E\x85KsJ߶\u0016}\u0002P\xA7|\x91`U8+\u001C\u0010ht#'d]\x89\u0003X \x99R\u000E$D\u0019\x89\xEF\u0017\xA5\x83:0\xC5RAH\x8D<~\xB8Q\u0019\xE13\xD9\xE2'\x95ǭ\xEC"
+      58 4e                             # bytes(78)
+         8219ffffa30150743b5abe26133d45854b734adfb6167d0250a77c916055382b1c1068742327645d8903822f582099520e24441989ef17a5833a30c55241488d3c7eb85119e133d9e22795c7adec # "\x82\u0019\xFF\xFF\xA3\u0001Pt;Z\xBE&\u0013=E\x85KsJ߶\u0016}\u0002P\xA7|\x91`U8+\u001C\u0010ht#'d]\x89\u0003\x82/X \x99R\u000E$D\u0019\x89\xEF\u0017\xA5\x83:0\xC5RAH\x8D<~\xB8Q\u0019\xE13\xD9\xE2'\x95ǭ\xEC"
    ff                                   # primitive(*)

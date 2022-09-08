@@ -1,42 +1,42 @@
 INFO:root:Processing element text:
 "LPJNul-wow4m6DsqxbninhsWHlwfp0JecwQzYpOLmCQ"
 *** Look for syntax problems around the [0;39;103m%%%[0m markers:
-=> bstr)
-key-auth-digest = (3 => [
-    alg: alg-id,
-    value: bstr
+ value: bstr
 ])
 alg-list = (4 => [+ alg-id])
-[0;32;103m%%%[0m[0;31;103m%%%[0m# From the IANA registry, only hash algorithms allowed
-alg-id: tstr / int
-bpv7_start = bundle / #6.5
-*** Parse error at 408 upto 408 of 5034 (6380).
+; From the IANA registry, only hash algorithms allowed
+[0;32;103m%%%[0malg-id[0;31;103m%%%[0m: tstr / int
+bpv7_start = bundle / #6.55799(bundle)
+
+; Times before 2000 are invalid
+dtn-time = uint
+*** Parse error at 463 upto 469 of 5034 (6380).
 INFO:root:Processing element text:
 "tPUZNY4ONIk6LxErRFEjVw"
 *** Look for syntax problems around the [0;39;103m%%%[0m markers:
-=> bstr)
-key-auth-digest = (3 => [
-    alg: alg-id,
-    value: bstr
+ value: bstr
 ])
 alg-list = (4 => [+ alg-id])
-[0;32;103m%%%[0m[0;31;103m%%%[0m# From the IANA registry, only hash algorithms allowed
-alg-id: tstr / int
-bpv7_start = bundle / #6.5
-*** Parse error at 408 upto 408 of 5034 (6380).
+; From the IANA registry, only hash algorithms allowed
+[0;32;103m%%%[0malg-id[0;31;103m%%%[0m: tstr / int
+bpv7_start = bundle / #6.55799(bundle)
+
+; Times before 2000 are invalid
+dtn-time = uint
+*** Parse error at 463 upto 469 of 5034 (6380).
 INFO:root:Processing element text:
 "p3yRYFU4KxwQaHQjJ2RdiQ"
 *** Look for syntax problems around the [0;39;103m%%%[0m markers:
-=> bstr)
-key-auth-digest = (3 => [
-    alg: alg-id,
-    value: bstr
+ value: bstr
 ])
 alg-list = (4 => [+ alg-id])
-[0;32;103m%%%[0m[0;31;103m%%%[0m# From the IANA registry, only hash algorithms allowed
-alg-id: tstr / int
-bpv7_start = bundle / #6.5
-*** Parse error at 408 upto 408 of 5034 (6380).
+; From the IANA registry, only hash algorithms allowed
+[0;32;103m%%%[0malg-id[0;31;103m%%%[0m: tstr / int
+bpv7_start = bundle / #6.55799(bundle)
+
+; Times before 2000 are invalid
+dtn-time = uint
+*** Parse error at 463 upto 469 of 5034 (6380).
 INFO:root:Processing element text:
 [_
   [
@@ -58,42 +58,43 @@ INFO:root:Processing element text:
       0xFFFF, / record-type-code /
       { / record-content /
         1: b64'dDtaviYTPUWFS3NK37YWfQ', / id-chal /
-        2: b64'p3yRYFU4KxwQaHQjJ2RdiQ' / token-bundle /
+        2: b64'p3yRYFU4KxwQaHQjJ2RdiQ', / token-bundle /
+        4: [-16] / alg-list: SHA-256 /
       }
     ]>>
   ]
 ]
 *** Look for syntax problems around the [0;39;103m%%%[0m markers:
-=> bstr)
-key-auth-digest = (3 => [
-    alg: alg-id,
-    value: bstr
+ value: bstr
 ])
 alg-list = (4 => [+ alg-id])
-[0;32;103m%%%[0m[0;31;103m%%%[0m# From the IANA registry, only hash algorithms allowed
-alg-id: tstr / int
-bpv7_start = bundle / #6.5
-*** Parse error at 408 upto 408 of 5034 (6380).
+; From the IANA registry, only hash algorithms allowed
+[0;32;103m%%%[0malg-id[0;31;103m%%%[0m: tstr / int
+bpv7_start = bundle / #6.55799(bundle)
+
+; Times before 2000 are invalid
+dtn-time = uint
+*** Parse error at 463 upto 469 of 5034 (6380).
 INFO:root:Processing element text:
 "p3yRYFU4KxwQaHQjJ2RdiQtPUZNY4ONIk6LxErRFEjVw."
 "LPJNul-wow4m6DsqxbninhsWHlwfp0JecwQzYpOLmCQ"
-/usr/lib/ruby/2.7.0/json/common.rb:156:in `parse': 783: unexpected token at '*** can't parse "p3yRYFU4KxwQaHQjJ2RdiQtPUZNY4ONIk6LxErRFEjVw." (JSON::ParserError)
+/var/lib/gems/2.7.0/gems/json_pure-2.6.2/lib/json/common.rb:216:in `parse': 783: unexpected token at '*** can't parse "p3yRYFU4KxwQaHQjJ2RdiQtPUZNY4ONIk6LxErRFEjVw." (JSON::ParserError)
 "LPJNul-wow4m6DsqxbninhsWHlwfp0JecwQzYpOLmCQ"
 *** Expected one of [ \\t\\n\\r], "/", ',' at line 2, column 1 (byte 49) after 
 '
-	from /usr/lib/ruby/2.7.0/json/common.rb:156:in `parse'
-	from /usr/lib/ruby/2.7.0/json/common.rb:335:in `load'
-	from /var/lib/gems/2.7.0/gems/cddl-0.8.27/bin/cddl:99:in `rescue in block in <top (required)>'
-	from /var/lib/gems/2.7.0/gems/cddl-0.8.27/bin/cddl:99:in `block in <top (required)>'
-	from /var/lib/gems/2.7.0/gems/cddl-0.8.27/bin/cddl:94:in `each'
-	from /var/lib/gems/2.7.0/gems/cddl-0.8.27/bin/cddl:94:in `<top (required)>'
+	from /var/lib/gems/2.7.0/gems/json_pure-2.6.2/lib/json/common.rb:216:in `parse'
+	from /var/lib/gems/2.7.0/gems/json_pure-2.6.2/lib/json/common.rb:569:in `load'
+	from /var/lib/gems/2.7.0/gems/cddl-0.9.1/bin/cddl:99:in `rescue in block in <top (required)>'
+	from /var/lib/gems/2.7.0/gems/cddl-0.9.1/bin/cddl:99:in `block in <top (required)>'
+	from /var/lib/gems/2.7.0/gems/cddl-0.9.1/bin/cddl:94:in `each'
+	from /var/lib/gems/2.7.0/gems/cddl-0.9.1/bin/cddl:94:in `<top (required)>'
 	from /usr/local/bin/cddl:23:in `load'
 	from /usr/local/bin/cddl:23:in `<main>'
-/var/lib/gems/2.7.0/gems/cbor-diag-0.7.6/lib/cbor-pure.rb:310:in `decode_item_final': extra bytes follow after a deserialized object of 1 bytes (RuntimeError)
-	from /var/lib/gems/2.7.0/gems/cbor-diag-0.7.6/lib/cbor-pure.rb:88:in `decode'
-	from /var/lib/gems/2.7.0/gems/cddl-0.8.27/bin/cddl:99:in `block in <top (required)>'
-	from /var/lib/gems/2.7.0/gems/cddl-0.8.27/bin/cddl:94:in `each'
-	from /var/lib/gems/2.7.0/gems/cddl-0.8.27/bin/cddl:94:in `<top (required)>'
+/var/lib/gems/2.7.0/gems/cbor-diag-0.8.1/lib/cbor-pure.rb:310:in `decode_item_final': extra bytes follow after a deserialized object of 1 bytes (RuntimeError)
+	from /var/lib/gems/2.7.0/gems/cbor-diag-0.8.1/lib/cbor-pure.rb:88:in `decode'
+	from /var/lib/gems/2.7.0/gems/cddl-0.9.1/bin/cddl:99:in `block in <top (required)>'
+	from /var/lib/gems/2.7.0/gems/cddl-0.9.1/bin/cddl:94:in `each'
+	from /var/lib/gems/2.7.0/gems/cddl-0.9.1/bin/cddl:94:in `<top (required)>'
 	from /usr/local/bin/cddl:23:in `load'
 	from /usr/local/bin/cddl:23:in `<main>'
 INFO:root:Processing element text:
@@ -118,20 +119,20 @@ INFO:root:Processing element text:
       { / record-content /
         1: b64'dDtaviYTPUWFS3NK37YWfQ', / id-chal /
         2: b64'p3yRYFU4KxwQaHQjJ2RdiQ', / token-bundle /
-        3: b64'mVIOJEQZie8XpYM6MMVSQUiNPH64URnhM9niJ5XHrew'
-        / key auth. digest /
+        3: [-16, b64'mVIOJEQZie8XpYM6MMVSQUiNPH64URnhM9niJ5XHrew']
+        / SHA-256 key auth. digest /
       }
     ]>>
   ]
 ]
 *** Look for syntax problems around the [0;39;103m%%%[0m markers:
-=> bstr)
-key-auth-digest = (3 => [
-    alg: alg-id,
-    value: bstr
+ value: bstr
 ])
 alg-list = (4 => [+ alg-id])
-[0;32;103m%%%[0m[0;31;103m%%%[0m# From the IANA registry, only hash algorithms allowed
-alg-id: tstr / int
-bpv7_start = bundle / #6.5
-*** Parse error at 408 upto 408 of 5034 (6380).
+; From the IANA registry, only hash algorithms allowed
+[0;32;103m%%%[0malg-id[0;31;103m%%%[0m: tstr / int
+bpv7_start = bundle / #6.55799(bundle)
+
+; Times before 2000 are invalid
+dtn-time = uint
+*** Parse error at 463 upto 469 of 5034 (6380).

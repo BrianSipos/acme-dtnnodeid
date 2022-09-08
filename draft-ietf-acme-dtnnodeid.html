@@ -12,24 +12,23 @@ This document specifies an extension to the Automated Certificate Management Env
 The DTN Node ID is encoded as a certificate Subject Alternative Name (SAN) of type otherName with a name form of  BundleEID  and as an ACME Identifier type "bundleEID".
        
     ' name="description">
-<meta content="xml2rfc 3.12.3" name="generator">
+<meta content="xml2rfc 3.14.2" name="generator">
 <meta content="ACME" name="keyword">
 <meta content="DTN" name="keyword">
-<meta content="draft-ietf-acme-dtnnodeid-09" name="ietf.draft">
+<meta content="draft-ietf-acme-dtnnodeid-10" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.12.3
+  xml2rfc 3.14.2
     Python 3.8.10
     appdirs 1.4.4
     ConfigArgParse 1.5.3
-    google-i18n-address 2.5.0
+    google-i18n-address 2.5.2
     html5lib 1.1
     intervaltree 3.1.0
-    Jinja2 2.11.3
+    Jinja2 3.1.2
     kitchen 1.2.6
-    lxml 4.8.0
-    MarkupSafe 2.0.1
+    lxml 4.9.1
+    MarkupSafe 2.1.1
     pycountry 22.3.5
-    pyflakes 2.4.0
     PyYAML 5.3.1
     requests 2.22.0
     setuptools 45.2.0
@@ -175,11 +174,8 @@ svg {
   margin: 1em 0;
 }
 .alignCenter > *:first-child {
-  border: none;
-  /* this isn't optimal, but it's an existence proof.  PrinceXML doesn't
-     support flexbox yet.
-  */
   display: table;
+  border: none;
   margin: 0 auto;
 }
 
@@ -659,6 +655,9 @@ hr.addr {
   figure {
     overflow: scroll;
   }
+  pre.breakable {
+    break-inside: auto;
+  }
   h1, h2, h3, h4, h5, h6 {
     page-break-after: avoid;
   }
@@ -1070,6 +1069,9 @@ table {
 td {
   border-top: 1px solid #ddd;
 }
+tr {
+  break-inside: avoid;
+}
 tr:nth-child(2n+1) > td {
   background-color: #f8f8f8;
 }
@@ -1190,11 +1192,11 @@ li > p:last-of-type {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">ACME DTN Node ID</td>
-<td class="right">March 2022</td>
+<td class="right">September 2022</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Sipos</td>
-<td class="center">Expires 21 September 2022</td>
+<td class="center">Expires 12 March 2023</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1204,15 +1206,15 @@ li > p:last-of-type {
 <dt class="label-workgroup">Workgroup:</dt>
 <dd class="workgroup">Automated Certificate Management Environment</dd>
 <dt class="label-internet-draft">Internet-Draft:</dt>
-<dd class="internet-draft">draft-ietf-acme-dtnnodeid-09</dd>
+<dd class="internet-draft">draft-ietf-acme-dtnnodeid-10</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2022-03-20" class="published">20 March 2022</time>
+<time datetime="2022-09-08" class="published">8 September 2022</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Experimental</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2022-09-21">21 September 2022</time></dd>
+<dd class="expires"><time datetime="2023-03-12">12 March 2023</time></dd>
 <dt class="label-authors">Author:</dt>
 <dd class="authors">
 <div class="author">
@@ -1248,7 +1250,7 @@ The DTN Node ID is encoded as a certificate Subject Alternative Name (SAN) of ty
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 21 September 2022.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 12 March 2023.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1427,7 +1429,7 @@ The DTN Node ID is encoded as a certificate Subject Alternative Name (SAN) of ty
 <a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
       </h2>
 <p id="section-1-1">
-Although the original purpose of the Automatic Certificate Management Environment (ACME) <span>[<a href="#RFC8555" class="xref">RFC8555</a>]</span> was to allow Public Key Infrastructure Using X.509 (PKIX) certificate authorities to validate network domain names of clients, the same mechanism can be used to validate any of the subject claims supported by the PKIX profile <span>[<a href="#RFC5280" class="xref">RFC5280</a>]</span>.<a href="#section-1-1" class="pilcrow">¶</a></p>
+Although the original purpose of the Automatic Certificate Management Environment (ACME) <span>[<a href="#RFC8555" class="xref">RFC8555</a>]</span> was to allow Public Key Infrastructure Using X.509 (PKIX) Certification Authorities (CAs) to validate network domain names of clients, the same mechanism can be used to validate any of the subject claims supported by the PKIX profile <span>[<a href="#RFC5280" class="xref">RFC5280</a>]</span>.<a href="#section-1-1" class="pilcrow">¶</a></p>
 <p id="section-1-2">
 In the case of this specification, the claim being validated is a Subject Alternative Name (SAN) of type otherName with a name form of <code>BundleEID</code>, which used to represent an Endpoint ID (EID) for a Delay-Tolerant Networking (DTN) bundle.
 Currently the URI schemes "dtn" and "ipn" as defined in <span>[<a href="#RFC9171" class="xref">RFC9171</a>]</span> are valid for an Endpoint ID.
@@ -1446,41 +1448,45 @@ The scope and behavior of this validation mechanism is similar to that of secure
 <a href="#section-1.1" class="section-number selfRef">1.1. </a><a href="#name-scope" class="section-name selfRef">Scope</a>
         </h3>
 <p id="section-1.1-1">
+The emergent properties of DTN naming and BP security are still being developed and explored, especially between different organizational and administrative domains, so the "experimental" status of this document is related more to the practical utility of this kind of Node ID validation than to the validation method itself.
+The original use case is in large or cross-organizational networks where a BP node can be trusted to be allocated and added to a network, but the method of certificate validation and issuance is desired to be in-band on the network rather than configured solely through a side channel using bespoke or manual protocols.
+Because this mechanism is so similar to other validation methods, specifically <span>[<a href="#RFC8823" class="xref">RFC8823</a>]</span>, it is expected to have few implementation difficulties or interoperability issues.<a href="#section-1.1-1" class="pilcrow">¶</a></p>
+<p id="section-1.1-2">
 This document describes the ACME messages, BPv7 payloads, and BPSec requirements needed to validate Node ID ownership.
-This document does not address:<a href="#section-1.1-1" class="pilcrow">¶</a></p>
+This document does not address:<a href="#section-1.1-2" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-1.1-2.1">
+<li class="normal" id="section-1.1-3.1">
 Mechanisms for communication between ACME client or ACME server and their associated BP agent(s).
-This document only describes exchanges between ACME client--server pairs and between their BP agents.<a href="#section-1.1-2.1" class="pilcrow">¶</a>
+This document only describes exchanges between ACME client--server pairs and between their BP agents.<a href="#section-1.1-3.1" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-1.1-2.2">
+          <li class="normal" id="section-1.1-3.2">
 Specific BP extension blocks or BPSec security contexts necessary to fulfill the security requirements of this protocol.
-The exact security context needed, and their parameters, are network-specific.<a href="#section-1.1-2.2" class="pilcrow">¶</a>
+The exact security context needed, and their parameters, are network-specific.<a href="#section-1.1-3.2" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-1.1-2.3">
-Policies or mechanisms for defining or configuring bundle integrity gateways, or trusting integrity gateways on an individual entity or across a network.<a href="#section-1.1-2.3" class="pilcrow">¶</a>
+          <li class="normal" id="section-1.1-3.3">
+Policies or mechanisms for defining or configuring bundle integrity gateways, or trusting integrity gateways on an individual entity or across a network.<a href="#section-1.1-3.3" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-1.1-2.4">
+          <li class="normal" id="section-1.1-3.4">
 Mechanisms for locating or identifying other bundle entities (peers) within a network or across an internet.
-The mapping of Node ID to potential convergence layer (CL) protocol and network address is left to implementation and configuration of the BP Agent and its various potential routing strategies.<a href="#section-1.1-2.4" class="pilcrow">¶</a>
+The mapping of Node ID to potential convergence layer (CL) protocol and network address is left to implementation and configuration of the BP Agent and its various potential routing strategies.<a href="#section-1.1-3.4" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-1.1-2.5">
+          <li class="normal" id="section-1.1-3.5">
 Logic for routing bundles along a path toward a bundle's endpoint.
-This protocol is involved only in creating bundles at a source and handling them at a destination.<a href="#section-1.1-2.5" class="pilcrow">¶</a>
+This protocol is involved only in creating bundles at a source and handling them at a destination.<a href="#section-1.1-3.5" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-1.1-2.6">
+          <li class="normal" id="section-1.1-3.6">
 Logic for performing rate control and congestion control of bundle transfers.
-The ACME server is responsible for rate control of validation requests.<a href="#section-1.1-2.6" class="pilcrow">¶</a>
+The ACME server is responsible for rate control of validation requests.<a href="#section-1.1-3.6" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-1.1-2.7">
-Policies or mechanisms for an ACME server to choose a prioritized list of acceptable hash algorithms, or for an ACME client to choose a set of acceptable hash algorithms.<a href="#section-1.1-2.7" class="pilcrow">¶</a>
+          <li class="normal" id="section-1.1-3.7">
+Policies or mechanisms for an ACME server to choose a prioritized list of acceptable hash algorithms, or for an ACME client to choose a set of acceptable hash algorithms.<a href="#section-1.1-3.7" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-1.1-2.8">
-Policies or mechanisms for provisioning, deploying, or accessing certificates and private keys; deploying or accessing certificate revocation lists (CRLs); or configuring security parameters on an individual entity or across a network.<a href="#section-1.1-2.8" class="pilcrow">¶</a>
+          <li class="normal" id="section-1.1-3.8">
+Policies or mechanisms for provisioning, deploying, or accessing certificates and private keys; deploying or accessing certificate revocation lists (CRLs); or configuring security parameters on an individual entity or across a network.<a href="#section-1.1-3.8" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-1.1-2.9">
+          <li class="normal" id="section-1.1-3.9">
 Policies or mechanisms for an ACME server to handle mixed-use certificate requests.
-This specification is focused only on single-use DTN-specific PKIX profiles.<a href="#section-1.1-2.9" class="pilcrow">¶</a>
+This specification is focused only on single-use DTN-specific PKIX profiles.<a href="#section-1.1-3.9" class="pilcrow">¶</a>
 </li>
         </ul>
 </section>
@@ -1937,7 +1943,7 @@ Each algorithim identifier <span class="bcp14">SHALL</span> correspond to the Va
 This structure is part of the extension CDDL in <a href="#sec-cddl" class="xref">Appendix A</a>.
 An example full Challenge Bundle is included in <a href="#sec-example-bundle-challenge" class="xref">Appendix B.1</a><a href="#section-3.3-4" class="pilcrow">¶</a></p>
 <p id="section-3.3-5">
-For interoperability, entities which use this validation method <span class="bcp14">SHALL</span> support the hash algorithm "SHA-256" of <span>[<a href="#I-D.ietf-cose-hash-algs" class="xref">I-D.ietf-cose-hash-algs</a>]</span>, but can use other hash algorithms.
+For interoperability, entities which use this validation method <span class="bcp14">SHALL</span> support the hash algorithm "SHA-256" of <span>[<a href="#RFC9054" class="xref">RFC9054</a>]</span>, but can use other hash algorithms.
 This requirement allows for different implementations to be configured to use an interoperable algorithm, but does not preclude the use of other algorithms.<a href="#section-3.3-5" class="pilcrow">¶</a></p>
 <p id="section-3.3-6">
 If the BP agent generating a Challenge Bundle does not have a well-synchronized clock or the agent responding to the challenge is expected to not have a well-synchronized clock, the bundle <span class="bcp14">SHALL</span> include a Bundle Age extension block.<a href="#section-3.3-6" class="pilcrow">¶</a></p>
@@ -2121,7 +2127,7 @@ The Security Source of this BIB <span class="bcp14">SHALL</span> be either the b
 The ultimate purpose of this ACME validation is to allow a CA to issue certificates following the profiles of <span><a href="https://rfc-editor.org/rfc/rfc9174#section-4.4.2" class="relref">Section 4.4.2</a> of [<a href="#RFC9174" class="xref">RFC9174</a>]</span>, <span>[<a href="#I-D.sipos-dtn-udpcl" class="xref">I-D.sipos-dtn-udpcl</a>]</span>, and <span>[<a href="#I-D.bsipos-dtn-bpsec-cose" class="xref">I-D.bsipos-dtn-bpsec-cose</a>]</span>.
 These purposes are referred to here as bundle security certificates.<a href="#section-5-1" class="pilcrow">¶</a></p>
 <p id="section-5-2">
-One defining aspect of bundle security certificates is the Extended Key Usage key purpose <code>id-kp-bundleSecurity</code> of <span>[<a href="#IANA-SMI" class="xref">IANA-SMI</a>]</span>.
+One defining aspect of bundle security certificates is the Extended Key Usage key purpose <code>id-kp-bundleSecurity</code> of <span>[<a href="#IANA-SMI" class="xref">IANA-SMI</a>]</span>, as defined in <span><a href="https://rfc-editor.org/rfc/rfc9174#section-4.4.2.1" class="relref">Section 4.4.2.1</a> of [<a href="#RFC9174" class="xref">RFC9174</a>]</span>.
 When requesting a certificate which includes a Node ID SAN, the CSR <span class="bcp14">SHOULD</span> include an Extended Key Usage of <code>id-kp-bundleSecurity</code>.
 When a bundle security certificate is issued based on a validated Node ID SAN, the certificate <span class="bcp14">SHALL</span> include an Extended Key Usage of <code>id-kp-bundleSecurity</code>.<a href="#section-5-2" class="pilcrow">¶</a></p>
 <div id="sec-multiple-claims">
@@ -2142,7 +2148,8 @@ The specific use case of <span>[<a href="#RFC9174" class="xref">RFC9174</a>]</sp
 <a href="#section-5.2" class="section-number selfRef">5.2. </a><a href="#name-generating-encryption-only-" class="section-name selfRef">Generating Encryption-only or Signing-only Bundle Security Certificates</a>
         </h3>
 <p id="section-5.2-1">
-ACME extensions specified in this document can be used to request encryption-only or signing-only bundle security certificates.<a href="#section-5.2-1" class="pilcrow">¶</a></p>
+ACME extensions specified in this document can be used to request encryption-only or signing-only bundle security certificates.
+The validity of a request for either a restricted-use or unrestricted-use certificate is dependent on both CA policy to issue such certificates as well as constraints based on the requested key and algorithm types.<a href="#section-5.2-1" class="pilcrow">¶</a></p>
 <p id="section-5.2-2">
 In order to request signing only bundle security certificate, the CSR <span class="bcp14">SHALL</span> include the key usage extension with digitalSignature and/or nonRepudiation bits set and no other bits set.<a href="#section-5.2-2" class="pilcrow">¶</a></p>
 <p id="section-5.2-3">
@@ -2433,17 +2440,17 @@ Within the "Bundle Protocol" registry <span>[<a href="#IANA-BP" class="xref">IAN
         <dd>
 <span class="refAuthor">Birkholz, H.</span>, <span class="refAuthor">Vigano, C.</span>, and <span class="refAuthor">C. Bormann</span>, <span class="refTitle">"Concise Data Definition Language (CDDL): A Notational Convention to Express Concise Binary Object Representation (CBOR) and JSON Data Structures"</span>, <span class="seriesInfo">RFC 8610</span>, <span class="seriesInfo">DOI 10.17487/RFC8610</span>, <time datetime="2019-06" class="refDate">June 2019</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8610">https://www.rfc-editor.org/info/rfc8610</a>&gt;</span>. </dd>
 <dd class="break"></dd>
+<dt id="RFC9054">[RFC9054]</dt>
+        <dd>
+<span class="refAuthor">Schaad, J.</span>, <span class="refTitle">"CBOR Object Signing and Encryption (COSE): Hash Algorithms"</span>, <span class="seriesInfo">RFC 9054</span>, <span class="seriesInfo">DOI 10.17487/RFC9054</span>, <time datetime="2022-08" class="refDate">August 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc9054">https://www.rfc-editor.org/info/rfc9054</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="RFC9171">[RFC9171]</dt>
         <dd>
-<span class="refAuthor">Burleigh, S.</span>, <span class="refAuthor">Fall, K.</span>, <span class="refAuthor">Birrane, E.</span>, and <span class="refAuthor">III.</span>, <span class="refTitle">"Bundle Protocol Version 7"</span>, <span class="seriesInfo">RFC 9171</span>, <span class="seriesInfo">DOI 10.17487/RFC9171</span>, <time datetime="2022-01" class="refDate">January 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc9171">https://www.rfc-editor.org/info/rfc9171</a>&gt;</span>. </dd>
+<span class="refAuthor">Burleigh, S.</span>, <span class="refAuthor">Fall, K.</span>, <span class="refAuthor">Birrane, E.</span>, and <span class="refAuthor">III</span>, <span class="refTitle">"Bundle Protocol Version 7"</span>, <span class="seriesInfo">RFC 9171</span>, <span class="seriesInfo">DOI 10.17487/RFC9171</span>, <time datetime="2022-01" class="refDate">January 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc9171">https://www.rfc-editor.org/info/rfc9171</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC9172">[RFC9172]</dt>
-        <dd>
-<span class="refAuthor">Birrane, E.</span>, <span class="refAuthor">III.</span>, and <span class="refAuthor">K. McKeever</span>, <span class="refTitle">"Bundle Protocol Security (BPSec)"</span>, <span class="seriesInfo">RFC 9172</span>, <span class="seriesInfo">DOI 10.17487/RFC9172</span>, <time datetime="2022-01" class="refDate">January 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc9172">https://www.rfc-editor.org/info/rfc9172</a>&gt;</span>. </dd>
-<dd class="break"></dd>
-<dt id="I-D.ietf-cose-hash-algs">[I-D.ietf-cose-hash-algs]</dt>
       <dd>
-<span class="refAuthor">Schaad, J.</span>, <span class="refTitle">"CBOR Object Signing and Encryption (COSE): Hash Algorithms"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-cose-hash-algs-09</span>, <time datetime="2020-09-14" class="refDate">14 September 2020</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-cose-hash-algs-09">https://datatracker.ietf.org/doc/html/draft-ietf-cose-hash-algs-09</a>&gt;</span>. </dd>
+<span class="refAuthor">Birrane, E.</span>, <span class="refAuthor">III</span>, and <span class="refAuthor">K. McKeever</span>, <span class="refTitle">"Bundle Protocol Security (BPSec)"</span>, <span class="seriesInfo">RFC 9172</span>, <span class="seriesInfo">DOI 10.17487/RFC9172</span>, <time datetime="2022-01" class="refDate">January 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc9172">https://www.rfc-editor.org/info/rfc9172</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>
@@ -2478,19 +2485,19 @@ Within the "Bundle Protocol" registry <span>[<a href="#IANA-BP" class="xref">IAN
 <dd class="break"></dd>
 <dt id="I-D.ietf-dtn-bibect">[I-D.ietf-dtn-bibect]</dt>
         <dd>
-<span class="refAuthor">Burleigh, S.</span>, <span class="refTitle">"Bundle-in-Bundle Encapsulation"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-dtn-bibect-03</span>, <time datetime="2020-02-18" class="refDate">18 February 2020</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-dtn-bibect-03">https://datatracker.ietf.org/doc/html/draft-ietf-dtn-bibect-03</a>&gt;</span>. </dd>
+<span class="refAuthor">Burleigh, S.</span>, <span class="refTitle">"Bundle-in-Bundle Encapsulation"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-dtn-bibect-03</span>, <time datetime="2020-02-18" class="refDate">18 February 2020</time>, <span>&lt;<a href="https://www.ietf.org/archive/id/draft-ietf-dtn-bibect-03.txt">https://www.ietf.org/archive/id/draft-ietf-dtn-bibect-03.txt</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.sipos-dtn-udpcl">[I-D.sipos-dtn-udpcl]</dt>
         <dd>
-<span class="refAuthor">Sipos, B.</span>, <span class="refTitle">"Delay-Tolerant Networking UDP Convergence Layer Protocol"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-sipos-dtn-udpcl-01</span>, <time datetime="2021-03-26" class="refDate">26 March 2021</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-sipos-dtn-udpcl-01">https://datatracker.ietf.org/doc/html/draft-sipos-dtn-udpcl-01</a>&gt;</span>. </dd>
+<span class="refAuthor">Sipos, B.</span>, <span class="refTitle">"Delay-Tolerant Networking UDP Convergence Layer Protocol"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-sipos-dtn-udpcl-01</span>, <time datetime="2021-03-26" class="refDate">26 March 2021</time>, <span>&lt;<a href="https://www.ietf.org/archive/id/draft-sipos-dtn-udpcl-01.txt">https://www.ietf.org/archive/id/draft-sipos-dtn-udpcl-01.txt</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.sipos-dtn-bpv7-admin-iana">[I-D.sipos-dtn-bpv7-admin-iana]</dt>
         <dd>
-<span class="refAuthor">Sipos, B.</span>, <span class="refTitle">"Bundle Protocol Version 7 Administrative Record Types Registry"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-sipos-dtn-bpv7-admin-iana-01</span>, <time datetime="2022-03-02" class="refDate">2 March 2022</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-sipos-dtn-bpv7-admin-iana-01">https://datatracker.ietf.org/doc/html/draft-sipos-dtn-bpv7-admin-iana-01</a>&gt;</span>. </dd>
+<span class="refAuthor">Sipos, B.</span>, <span class="refTitle">"Bundle Protocol Version 7 Administrative Record Types Registry"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-sipos-dtn-bpv7-admin-iana-01</span>, <time datetime="2022-03-02" class="refDate">2 March 2022</time>, <span>&lt;<a href="https://www.ietf.org/archive/id/draft-sipos-dtn-bpv7-admin-iana-01.txt">https://www.ietf.org/archive/id/draft-sipos-dtn-bpv7-admin-iana-01.txt</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.bsipos-dtn-bpsec-cose">[I-D.bsipos-dtn-bpsec-cose]</dt>
         <dd>
-<span class="refAuthor">Sipos, B.</span>, <span class="refTitle">"DTN Bundle Protocol Security COSE Security Context"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-bsipos-dtn-bpsec-cose-06</span>, <time datetime="2021-06-03" class="refDate">3 June 2021</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-bsipos-dtn-bpsec-cose-06">https://datatracker.ietf.org/doc/html/draft-bsipos-dtn-bpsec-cose-06</a>&gt;</span>. </dd>
+<span class="refAuthor">Sipos, B.</span>, <span class="refTitle">"DTN Bundle Protocol Security COSE Security Context"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-bsipos-dtn-bpsec-cose-06</span>, <time datetime="2021-06-03" class="refDate">3 June 2021</time>, <span>&lt;<a href="https://www.ietf.org/archive/id/draft-bsipos-dtn-bpsec-cose-06.txt">https://www.ietf.org/archive/id/draft-bsipos-dtn-bpsec-cose-06.txt</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="github-dtn-demo-agent">[github-dtn-demo-agent]</dt>
         <dd>
@@ -2515,7 +2522,7 @@ Within the "Bundle Protocol" registry <span>[<a href="#IANA-BP" class="xref">IAN
 <p id="appendix-A-1">
 [NOTE to the RFC Editor: The "0xFFFF" in this CDDL is replaced by the "ACME Node ID Validation" administrative record type code.]<a href="#appendix-A-1" class="pilcrow">¶</a></p>
 <p id="appendix-A-2" class="keepWithNext">
-The CDDL extension of BP <span>[<a href="#RFC9171" class="xref">RFC9171</a>]</span> for the ACME bundles is:<a href="#appendix-A-2" class="pilcrow">¶</a></p>
+The normative CDDL extension of BP <span>[<a href="#RFC9171" class="xref">RFC9171</a>]</span> for the ACME bundles is:<a href="#appendix-A-2" class="pilcrow">¶</a></p>
 <div id="appendix-A-3">
 <pre class="lang-cddl sourcecode">
 ; All ACME records have the same structure
@@ -2533,7 +2540,7 @@ key-auth-digest = (3 =&gt; [
     value: bstr
 ])
 alg-list = (4 =&gt; [+ alg-id])
-# From the IANA registry, only hash algorithms allowed
+; From the IANA registry, only hash algorithms allowed
 alg-id: tstr / int
 </pre><a href="#appendix-A-3" class="pilcrow">¶</a>
 </div>
@@ -2602,7 +2609,8 @@ This challenge requires that the ACME client respond within a 60 second time win
       0xFFFF, / record-type-code /
       { / record-content /
         1: b64'dDtaviYTPUWFS3NK37YWfQ', / id-chal /
-        2: b64'p3yRYFU4KxwQaHQjJ2RdiQ' / token-bundle /
+        2: b64'p3yRYFU4KxwQaHQjJ2RdiQ', / token-bundle /
+        4: [-16] / alg-list: SHA-256 /
       }
     ]&gt;&gt;
   ]
@@ -2656,8 +2664,8 @@ This response indicates that there is 30 seconds remaining in the response time 
       { / record-content /
         1: b64'dDtaviYTPUWFS3NK37YWfQ', / id-chal /
         2: b64'p3yRYFU4KxwQaHQjJ2RdiQ', / token-bundle /
-        3: b64'mVIOJEQZie8XpYM6MMVSQUiNPH64URnhM9niJ5XHrew'
-        / key auth. digest /
+        3: [-16, b64'mVIOJEQZie8XpYM6MMVSQUiNPH64URnhM9niJ5XHrew']
+        / SHA-256 key auth. digest /
       }
     ]&gt;&gt;
   ]

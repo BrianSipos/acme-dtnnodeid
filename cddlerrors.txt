@@ -1,11 +1,11 @@
 *** Look for syntax problems around the [0;39;103m%%%[0m markers:
-=> bstr)
-key-auth-digest = (3 => [
-    alg: alg-id,
-    value: bstr
+ value: bstr
 ])
 alg-list = (4 => [+ alg-id])
-[0;32;103m%%%[0m[0;31;103m%%%[0m# From the IANA registry, only hash algorithms allowed
-alg-id: tstr / int
-bpv7_start = bundle / #6.5
-*** Parse error at 408 upto 408 of 5034 (6380).
+; From the IANA registry, only hash algorithms allowed
+[0;32;103m%%%[0malg-id[0;31;103m%%%[0m: tstr / int
+bpv7_start = bundle / #6.55799(bundle)
+
+; Times before 2000 are invalid
+dtn-time = uint
+*** Parse error at 463 upto 469 of 5034 (6380).

@@ -17,5 +17,5 @@ key-auth-digest = (3 => [
     value: bstr
 ])
 alg-list = (4 => [+ alg-id])
-# From the IANA registry, only hash algorithms allowed
+; From the IANA registry, only hash algorithms allowed
 alg-id: tstr / int
