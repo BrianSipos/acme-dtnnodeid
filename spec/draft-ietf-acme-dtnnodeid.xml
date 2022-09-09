@@ -54,15 +54,12 @@ Because a single order can contain multiple identifiers of multiple types, there
 Once a certificate is issued for a Node ID, how the ACME client configures the Bundle Protocol (BP) agent with the new certificate is an implementation matter.
       </t>
       <t>
-The scope and behavior of this validation mechanism is similar to that of secured email validation of <xref target="RFC8823"/>.
-      </t>
-      <section>
-        <name>Scope</name>
-        <t>
 The emergent properties of DTN naming and BP security are still being developed and explored, especially between different organizational and administrative domains, so the "experimental" status of this document is related more to the practical utility of this kind of Node ID validation than to the validation method itself.
 The original use case is in large or cross-organizational networks where a BP node can be trusted to be allocated and added to a network, but the method of certificate validation and issuance is desired to be in-band on the network rather than configured solely through a side channel using bespoke or manual protocols.
 Because this mechanism is so similar to other validation methods, specifically <xref target="RFC8823"/>, it is expected to have few implementation difficulties or interoperability issues.
-        </t>
+      </t>
+      <section>
+        <name>Scope</name>
         <t>
 This document describes the ACME messages, BPv7 payloads, and BPSec requirements needed to validate Node ID ownership.
 This document does not address:
