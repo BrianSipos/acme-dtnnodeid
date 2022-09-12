@@ -1196,7 +1196,7 @@ li > p:last-of-type {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Sipos</td>
-<td class="center">Expires 13 March 2023</td>
+<td class="center">Expires 16 March 2023</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1209,12 +1209,12 @@ li > p:last-of-type {
 <dd class="internet-draft">draft-ietf-acme-dtnnodeid-10</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2022-09-09" class="published">9 September 2022</time>
+<time datetime="2022-09-12" class="published">12 September 2022</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Experimental</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2023-03-13">13 March 2023</time></dd>
+<dd class="expires"><time datetime="2023-03-16">16 March 2023</time></dd>
 <dt class="label-authors">Author:</dt>
 <dd class="authors">
 <div class="author">
@@ -1250,7 +1250,7 @@ The DTN Node ID is encoded as a certificate Subject Alternative Name (SAN) of ty
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 13 March 2023.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 16 March 2023.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1441,10 +1441,12 @@ A "bundleEID" claim can be part of a pre-authorization or as one of the authoriz
 Once an ACME server validates a Node ID, either as a pre-authorization of the "bundleEID" or as one of the authorizations of an order containing a "bundleEID", the client can finalize the order using an associated certificate signing request (CSR).
 Because a single order can contain multiple identifiers of multiple types, there can be operational issues for a client attempting to, and possibly failing to, validate those multiple identifiers as described in <a href="#sec-multiple-claims" class="xref">Section 5.1</a>.
 Once a certificate is issued for a Node ID, how the ACME client configures the Bundle Protocol (BP) agent with the new certificate is an implementation matter.<a href="#section-1-4" class="pilcrow">¶</a></p>
-<p id="section-1-5">
+<aside id="section-1-5">
+        <p id="section-1-5.1">
 The emergent properties of DTN naming and BP security are still being developed and explored, especially between different organizational and administrative domains, so the "experimental" status of this document is related more to the practical utility of this kind of Node ID validation than to the validation method itself.
 The original use case is in large or cross-organizational networks where a BP node can be trusted to be allocated and added to a network, but the method of certificate validation and issuance is desired to be in-band on the network rather than configured solely through a side channel using bespoke or manual protocols.
-Because this mechanism is so similar to other validation methods, specifically <span>[<a href="#RFC8823" class="xref">RFC8823</a>]</span>, it is expected to have few implementation difficulties or interoperability issues.<a href="#section-1-5" class="pilcrow">¶</a></p>
+Because this mechanism is so similar to other validation methods, specifically <span>[<a href="#RFC8823" class="xref">RFC8823</a>]</span>, it is expected to have few implementation difficulties or interoperability issues.<a href="#section-1-5.1" class="pilcrow">¶</a></p>
+</aside>
 <section id="section-1.1">
         <h3 id="name-scope">
 <a href="#section-1.1" class="section-number selfRef">1.1. </a><a href="#name-scope" class="section-name selfRef">Scope</a>
@@ -1931,7 +1933,7 @@ See <span>[<a href="#RFC4086" class="xref">RFC4086</a>]</span> for additional in
 One pair <span class="bcp14">SHALL</span> consist of key 4 with value of an array containing acceptable hash algorithm identifiers.
 The array <span class="bcp14">SHALL</span> be ordered in descending preference, with the first item being the most preferred.
 The array <span class="bcp14">SHALL</span> contain at least one item.
-Each algorithim identifier <span class="bcp14">SHALL</span> correspond to the Value column (integer or text string) of the algorithm registered in the "COSE Algorithms" registry of <span>[<a href="#IANA-COSE" class="xref">IANA-COSE</a>]</span>.<a href="#section-3.3-3.12.2.3" class="pilcrow">¶</a>
+Each algorithm identifier <span class="bcp14">SHALL</span> correspond to the Value column (integer or text string) of the algorithm registered in the "COSE Algorithms" registry of <span>[<a href="#IANA-COSE" class="xref">IANA-COSE</a>]</span>.<a href="#section-3.3-3.12.2.3" class="pilcrow">¶</a>
 </li>
             </ul>
 </dd>
@@ -2026,7 +2028,7 @@ One pair <span class="bcp14">SHALL</span> consist of key 2 with value of ACME ch
 </li>
               <li class="normal" id="section-3.4-3.12.2.3">
 One pair <span class="bcp14">SHALL</span> consist of key 3 with value of a two-element array containing the pair of a hash algorithm identifier and the hash byte string.
-The algorithim identifier <span class="bcp14">SHALL</span> correspond to the Value column (integer or text string) of the algorithm registered in the "COSE Algorithms" registry of <span>[<a href="#IANA-COSE" class="xref">IANA-COSE</a>]</span>.<a href="#section-3.4-3.12.2.3" class="pilcrow">¶</a>
+The algorithm identifier <span class="bcp14">SHALL</span> correspond to the Value column (integer or text string) of the algorithm registered in the "COSE Algorithms" registry of <span>[<a href="#IANA-COSE" class="xref">IANA-COSE</a>]</span>.<a href="#section-3.4-3.12.2.3" class="pilcrow">¶</a>
 </li>
             </ul>
 </dd>
@@ -2081,18 +2083,25 @@ The lack of a response within the expected response interval, as defined in <a h
 <a href="#section-3.5" class="section-number selfRef">3.5. </a><a href="#name-multi-perspective-validatio" class="section-name selfRef">Multi-Perspective Validation</a>
         </h3>
 <p id="section-3.5-1">
-To avoid possible on-path attacks in certain networks, an ACME server can perform a single validation using multiple challenge bundle sources or via multiple routing paths.
+To avoid on-path attacks in certain networks, an ACME server can perform a single validation using multiple challenge bundle sources or via multiple routing paths.
 This technique is called multi-perspective validation as recommended in <span><a href="https://rfc-editor.org/rfc/rfc8555#section-10.2" class="relref">Section 10.2</a> of [<a href="#RFC8555" class="xref">RFC8555</a>]</span> and an implementation used by Let's Encrypt is described in <span>[<a href="#LE-multi-perspective" class="xref">LE-multi-perspective</a>]</span>.<a href="#section-3.5-1" class="pilcrow">¶</a></p>
-<p id="section-3.5-2">
+<aside id="section-3.5-2">
+          <p id="section-3.5-2.1">
+Part of the experimental nature of this validation method, and the bundle protocol more generally, is understanding its vulnerability to different kinds of on-path attacks.
+Some attacks could be based on the topology of the BP overlay network, while others could be based on the underlying (internet protocol) network topology.
+Because not all of the attack surfaces of this validation method are known or fully understood the usefulness of the technique described in this section is also not assured.
+The point of these requirements is so that both the ACME client and server have consistent logic for handling this technique.<a href="#section-3.5-2.1" class="pilcrow">¶</a></p>
+</aside>
+<p id="section-3.5-3">
 When required by policy, an ACME server <span class="bcp14">SHALL</span> send multiple challenge bundles from different sources in the DTN network.
 When multiple Challenge Bundles are sent for a single validation, it is a matter of ACME server policy to determine whether or not the validation as a whole is successful.
-The result of each single-source validation is defined as success or failure in <a href="#sec-response-check" class="xref">Section 3.4.1</a>.<a href="#section-3.5-2" class="pilcrow">¶</a></p>
-<p id="section-3.5-3">
-A <span class="bcp14">RECOMMENDED</span> validation policy is to succeed if the challenge from a primary bundle source is successful and if there are no more than one failure from a secondary source.
-The determination of which perspectives are considered primary or secondary is an implementation matter.<a href="#section-3.5-3" class="pilcrow">¶</a></p>
+The result of each single-source validation is defined as success or failure in <a href="#sec-response-check" class="xref">Section 3.4.1</a>.<a href="#section-3.5-3" class="pilcrow">¶</a></p>
 <p id="section-3.5-4">
+A <span class="bcp14">RECOMMENDED</span> validation policy is to succeed if the challenge from a primary bundle source is successful and if there are no more than one failure from a secondary source.
+The determination of which perspectives are considered primary or secondary is an implementation matter.<a href="#section-3.5-4" class="pilcrow">¶</a></p>
+<p id="section-3.5-5">
 Regardless of whether a validation is single- or multi-perspective, a validation failure <span class="bcp14">SHALL</span> be indicated by an ACME error type of "incorrectResponse".
-Each specific perspective failure <span class="bcp14">SHOULD</span> be indicated to the ACME client as a validation subproblem.<a href="#section-3.5-4" class="pilcrow">¶</a></p>
+Each specific perspective failure <span class="bcp14">SHOULD</span> be indicated to the ACME client as a validation subproblem.<a href="#section-3.5-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -2107,14 +2116,20 @@ This section defines a BIB use which closely resembles the function of DKIM emai
 In this mechanism a routing node in a DTN sub-network attests to the origination of a bundle by adding a BIB before forwarding it.
 The bundle receiver then need not trust the source of the bundle, but only trust this security source node.
 The receiver needs policy configuration to know which security sources are permitted to attest for which bundle sources.<a href="#section-4-1" class="pilcrow">¶</a></p>
-<p id="section-4-2">
+<aside id="section-4-2">
+        <p id="section-4-2.1">
+The usefulness of the integrity gateway to this validation method is experimental because it is not a settled matter how naming authority in a DTN is either allocated, delegated, or enforced.
+It is also not defined how the organization running the CA (and its ACME server) can delegate some level of trust to a different organization running a connected DTN with a security gateway.
+The organization running the integrity gateway would need to apply some minimal amount of policy to nodes running behind it, such as patterns to their Node IDs, which would behave conceptually similar to delegation of sub-domains in the domain name system (DNS) but without the online interaction of DNS.<a href="#section-4-2.1" class="pilcrow">¶</a></p>
+</aside>
+<p id="section-4-3">
 An integrity gateway <span class="bcp14">SHALL</span> validate the Source Node ID of a bundle, using local-network-specific means, before adding a BIB to the bundle.
 The exact means by which an integrity gateway validates a bundle's source is network-specific, but could use physical-layer, network-layer or BP-convergence-layer authentication.
-The bundle source could also add its own BIB with a local-network-specific security context or local-network-specific key material (i.e. a group key shared within the local network).<a href="#section-4-2" class="pilcrow">¶</a></p>
-<p id="section-4-3">
+The bundle source could also add its own BIB with a local-network-specific security context or local-network-specific key material (i.e. a group key shared within the local network).<a href="#section-4-3" class="pilcrow">¶</a></p>
+<p id="section-4-4">
 When an integrity gateway adds a BIB it <span class="bcp14">SHALL</span> be in accordance with <span>[<a href="#RFC9172" class="xref">RFC9172</a>]</span>.
 The BIB targets <span class="bcp14">SHALL</span> cover both the payload block and the primary block (either directly as a target or as additional authenticated data for the payload block MAC/signature).
-The Security Source of this BIB <span class="bcp14">SHALL</span> be either the bundle source Node ID itself or a routing node trusted by the destination node (see <a href="#sec-security-impersonate" class="xref">Section 7.2</a>).<a href="#section-4-3" class="pilcrow">¶</a></p>
+The Security Source of this BIB <span class="bcp14">SHALL</span> be either the bundle source Node ID itself or a routing node trusted by the destination node (see <a href="#sec-security-impersonate" class="xref">Section 7.2</a>).<a href="#section-4-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <section id="section-5">
