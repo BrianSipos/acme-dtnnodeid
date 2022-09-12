@@ -53,11 +53,11 @@ Once an ACME server validates a Node ID, either as a pre-authorization of the "b
 Because a single order can contain multiple identifiers of multiple types, there can be operational issues for a client attempting to, and possibly failing to, validate those multiple identifiers as described in <xref target="sec-multiple-claims"/>.
 Once a certificate is issued for a Node ID, how the ACME client configures the Bundle Protocol (BP) agent with the new certificate is an implementation matter.
       </t>
-      <t>
+      <aside><t>
 The emergent properties of DTN naming and BP security are still being developed and explored, especially between different organizational and administrative domains, so the "experimental" status of this document is related more to the practical utility of this kind of Node ID validation than to the validation method itself.
 The original use case is in large or cross-organizational networks where a BP node can be trusted to be allocated and added to a network, but the method of certificate validation and issuance is desired to be in-band on the network rather than configured solely through a side channel using bespoke or manual protocols.
 Because this mechanism is so similar to other validation methods, specifically <xref target="RFC8823"/>, it is expected to have few implementation difficulties or interoperability issues.
-      </t>
+      </t></aside>
       <section>
         <name>Scope</name>
         <t>
@@ -511,7 +511,7 @@ See <xref target="RFC4086"/> for additional information on randomness requiremen
 One pair <bcp14>SHALL</bcp14> consist of key 4 with value of an array containing acceptable hash algorithm identifiers.
 The array <bcp14>SHALL</bcp14> be ordered in descending preference, with the first item being the most preferred.
 The array <bcp14>SHALL</bcp14> contain at least one item.
-Each algorithim identifier <bcp14>SHALL</bcp14> correspond to the Value column (integer or text string) of the algorithm registered in the "COSE Algorithms" registry of <xref target="IANA-COSE"/>.
+Each algorithm identifier <bcp14>SHALL</bcp14> correspond to the Value column (integer or text string) of the algorithm registered in the "COSE Algorithms" registry of <xref target="IANA-COSE"/>.
               </li>
             </ul>
           </dd>
@@ -601,7 +601,7 @@ One pair <bcp14>SHALL</bcp14> consist of key 2 with value of ACME challenge <tt>
               </li>
               <li>
 One pair <bcp14>SHALL</bcp14> consist of key 3 with value of a two-element array containing the pair of a hash algorithm identifier and the hash byte string.
-The algorithim identifier <bcp14>SHALL</bcp14> correspond to the Value column (integer or text string) of the algorithm registered in the "COSE Algorithms" registry of <xref target="IANA-COSE"/>.
+The algorithm identifier <bcp14>SHALL</bcp14> correspond to the Value column (integer or text string) of the algorithm registered in the "COSE Algorithms" registry of <xref target="IANA-COSE"/>.
               </li>
             </ul>
           </dd>
@@ -652,9 +652,15 @@ The lack of a response within the expected response interval, as defined in <xre
       <section anchor="sec-multi-perspective">
         <name>Multi-Perspective Validation</name>
         <t>
-To avoid possible on-path attacks in certain networks, an ACME server can perform a single validation using multiple challenge bundle sources or via multiple routing paths.
+To avoid on-path attacks in certain networks, an ACME server can perform a single validation using multiple challenge bundle sources or via multiple routing paths.
 This technique is called multi-perspective validation as recommended in <xref section="10.2" target="RFC8555"/> and an implementation used by Let's Encrypt is described in <xref target="LE-multi-perspective"/>.
         </t>
+        <aside><t>
+Part of the experimental nature of this validation method, and the bundle protocol more generally, is understanding its vulnerability to different kinds of on-path attacks.
+Some attacks could be based on the topology of the BP overlay network, while others could be based on the underlying (internet protocol) network topology.
+Because not all of the attack surfaces of this validation method are known or fully understood the usefulness of the technique described in this section is also not assured.
+The point of these requirements is so that both the ACME client and server have consistent logic for handling this technique.
+        </t></aside>
         <t>
 When required by policy, an ACME server <bcp14>SHALL</bcp14> send multiple challenge bundles from different sources in the DTN network.
 When multiple Challenge Bundles are sent for a single validation, it is a matter of ACME server policy to determine whether or not the validation as a whole is successful.
@@ -678,6 +684,11 @@ In this mechanism a routing node in a DTN sub-network attests to the origination
 The bundle receiver then need not trust the source of the bundle, but only trust this security source node.
 The receiver needs policy configuration to know which security sources are permitted to attest for which bundle sources.
       </t>
+      <aside><t>
+The usefulness of the integrity gateway to this validation method is experimental because it is not a settled matter how naming authority in a DTN is either allocated, delegated, or enforced.
+It is also not defined how the organization running the CA (and its ACME server) can delegate some level of trust to a different organization running a connected DTN with a security gateway.
+The organization running the integrity gateway would need to apply some minimal amount of policy to nodes running behind it, such as patterns to their Node IDs, which would behave conceptually similar to delegation of sub-domains in the domain name system (DNS) but without the online interaction of DNS.
+      </t></aside>
       <t>
 An integrity gateway <bcp14>SHALL</bcp14> validate the Source Node ID of a bundle, using local-network-specific means, before adding a BIB to the bundle.
 The exact means by which an integrity gateway validates a bundle's source is network-specific, but could use physical-layer, network-layer or BP-convergence-layer authentication.
