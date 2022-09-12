@@ -22,6 +22,7 @@ set(SPLIT_ARTWORK "${CMAKE_CURRENT_SOURCE_DIR}/split_artwork.py")
 set(DRAFT_NAME_XML "${CMAKE_CURRENT_SOURCE_DIR}/${DRAFT_NAME}.xml")
 set(DRAFT_NAME_TXT "${DRAFT_NAME}.txt")
 set(DRAFT_NAME_HTML "${DRAFT_NAME}.html")
+set(DRAFT_NAME_PDF "${DRAFT_NAME}.pdf")
 add_custom_command(
     OUTPUT "${DRAFT_NAME_TXT}"
     DEPENDS "${DRAFT_NAME_XML}"
@@ -31,6 +32,11 @@ add_custom_command(
     OUTPUT "${DRAFT_NAME_HTML}"
     DEPENDS "${DRAFT_NAME_XML}"
     COMMAND ${XML2RFC} --no-network --html -o "${DRAFT_NAME_HTML}" "${DRAFT_NAME_XML}"
+)
+add_custom_command(
+    OUTPUT "${DRAFT_NAME_PDF}"
+    DEPENDS "${DRAFT_NAME_XML}"
+    COMMAND ${XML2RFC} --no-network --pdf -o "${DRAFT_NAME_PDF}" "${DRAFT_NAME_XML}"
 )
 
 set(DICTIONARY_TXT "${CMAKE_CURRENT_SOURCE_DIR}/dictionary.txt")
@@ -52,6 +58,10 @@ add_custom_command(
 add_custom_target(
     specs ALL
     DEPENDS "${DRAFT_NAME_TXT}" "${DRAFT_NAME_HTML}" "${MISSPELLING_TXT}"
+)
+add_custom_target(
+    pdf
+    DEPENDS "${DRAFT_NAME_PDF}"
 )
 install(
     FILES
