@@ -104,7 +104,7 @@ This specification is focused only on single-use DTN-specific PKIX profiles.
         <name>Authorization Strategy</name>
         <t>
 The basic unit of data exchange in a DTN is a Bundle <xref target="RFC9171"/>, which consists of a data payload with accompanying metadata.
-An Endpoint ID is used as the destination of a Bundle and can indicate both a unicast or a multicast destination.
+An Endpoint ID is used as the destination of a Bundle and can indicate both a singleton or a group destination.
 A Node ID is used to identify the source of a Bundle and is used for routing through intermediate nodes, including the final node(s) used to deliver a Bundle to its destination endpoint.
 A Node ID can also be used as an endpoint for administrative bundles.
 More detailed descriptions of the rationale and capabilities of these networks can be found in "Delay-Tolerant Network Architecture" <xref target="RFC4838"/>.
@@ -209,7 +209,7 @@ Because this is an ACME document, the following DTN Bundle Protocol terms are de
           <dt>Endpoint ID:</dt>
           <dd>
 An Endpoint ID is an identifier for the ultimate destination of a bundle, independent of any intermediate forwarding needed to reach that destination.
-An endpoint can be a singleton (unicast) or not (anycast or multicast) so an Endpoint ID can also represent a single entity or a set of entities.
+An endpoint can be a singleton or not so an Endpoint ID can also represent a single entity or a set of entities.
 This is formally defined in <xref section="4.2.5.1" target="RFC9171"/>.
           </dd>
           <dt>Node ID:</dt>
@@ -703,7 +703,7 @@ The Security Source of this BIB <bcp14>SHALL</bcp14> be either the bundle source
     <section>
       <name>Certificate Request Profile</name>
       <t>
-The ultimate purpose of this ACME validation is to allow a CA to issue certificates following the profiles of <xref section="4.4.2" target="RFC9174"/>, <xref target="I-D.sipos-dtn-udpcl"/>, and <xref target="I-D.bsipos-dtn-bpsec-cose"/>.
+The ultimate purpose of this ACME validation is to allow a CA to issue certificates following the profiles of <xref section="4.4.2" target="RFC9174"/>, and <xref section="4" target="I-D.ietf-dtn-bpsec-cose"/>.
 These purposes are referred to here as bundle security certificates.
       </t>
       <t>
@@ -792,7 +792,7 @@ It is not a trivial task to guarantee bundle routing though, so more advanced te
         <name>Threat: Bundle Replay</name>
         <t>
 It is possible for an on-path attacker to replay both Challenge Bundles or Response Bundles.
-Even in a properly-configured DTN it is possible that intermediate bundle routers to use multicast forwarding of a unicast-destination bundle.
+Even in a properly-configured DTN it is possible that intermediate bundle routers to use multi-path forwarding of a singleton-destination bundle.
         </t>
         <t>
 Ultimately, the point of the ACME bundle exchange is to derive a Key Authorization and its cryptographic digest and communicate it back to the ACME server for validation, so the uniqueness of the Key Authorization directly determines the scope of replay validity.
@@ -905,7 +905,7 @@ Within the "Automated Certificate Management Environment (ACME) Protocol" regist
 Within the "Bundle Protocol" registry <xref target="IANA-BP"/>, the following entries have been added to the "Bundle Administrative Record Types" sub-registry.
         </t>
         <t>
-[NOTE to the RFC Editor: For <xref target="RFC5050"/> compatibility the AR-TBD value needs to be no larger than 15, but such compatibility is not needed. For BPbis the AR-TBD value needs to be no larger than 65535 as defined by <xref target="I-D.sipos-dtn-bpv7-admin-iana"/>.]
+[NOTE to the RFC Editor: For <xref target="RFC5050"/> compatibility the AR-TBD value needs to be no larger than 15, but such compatibility is not needed. For BPbis the AR-TBD value needs to be no larger than 65535 as defined by <xref target="I-D.ietf-dtn-bpv7-admin-iana"/>.]
         </t>
         <table>
           <thead>
@@ -994,9 +994,8 @@ Within the "Bundle Protocol" registry <xref target="IANA-BP"/>, the following en
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8823.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.9174.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml-ids/reference.I-D.ietf-dtn-bibect.xml"/>
-        <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml-ids/reference.I-D.sipos-dtn-udpcl.xml"/>
-        <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml-ids/reference.I-D.sipos-dtn-bpv7-admin-iana.xml"/>
-        <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml-ids/reference.I-D.bsipos-dtn-bpsec-cose.xml"/>
+        <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml-ids/reference.I-D.ietf-dtn-bpv7-admin-iana.xml"/>
+        <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml-ids/reference.I-D.ietf-dtn-bpsec-cose.xml"/>
         <reference anchor="github-dtn-demo-agent" target="https://github.com/BrianSipos/dtn-demo-agent/">
           <front>
             <title>Python implementation of basic BPv7-related protocols</title>
