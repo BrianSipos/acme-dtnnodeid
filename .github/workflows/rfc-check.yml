@@ -1,32 +1,39 @@
 name: RFC XML Check
 
 on: [push]
+permissions:
+  contents: write
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-    
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v3
     - name: dependencies
       run: |
-        sudo apt-get install aspell cmake python3 python3-pip python3-setuptools python3-wheel ruby xmlstarlet yajl-tools
+        sudo apt-get install -y aspell cmake python3 python3-pip python3-setuptools python3-wheel ruby xmlstarlet yajl-tools xml2rfc
         sudo pip3 install xml2rfc
         sudo gem install cddl
     - name: xml2rfc
       run: |
-        mkdir -p build
-        (cd build && cmake .. -DCMAKE_INSTALL_DOCDIR=$PWD/install)
-        cmake --build build -v --target install
-    - uses: actions/upload-artifact@v2
+        cmake -S . -B build -DCMAKE_INSTALL_DOCDIR=$PWD/build/install
+        cmake --build build -v
+        cmake --install build
+    - uses: actions/upload-artifact@v3
       with:
         name: spec
-        path: |
-          build/spec/draft-*.html
-          build/spec/draft-*.txt
-          build/spec/misspelling.txt
-          build/spec/*errors.txt
+        path: build/install
+
+  deploy:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/download-artifact@v3
+      with:
+        name: spec
+        path: build/install
     - name: Deploy 🚀
       uses: JamesIves/github-pages-deploy-action@4.1.0
       with:
