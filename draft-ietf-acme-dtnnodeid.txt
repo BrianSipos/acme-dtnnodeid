@@ -4,20 +4,22 @@
 
 Automated Certificate Management Environment                    B. Sipos
 Internet-Draft                                           RKF Engineering
-Intended status: Experimental                              2 August 2023
-Expires: 3 February 2024
+Intended status: Experimental                            11 January 2024
+Expires: 14 July 2024
 
 
    Automated Certificate Management Environment (ACME) Delay-Tolerant
              Networking (DTN) Node ID Validation Extension
-                      draft-ietf-acme-dtnnodeid-11
+                      draft-ietf-acme-dtnnodeid-12
 
 Abstract
 
    This document specifies an extension to the Automated Certificate
    Management Environment (ACME) protocol which allows an ACME server to
    validate the Delay-Tolerant Networking (DTN) Node ID for an ACME
-   client.  The DTN Node ID is encoded as a certificate Subject
+   client.  A DTN Node ID is an identifier used in the Bundle Protocol
+   (BP) to name a "singleton endpoint", one which is registered on a
+   single BP node.  The DTN Node ID is encoded as a certificate Subject
    Alternative Name (SAN) of type otherName with a name form of
    BundleEID and as an ACME Identifier type "bundleEID".
 
@@ -36,33 +38,26 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 3 February 2024.
+   This Internet-Draft will expire on 14 July 2024.
 
 Copyright Notice
 
-   Copyright (c) 2023 IETF Trust and the persons identified as the
+   Copyright (c) 2024 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
-
-
-
-
-
-
-
-
-
-
-
-Sipos                    Expires 3 February 2024                [Page 1]
-
-Internet-Draft              ACME DTN Node ID                 August 2023
-
 
    This document is subject to BCP 78 and the IETF Trust's Legal
    Provisions Relating to IETF Documents (https://trustee.ietf.org/
    license-info) in effect on the date of publication of this document.
    Please review these documents carefully, as they describe your rights
    and restrictions with respect to this document.  Code Components
+
+
+
+Sipos                     Expires 14 July 2024                  [Page 1]
+
+Internet-Draft              ACME DTN Node ID                January 2024
+
+
    extracted from this document must include Revised BSD License text as
    described in Section 4.e of the Trust Legal Provisions and are
    provided without warranty as described in the Revised BSD License.
@@ -104,20 +99,20 @@ Table of Contents
    9.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  25
      9.1.  Normative References  . . . . . . . . . . . . . . . . . .  25
      9.2.  Informative References  . . . . . . . . . . . . . . . . .  27
-   Appendix A.  Administrative Record Types CDDL . . . . . . . . . .  29
+   Appendix A.  Administrative Record Types CDDL . . . . . . . . . .  28
    Appendix B.  Example Authorization  . . . . . . . . . . . . . . .  29
-
-
-
-Sipos                    Expires 3 February 2024                [Page 2]
-
-Internet-Draft              ACME DTN Node ID                 August 2023
-
-
-     B.1.  Challenge Bundle  . . . . . . . . . . . . . . . . . . . .  30
+     B.1.  Challenge Bundle  . . . . . . . . . . . . . . . . . . . .  29
      B.2.  Response Bundle . . . . . . . . . . . . . . . . . . . . .  30
    Acknowledgments . . . . . . . . . . . . . . . . . . . . . . . . .  31
    Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .  31
+
+
+
+
+Sipos                     Expires 14 July 2024                  [Page 2]
+
+Internet-Draft              ACME DTN Node ID                January 2024
+
 
 1.  Introduction
 
@@ -130,12 +125,14 @@ Internet-Draft              ACME DTN Node ID                 August 2023
 
    In the case of this specification, the claim being validated is a
    Subject Alternative Name (SAN) of type otherName with a name form of
-   BundleEID, which used to represent an Endpoint ID (EID) for a Delay-
-   Tolerant Networking (DTN) bundle.  Currently the URI schemes "dtn"
-   and "ipn" as defined in [RFC9171] are valid for an Endpoint ID.  A
-   DTN Node ID is an Endpoint ID with scheme-specific restrictions to
-   identify it as such; currently the "dtn" scheme uses an empty demux
-   part and the "ipn" scheme uses service number zero.
+   BundleEID, which used to represent a Bundle Protocol (BP) Endpoint ID
+   (EID) in a Delay-Tolerant Networking (DTN) overlay network.  A DTN
+   Node ID is any EID which can uniquely identify a BP node, as defined
+   in Section 4.2.5.2 of [RFC9171], which is equivalent to the EID being
+   usable as a singleton endpoint.  One common EID used as a Node ID is
+   the Administrative EID, which is guaranteed to exist on any BP node.
+   Currently the URI schemes "dtn" and "ipn" as defined in [RFC9171] are
+   valid for a singleton endpoint and thus a Node ID.
 
    Because the BundleEID claim is new to ACME, a new ACME Identifier
    type "bundleEID" is needed to manage this claim within ACME
@@ -151,8 +148,8 @@ Internet-Draft              ACME DTN Node ID                 August 2023
    there can be operational issues for a client attempting to, and
    possibly failing to, validate those multiple identifiers as described
    in Section 5.1.  Once a certificate is issued for a Node ID, how the
-   ACME client configures the Bundle Protocol (BP) agent with the new
-   certificate is an implementation matter.
+   ACME client configures the BP Agent with the new certificate is an
+   implementation matter.
 
       |  The emergent properties of DTN naming and BP security are still
       |  being developed and explored, especially between different
@@ -162,17 +159,17 @@ Internet-Draft              ACME DTN Node ID                 August 2023
       |  the validation method itself.  The original use case is in
       |  large or cross-organizational networks where a BP node can be
       |  trusted to be allocated and added to a network, but the method
-
-
-
-Sipos                    Expires 3 February 2024                [Page 3]
-
-Internet-Draft              ACME DTN Node ID                 August 2023
-
-
       |  of certificate validation and issuance is desired to be in-band
       |  on the network rather than configured solely through a side
       |  channel using bespoke or manual protocols.  Because this
+
+
+
+Sipos                     Expires 14 July 2024                  [Page 3]
+
+Internet-Draft              ACME DTN Node ID                January 2024
+
+
       |  mechanism is so similar to other validation methods,
       |  specifically [RFC8823], it is expected to have few
       |  implementation difficulties or interoperability issues.
@@ -215,21 +212,19 @@ Internet-Draft              ACME DTN Node ID                 August 2023
       list of acceptable hash algorithms, or for an ACME client to
       choose a set of acceptable hash algorithms.
 
-
-
-
-
-
-
-Sipos                    Expires 3 February 2024                [Page 4]
-
-Internet-Draft              ACME DTN Node ID                 August 2023
-
-
    *  Policies or mechanisms for provisioning, deploying, or accessing
       certificates and private keys; deploying or accessing certificate
       revocation lists (CRLs); or configuring security parameters on an
       individual entity or across a network.
+
+
+
+
+
+Sipos                     Expires 14 July 2024                  [Page 4]
+
+Internet-Draft              ACME DTN Node ID                January 2024
+
 
    *  Policies or mechanisms for an ACME server to handle mixed-use
       certificate requests.  This specification is focused only on
@@ -277,9 +272,14 @@ Internet-Draft              ACME DTN Node ID                 August 2023
 
 
 
-Sipos                    Expires 3 February 2024                [Page 5]
+
+
+
+
+
+Sipos                     Expires 14 July 2024                  [Page 5]
 
-Internet-Draft              ACME DTN Node ID                 August 2023
+Internet-Draft              ACME DTN Node ID                January 2024
 
 
         +------------+                             +------------+
@@ -333,9 +333,9 @@ Internet-Draft              ACME DTN Node ID                 August 2023
 
 
 
-Sipos                    Expires 3 February 2024                [Page 6]
+Sipos                     Expires 14 July 2024                  [Page 6]
 
-Internet-Draft              ACME DTN Node ID                 August 2023
+Internet-Draft              ACME DTN Node ID                January 2024
 
 
    '//sourcecode[@type="cddl"]'
@@ -389,9 +389,9 @@ Internet-Draft              ACME DTN Node ID                 August 2023
 
 
 
-Sipos                    Expires 3 February 2024                [Page 7]
+Sipos                     Expires 14 July 2024                  [Page 7]
 
-Internet-Draft              ACME DTN Node ID                 August 2023
+Internet-Draft              ACME DTN Node ID                January 2024
 
 
       destination of a bundle, independent of any intermediate
@@ -445,9 +445,9 @@ Internet-Draft              ACME DTN Node ID                 August 2023
 
 
 
-Sipos                    Expires 3 February 2024                [Page 8]
+Sipos                     Expires 14 July 2024                  [Page 8]
 
-Internet-Draft              ACME DTN Node ID                 August 2023
+Internet-Draft              ACME DTN Node ID                January 2024
 
 
    When an ACME server needs to request proof that a client controls a
@@ -501,9 +501,9 @@ Internet-Draft              ACME DTN Node ID                 August 2023
 
 
 
-Sipos                    Expires 3 February 2024                [Page 9]
+Sipos                     Expires 14 July 2024                  [Page 9]
 
-Internet-Draft              ACME DTN Node ID                 August 2023
+Internet-Draft              ACME DTN Node ID                January 2024
 
 
    Similar to the ACME use case for validating email address ownership
@@ -557,9 +557,9 @@ Internet-Draft              ACME DTN Node ID                 August 2023
 
 
 
-Sipos                    Expires 3 February 2024               [Page 10]
+Sipos                     Expires 14 July 2024                 [Page 10]
 
-Internet-Draft              ACME DTN Node ID                 August 2023
+Internet-Draft              ACME DTN Node ID                January 2024
 
 
    2.  The ACME client obtains the id-chal and token-chal from the
@@ -613,9 +613,9 @@ Internet-Draft              ACME DTN Node ID                 August 2023
 
 
 
-Sipos                    Expires 3 February 2024               [Page 11]
+Sipos                     Expires 14 July 2024                 [Page 11]
 
-Internet-Draft              ACME DTN Node ID                 August 2023
+Internet-Draft              ACME DTN Node ID                January 2024
 
 
    3.  The ACME server receives a POST to the challenge URL indicated
@@ -669,9 +669,9 @@ Internet-Draft              ACME DTN Node ID                 August 2023
 
 
 
-Sipos                    Expires 3 February 2024               [Page 12]
+Sipos                     Expires 14 July 2024                 [Page 12]
 
-Internet-Draft              ACME DTN Node ID                 August 2023
+Internet-Draft              ACME DTN Node ID                January 2024
 
 
       Section 5 of [RFC4648].  Trailing '=' padding characters SHALL be
@@ -725,9 +725,9 @@ Internet-Draft              ACME DTN Node ID                 August 2023
 
 
 
-Sipos                    Expires 3 February 2024               [Page 13]
+Sipos                     Expires 14 July 2024                 [Page 13]
 
-Internet-Draft              ACME DTN Node ID                 August 2023
+Internet-Draft              ACME DTN Node ID                January 2024
 
 
    A challenge response is not sent until the BP agent has been
@@ -781,9 +781,9 @@ Internet-Draft              ACME DTN Node ID                 August 2023
 
 
 
-Sipos                    Expires 3 February 2024               [Page 14]
+Sipos                     Expires 14 July 2024                 [Page 14]
 
-Internet-Draft              ACME DTN Node ID                 August 2023
+Internet-Draft              ACME DTN Node ID                January 2024
 
 
       *  One pair SHALL consist of key 1 with value of ACME challenge
@@ -837,9 +837,9 @@ Internet-Draft              ACME DTN Node ID                 August 2023
 
 
 
-Sipos                    Expires 3 February 2024               [Page 15]
+Sipos                     Expires 14 July 2024                 [Page 15]
 
-Internet-Draft              ACME DTN Node ID                 August 2023
+Internet-Draft              ACME DTN Node ID                January 2024
 
 
    *  The Challenge Bundle contains a BIB which covers at least the
@@ -893,9 +893,9 @@ Internet-Draft              ACME DTN Node ID                 August 2023
 
 
 
-Sipos                    Expires 3 February 2024               [Page 16]
+Sipos                     Expires 14 July 2024                 [Page 16]
 
-Internet-Draft              ACME DTN Node ID                 August 2023
+Internet-Draft              ACME DTN Node ID                January 2024
 
 
       *  One pair SHALL consist of key 1 with value of ACME challenge
@@ -949,9 +949,9 @@ Internet-Draft              ACME DTN Node ID                 August 2023
 
 
 
-Sipos                    Expires 3 February 2024               [Page 17]
+Sipos                     Expires 14 July 2024                 [Page 17]
 
-Internet-Draft              ACME DTN Node ID                 August 2023
+Internet-Draft              ACME DTN Node ID                January 2024
 
 
    *  The response payload contains the same id-chal and token-bundle as
@@ -1005,9 +1005,9 @@ Internet-Draft              ACME DTN Node ID                 August 2023
 
 
 
-Sipos                    Expires 3 February 2024               [Page 18]
+Sipos                     Expires 14 July 2024                 [Page 18]
 
-Internet-Draft              ACME DTN Node ID                 August 2023
+Internet-Draft              ACME DTN Node ID                January 2024
 
 
    Regardless of whether a validation is single- or multi-perspective, a
@@ -1061,9 +1061,9 @@ Internet-Draft              ACME DTN Node ID                 August 2023
 
 
 
-Sipos                    Expires 3 February 2024               [Page 19]
+Sipos                     Expires 14 July 2024                 [Page 19]
 
-Internet-Draft              ACME DTN Node ID                 August 2023
+Internet-Draft              ACME DTN Node ID                January 2024
 
 
 5.  Certificate Request Profile
@@ -1117,9 +1117,9 @@ Internet-Draft              ACME DTN Node ID                 August 2023
 
 
 
-Sipos                    Expires 3 February 2024               [Page 20]
+Sipos                     Expires 14 July 2024                 [Page 20]
 
-Internet-Draft              ACME DTN Node ID                 August 2023
+Internet-Draft              ACME DTN Node ID                January 2024
 
 
    Presence of both of the above sets of key usage bits in the CSR, as
@@ -1173,9 +1173,9 @@ Internet-Draft              ACME DTN Node ID                 August 2023
 
 
 
-Sipos                    Expires 3 February 2024               [Page 21]
+Sipos                     Expires 14 July 2024                 [Page 21]
 
-Internet-Draft              ACME DTN Node ID                 August 2023
+Internet-Draft              ACME DTN Node ID                January 2024
 
 
 7.1.  Threat: Passive Leak of Validation Data
@@ -1210,8 +1210,8 @@ Internet-Draft              ACME DTN Node ID                 August 2023
    validation of the same Node ID from multiple sources or via multiple
    bundle routing paths, as defined in Section 3.5.  It is not a trivial
    task to guarantee bundle routing though, so more advanced techniques
-   such as onion routing (using bundle-in-bundle encapsulation
-   [I-D.ietf-dtn-bibect]) could be employed.
+   such as onion routing (using bundle-in-bundle encapsulation) could be
+   employed.
 
 7.3.  Threat: Bundle Replay
 
@@ -1229,9 +1229,9 @@ Internet-Draft              ACME DTN Node ID                 August 2023
 
 
 
-Sipos                    Expires 3 February 2024               [Page 22]
+Sipos                     Expires 14 July 2024                 [Page 22]
 
-Internet-Draft              ACME DTN Node ID                 August 2023
+Internet-Draft              ACME DTN Node ID                January 2024
 
 
    uniqueness of each token-chal to the ACME challenge ensures that the
@@ -1285,9 +1285,9 @@ Internet-Draft              ACME DTN Node ID                 August 2023
 
 
 
-Sipos                    Expires 3 February 2024               [Page 23]
+Sipos                     Expires 14 July 2024                 [Page 23]
 
-Internet-Draft              ACME DTN Node ID                 August 2023
+Internet-Draft              ACME DTN Node ID                January 2024
 
 
 7.6.  Out-of-Scope BP Agent Communication
@@ -1341,9 +1341,9 @@ Internet-Draft              ACME DTN Node ID                 August 2023
 
 
 
-Sipos                    Expires 3 February 2024               [Page 24]
+Sipos                     Expires 14 July 2024                 [Page 24]
 
-Internet-Draft              ACME DTN Node ID                 August 2023
+Internet-Draft              ACME DTN Node ID                January 2024
 
 
 8.2.  ACME Validation Methods
@@ -1397,9 +1397,9 @@ Internet-Draft              ACME DTN Node ID                 August 2023
 
 
 
-Sipos                    Expires 3 February 2024               [Page 25]
+Sipos                     Expires 14 July 2024                 [Page 25]
 
-Internet-Draft              ACME DTN Node ID                 August 2023
+Internet-Draft              ACME DTN Node ID                January 2024
 
 
    [IANA-SMI] IANA, "Structure of Management Information (SMI) Numbers",
@@ -1453,9 +1453,9 @@ Internet-Draft              ACME DTN Node ID                 August 2023
 
 
 
-Sipos                    Expires 3 February 2024               [Page 26]
+Sipos                     Expires 14 July 2024                 [Page 26]
 
-Internet-Draft              ACME DTN Node ID                 August 2023
+Internet-Draft              ACME DTN Node ID                January 2024
 
 
    [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
@@ -1509,9 +1509,9 @@ Internet-Draft              ACME DTN Node ID                 August 2023
 
 
 
-Sipos                    Expires 3 February 2024               [Page 27]
+Sipos                     Expires 14 July 2024                 [Page 27]
 
-Internet-Draft              ACME DTN Node ID                 August 2023
+Internet-Draft              ACME DTN Node ID                January 2024
 
 
    [RFC8823]  Melnikov, A., "Extensions to Automatic Certificate
@@ -1524,25 +1524,19 @@ Internet-Draft              ACME DTN Node ID                 August 2023
               4", RFC 9174, DOI 10.17487/RFC9174, January 2022,
               <https://www.rfc-editor.org/info/rfc9174>.
 
-   [I-D.ietf-dtn-bibect]
-              Burleigh, S. C., "Bundle-in-Bundle Encapsulation", Work in
-              Progress, Internet-Draft, draft-ietf-dtn-bibect-03, 18
-              February 2020, <https://datatracker.ietf.org/doc/html/
-              draft-ietf-dtn-bibect-03>.
-
    [I-D.ietf-dtn-bpv7-admin-iana]
               Sipos, B., "Bundle Protocol Version 7 Administrative
               Record Types Registry", Work in Progress, Internet-Draft,
-              draft-ietf-dtn-bpv7-admin-iana-01, 6 March 2023,
+              draft-ietf-dtn-bpv7-admin-iana-02, 10 August 2023,
               <https://datatracker.ietf.org/doc/html/draft-ietf-dtn-
-              bpv7-admin-iana-01>.
+              bpv7-admin-iana-02>.
 
    [I-D.ietf-dtn-bpsec-cose]
               Sipos, B., "DTN Bundle Protocol Security (BPSec) COSE
               Context", Work in Progress, Internet-Draft, draft-ietf-
-              dtn-bpsec-cose-02, 3 July 2023,
+              dtn-bpsec-cose-03, 3 January 2024,
               <https://datatracker.ietf.org/doc/html/draft-ietf-dtn-
-              bpsec-cose-02>.
+              bpsec-cose-03>.
 
    [github-dtn-demo-agent]
               Sipos, B., "Python implementation of basic BPv7-related
@@ -1561,21 +1555,20 @@ Internet-Draft              ACME DTN Node ID                 August 2023
               <https://letsencrypt.org/2020/02/19/multi-perspective-
               validation.html>.
 
-
-
-
-
-Sipos                    Expires 3 February 2024               [Page 28]
-
-Internet-Draft              ACME DTN Node ID                 August 2023
-
-
 Appendix A.  Administrative Record Types CDDL
 
    [NOTE to the RFC Editor: The "0xFFFF" in this CDDL is replaced by the
    "ACME Node ID Validation" administrative record type code.]
 
    The normative CDDL extension of BP [RFC9171] for the ACME bundles is:
+
+
+
+
+Sipos                     Expires 14 July 2024                 [Page 28]
+
+Internet-Draft              ACME DTN Node ID                January 2024
+
 
    ; All ACME records have the same structure
    $admin-record /= [0xFFFF, acme-record]
@@ -1617,15 +1610,6 @@ Appendix B.  Example Authorization
 
    "tPUZNY4ONIk6LxErRFEjVw"
 
-
-
-
-
-Sipos                    Expires 3 February 2024               [Page 29]
-
-Internet-Draft              ACME DTN Node ID                 August 2023
-
-
 B.1.  Challenge Bundle
 
    For the single challenge bundle in this example, the token-bundle
@@ -1633,6 +1617,14 @@ B.1.  Challenge Bundle
    of:
 
    "p3yRYFU4KxwQaHQjJ2RdiQ"
+
+
+
+
+Sipos                     Expires 14 July 2024                 [Page 29]
+
+Internet-Draft              ACME DTN Node ID                January 2024
+
 
    The minimal-but-valid Challenge Bundle is shown in Figure 2.  This
    challenge requires that the ACME client respond within a 60 second
@@ -1673,21 +1665,22 @@ B.2.  Response Bundle
    Authorization value (a single string split across lines for
    readability) is:
 
-
-
-
-
-Sipos                    Expires 3 February 2024               [Page 30]
-
-Internet-Draft              ACME DTN Node ID                 August 2023
-
-
    "p3yRYFU4KxwQaHQjJ2RdiQtPUZNY4ONIk6LxErRFEjVw."
    "LPJNul-wow4m6DsqxbninhsWHlwfp0JecwQzYpOLmCQ"
 
    The minimal-but-valid Response Bundle is shown in Figure 3.  This
    response indicates that there is 30 seconds remaining in the response
    time window.
+
+
+
+
+
+
+Sipos                     Expires 14 July 2024                 [Page 30]
+
+Internet-Draft              ACME DTN Node ID                January 2024
+
 
    [_
      [
@@ -1729,15 +1722,6 @@ Acknowledgments
 
 Author's Address
 
-
-
-
-
-Sipos                    Expires 3 February 2024               [Page 31]
-
-Internet-Draft              ACME DTN Node ID                 August 2023
-
-
    Brian Sipos
    RKF Engineering Solutions, LLC
    7500 Old Georgetown Road
@@ -1749,44 +1733,4 @@ Internet-Draft              ACME DTN Node ID                 August 2023
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Sipos                    Expires 3 February 2024               [Page 32]
+Sipos                     Expires 14 July 2024                 [Page 31]

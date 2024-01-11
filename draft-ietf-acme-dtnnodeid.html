@@ -9,16 +9,17 @@
 <meta content='
        
 This document specifies an extension to the Automated Certificate Management Environment (ACME) protocol which allows an ACME server to validate the Delay-Tolerant Networking (DTN) Node ID for an ACME client.
+A DTN Node ID is an identifier used in the Bundle Protocol (BP) to name a "singleton endpoint", one which is registered on a single BP node.
 The DTN Node ID is encoded as a certificate Subject Alternative Name (SAN) of type otherName with a name form of  BundleEID  and as an ACME Identifier type "bundleEID".
        
     ' name="description">
 <meta content="xml2rfc 3.12.2" name="generator">
 <meta content="ACME" name="keyword">
 <meta content="DTN" name="keyword">
-<meta content="draft-ietf-acme-dtnnodeid-11" name="ietf.draft">
+<meta content="draft-ietf-acme-dtnnodeid-12" name="ietf.draft">
 <!-- Generator version information:
   xml2rfc 3.12.2
-    Python 3.10.6
+    Python 3.10.12
     weasyprint 54.1
 -->
 <link href="/home/runner/work/acme-dtnnodeid/acme-dtnnodeid/spec/draft-ietf-acme-dtnnodeid.xml" rel="alternate" type="application/rfc+xml">
@@ -1176,11 +1177,11 @@ li > p:last-of-type {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">ACME DTN Node ID</td>
-<td class="right">August 2023</td>
+<td class="right">January 2024</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Sipos</td>
-<td class="center">Expires 3 February 2024</td>
+<td class="center">Expires 14 July 2024</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1190,15 +1191,15 @@ li > p:last-of-type {
 <dt class="label-workgroup">Workgroup:</dt>
 <dd class="workgroup">Automated Certificate Management Environment</dd>
 <dt class="label-internet-draft">Internet-Draft:</dt>
-<dd class="internet-draft">draft-ietf-acme-dtnnodeid-11</dd>
+<dd class="internet-draft">draft-ietf-acme-dtnnodeid-12</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2023-08-02" class="published">2 August 2023</time>
+<time datetime="2024-01-11" class="published">11 January 2024</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Experimental</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2024-02-03">3 February 2024</time></dd>
+<dd class="expires"><time datetime="2024-07-14">14 July 2024</time></dd>
 <dt class="label-authors">Author:</dt>
 <dd class="authors">
 <div class="author">
@@ -1213,6 +1214,7 @@ li > p:last-of-type {
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
 <p id="section-abstract-1">
 This document specifies an extension to the Automated Certificate Management Environment (ACME) protocol which allows an ACME server to validate the Delay-Tolerant Networking (DTN) Node ID for an ACME client.
+A DTN Node ID is an identifier used in the Bundle Protocol (BP) to name a "singleton endpoint", one which is registered on a single BP node.
 The DTN Node ID is encoded as a certificate Subject Alternative Name (SAN) of type otherName with a name form of <code>BundleEID</code> and as an ACME Identifier type "bundleEID".<a href="#section-abstract-1" class="pilcrow">¶</a></p>
 </section>
 <div id="status-of-memo">
@@ -1234,7 +1236,7 @@ The DTN Node ID is encoded as a certificate Subject Alternative Name (SAN) of ty
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 3 February 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 14 July 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1243,7 +1245,7 @@ The DTN Node ID is encoded as a certificate Subject Alternative Name (SAN) of ty
 <a href="#name-copyright-notice" class="section-name selfRef">Copyright Notice</a>
         </h2>
 <p id="section-boilerplate.2-1">
-            Copyright (c) 2023 IETF Trust and the persons identified as the
+            Copyright (c) 2024 IETF Trust and the persons identified as the
             document authors. All rights reserved.<a href="#section-boilerplate.2-1" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.2-2">
             This document is subject to BCP 78 and the IETF Trust's Legal
@@ -1415,16 +1417,17 @@ The DTN Node ID is encoded as a certificate Subject Alternative Name (SAN) of ty
 <p id="section-1-1">
 Although the original purpose of the Automatic Certificate Management Environment (ACME) <span>[<a href="#RFC8555" class="xref">RFC8555</a>]</span> was to allow Public Key Infrastructure Using X.509 (PKIX) Certification Authorities (CAs) to validate network domain names of clients, the same mechanism can be used to validate any of the subject claims supported by the PKIX profile <span>[<a href="#RFC5280" class="xref">RFC5280</a>]</span>.<a href="#section-1-1" class="pilcrow">¶</a></p>
 <p id="section-1-2">
-In the case of this specification, the claim being validated is a Subject Alternative Name (SAN) of type otherName with a name form of <code>BundleEID</code>, which used to represent an Endpoint ID (EID) for a Delay-Tolerant Networking (DTN) bundle.
-Currently the URI schemes "dtn" and "ipn" as defined in <span>[<a href="#RFC9171" class="xref">RFC9171</a>]</span> are valid for an Endpoint ID.
-A DTN Node ID is an Endpoint ID with scheme-specific restrictions to identify it as such; currently the "dtn" scheme uses an empty demux part and the "ipn" scheme uses service number zero.<a href="#section-1-2" class="pilcrow">¶</a></p>
+In the case of this specification, the claim being validated is a Subject Alternative Name (SAN) of type otherName with a name form of <code>BundleEID</code>, which used to represent a Bundle Protocol (BP) Endpoint ID (EID) in a Delay-Tolerant Networking (DTN) overlay network.
+A DTN Node ID is any EID which can uniquely identify a BP node, as defined in <span><a href="https://rfc-editor.org/rfc/rfc9171#section-4.2.5.2" class="relref">Section 4.2.5.2</a> of [<a href="#RFC9171" class="xref">RFC9171</a>]</span>, which is equivalent to the EID being usable as a singleton endpoint.
+One common EID used as a Node ID is the Administrative EID, which is guaranteed to exist on any BP node.
+Currently the URI schemes "dtn" and "ipn" as defined in <span>[<a href="#RFC9171" class="xref">RFC9171</a>]</span> are valid for a singleton endpoint and thus a Node ID.<a href="#section-1-2" class="pilcrow">¶</a></p>
 <p id="section-1-3">
 Because the <code>BundleEID</code> claim is new to ACME, a new ACME Identifier type "bundleEID" is needed to manage this claim within ACME messaging.
 A "bundleEID" claim can be part of a pre-authorization or as one of the authorizations of an order containing any number of claims.<a href="#section-1-3" class="pilcrow">¶</a></p>
 <p id="section-1-4">
 Once an ACME server validates a Node ID, either as a pre-authorization of the "bundleEID" or as one of the authorizations of an order containing a "bundleEID", the client can finalize the order using an associated certificate signing request (CSR).
 Because a single order can contain multiple identifiers of multiple types, there can be operational issues for a client attempting to, and possibly failing to, validate those multiple identifiers as described in <a href="#sec-multiple-claims" class="xref">Section 5.1</a>.
-Once a certificate is issued for a Node ID, how the ACME client configures the Bundle Protocol (BP) agent with the new certificate is an implementation matter.<a href="#section-1-4" class="pilcrow">¶</a></p>
+Once a certificate is issued for a Node ID, how the ACME client configures the BP Agent with the new certificate is an implementation matter.<a href="#section-1-4" class="pilcrow">¶</a></p>
 <aside id="section-1-5">
         <p id="section-1-5.1">
 The emergent properties of DTN naming and BP security are still being developed and explored, especially between different organizational and administrative domains, so the "experimental" status of this document is related more to the practical utility of this kind of Node ID validation than to the validation method itself.
@@ -2121,7 +2124,7 @@ The Security Source of this BIB <span class="bcp14">SHALL</span> be either the b
 <a href="#section-5" class="section-number selfRef">5. </a><a href="#name-certificate-request-profile" class="section-name selfRef">Certificate Request Profile</a>
       </h2>
 <p id="section-5-1">
-The ultimate purpose of this ACME validation is to allow a CA to issue certificates following the profiles of <span><a href="https://rfc-editor.org/rfc/rfc9174#section-4.4.2" class="relref">Section 4.4.2</a> of [<a href="#RFC9174" class="xref">RFC9174</a>]</span>, and <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-dtn-bpsec-cose-02#section-4" class="relref">Section 4</a> of [<a href="#I-D.ietf-dtn-bpsec-cose" class="xref">I-D.ietf-dtn-bpsec-cose</a>]</span>.
+The ultimate purpose of this ACME validation is to allow a CA to issue certificates following the profiles of <span><a href="https://rfc-editor.org/rfc/rfc9174#section-4.4.2" class="relref">Section 4.4.2</a> of [<a href="#RFC9174" class="xref">RFC9174</a>]</span>, and <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-dtn-bpsec-cose-03#section-4" class="relref">Section 4</a> of [<a href="#I-D.ietf-dtn-bpsec-cose" class="xref">I-D.ietf-dtn-bpsec-cose</a>]</span>.
 These purposes are referred to here as bundle security certificates.<a href="#section-5-1" class="pilcrow">¶</a></p>
 <p id="section-5-2">
 One defining aspect of bundle security certificates is the Extended Key Usage key purpose <code>id-kp-bundleSecurity</code> of <span>[<a href="#IANA-SMI" class="xref">IANA-SMI</a>]</span>, as defined in <span><a href="https://rfc-editor.org/rfc/rfc9174#section-4.4.2.1" class="relref">Section 4.4.2.1</a> of [<a href="#RFC9174" class="xref">RFC9174</a>]</span>.
@@ -2206,7 +2209,7 @@ The primary mitigation is to delegate bundle integrity sourcing to a trusted rou
 This is functionally similar to DKIM signing of <span>[<a href="#RFC6376" class="xref">RFC6376</a>]</span> and provides some level of bundle origination.<a href="#section-7.2-2" class="pilcrow">¶</a></p>
 <p id="section-7.2-3">
 Another way to mitigate single-path on-path attacks is to attempt validation of the same Node ID from multiple sources or via multiple bundle routing paths, as defined in <a href="#sec-multi-perspective" class="xref">Section 3.5</a>.
-It is not a trivial task to guarantee bundle routing though, so more advanced techniques such as onion routing (using bundle-in-bundle encapsulation <span>[<a href="#I-D.ietf-dtn-bibect" class="xref">I-D.ietf-dtn-bibect</a>]</span>) could be employed.<a href="#section-7.2-3" class="pilcrow">¶</a></p>
+It is not a trivial task to guarantee bundle routing though, so more advanced techniques such as onion routing (using bundle-in-bundle encapsulation) could be employed.<a href="#section-7.2-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="sec-security-replay">
@@ -2480,17 +2483,13 @@ Within the "Bundle Protocol" registry <span>[<a href="#IANA-BP" class="xref">IAN
         <dd>
 <span class="refAuthor">Sipos, B.</span>, <span class="refAuthor">Demmer, M.</span>, <span class="refAuthor">Ott, J.</span>, and <span class="refAuthor">S. Perreault</span>, <span class="refTitle">"Delay-Tolerant Networking TCP Convergence-Layer Protocol Version 4"</span>, <span class="seriesInfo">RFC 9174</span>, <span class="seriesInfo">DOI 10.17487/RFC9174</span>, <time datetime="2022-01" class="refDate">January 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc9174">https://www.rfc-editor.org/info/rfc9174</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="I-D.ietf-dtn-bibect">[I-D.ietf-dtn-bibect]</dt>
-        <dd>
-<span class="refAuthor">Burleigh, S. C.</span>, <span class="refTitle">"Bundle-in-Bundle Encapsulation"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-dtn-bibect-03</span>, <time datetime="2020-02-18" class="refDate">18 February 2020</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-dtn-bibect-03">https://datatracker.ietf.org/doc/html/draft-ietf-dtn-bibect-03</a>&gt;</span>. </dd>
-<dd class="break"></dd>
 <dt id="I-D.ietf-dtn-bpv7-admin-iana">[I-D.ietf-dtn-bpv7-admin-iana]</dt>
         <dd>
-<span class="refAuthor">Sipos, B.</span>, <span class="refTitle">"Bundle Protocol Version 7 Administrative Record Types Registry"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-dtn-bpv7-admin-iana-01</span>, <time datetime="2023-03-06" class="refDate">6 March 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-dtn-bpv7-admin-iana-01">https://datatracker.ietf.org/doc/html/draft-ietf-dtn-bpv7-admin-iana-01</a>&gt;</span>. </dd>
+<span class="refAuthor">Sipos, B.</span>, <span class="refTitle">"Bundle Protocol Version 7 Administrative Record Types Registry"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-dtn-bpv7-admin-iana-02</span>, <time datetime="2023-08-10" class="refDate">10 August 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-dtn-bpv7-admin-iana-02">https://datatracker.ietf.org/doc/html/draft-ietf-dtn-bpv7-admin-iana-02</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.ietf-dtn-bpsec-cose">[I-D.ietf-dtn-bpsec-cose]</dt>
         <dd>
-<span class="refAuthor">Sipos, B.</span>, <span class="refTitle">"DTN Bundle Protocol Security (BPSec) COSE Context"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-dtn-bpsec-cose-02</span>, <time datetime="2023-07-03" class="refDate">3 July 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-dtn-bpsec-cose-02">https://datatracker.ietf.org/doc/html/draft-ietf-dtn-bpsec-cose-02</a>&gt;</span>. </dd>
+<span class="refAuthor">Sipos, B.</span>, <span class="refTitle">"DTN Bundle Protocol Security (BPSec) COSE Context"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-dtn-bpsec-cose-03</span>, <time datetime="2024-01-03" class="refDate">3 January 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-dtn-bpsec-cose-03">https://datatracker.ietf.org/doc/html/draft-ietf-dtn-bpsec-cose-03</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="github-dtn-demo-agent">[github-dtn-demo-agent]</dt>
         <dd>

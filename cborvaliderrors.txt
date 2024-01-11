@@ -78,20 +78,20 @@ dtn-time = uint
 INFO:root:Processing element text:
 "p3yRYFU4KxwQaHQjJ2RdiQtPUZNY4ONIk6LxErRFEjVw."
 "LPJNul-wow4m6DsqxbninhsWHlwfp0JecwQzYpOLmCQ"
-/var/lib/gems/3.0.0/gems/json_pure-2.6.3/lib/json/common.rb:216:in `parse': 809: unexpected token at '*** can't parse "p3yRYFU4KxwQaHQjJ2RdiQtPUZNY4ONIk6LxErRFEjVw." (JSON::ParserError)
+/var/lib/gems/3.0.0/gems/json_pure-2.7.1/lib/json/common.rb:219:in `parse': 809: unexpected token at '*** can't parse "p3yRYFU4KxwQaHQjJ2RdiQtPUZNY4ONIk6LxErRFEjVw." (JSON::ParserError)
 "LPJNul-wow4m6DsqxbninhsWHlwfp0JecwQzYpOLmCQ"
 *** Expected one of [ \\t\\n\\r], "/", ',' at line 2, column 1 (byte 49) after 
 '
-	from /var/lib/gems/3.0.0/gems/json_pure-2.6.3/lib/json/common.rb:216:in `parse'
-	from /var/lib/gems/3.0.0/gems/json_pure-2.6.3/lib/json/common.rb:569:in `load'
+	from /var/lib/gems/3.0.0/gems/json_pure-2.7.1/lib/json/common.rb:219:in `parse'
+	from /var/lib/gems/3.0.0/gems/json_pure-2.7.1/lib/json/common.rb:552:in `load'
 	from /var/lib/gems/3.0.0/gems/cddl-0.10.3/bin/cddl:99:in `rescue in block in <top (required)>'
 	from /var/lib/gems/3.0.0/gems/cddl-0.10.3/bin/cddl:99:in `block in <top (required)>'
 	from /var/lib/gems/3.0.0/gems/cddl-0.10.3/bin/cddl:94:in `each'
 	from /var/lib/gems/3.0.0/gems/cddl-0.10.3/bin/cddl:94:in `<top (required)>'
 	from /usr/local/bin/cddl:25:in `load'
 	from /usr/local/bin/cddl:25:in `<main>'
-/var/lib/gems/3.0.0/gems/cbor-diag-0.8.6/lib/cbor-pure.rb:310:in `decode_item_final': extra bytes follow after a deserialized object of 1 bytes (RuntimeError)
-	from /var/lib/gems/3.0.0/gems/cbor-diag-0.8.6/lib/cbor-pure.rb:88:in `decode'
+/var/lib/gems/3.0.0/gems/cbor-diag-0.8.7/lib/cbor-pure.rb:310:in `decode_item_final': extra bytes follow after a deserialized object of 1 bytes (RuntimeError)
+	from /var/lib/gems/3.0.0/gems/cbor-diag-0.8.7/lib/cbor-pure.rb:88:in `decode'
 	from /var/lib/gems/3.0.0/gems/cddl-0.10.3/bin/cddl:99:in `block in <top (required)>'
 	from /var/lib/gems/3.0.0/gems/cddl-0.10.3/bin/cddl:94:in `each'
 	from /var/lib/gems/3.0.0/gems/cddl-0.10.3/bin/cddl:94:in `<top (required)>'
