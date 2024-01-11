@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?rfc toc="yes"?>
-<rfc xmlns:xi="http://www.w3.org/2001/XInclude" category="exp" docName="draft-ietf-acme-dtnnodeid-11" ipr="trust200902" submissionType="IETF" tocInclude="true" version="3">
+<rfc xmlns:xi="http://www.w3.org/2001/XInclude" category="exp" docName="draft-ietf-acme-dtnnodeid-12" ipr="trust200902" submissionType="IETF" tocInclude="true" version="3">
   <front>
     <title abbrev="ACME DTN Node ID">
 Automated Certificate Management Environment (ACME)
 Delay-Tolerant Networking (DTN) Node ID Validation Extension
     </title>
-    <seriesInfo name="Internet-Draft" value="draft-ietf-acme-dtnnodeid-11"/>
+    <seriesInfo name="Internet-Draft" value="draft-ietf-acme-dtnnodeid-12"/>
     <author fullname="Brian Sipos" initials="B." surname="Sipos">
       <organization abbrev="RKF Engineering">RKF Engineering Solutions, LLC</organization>
       <address>
@@ -29,6 +29,7 @@ Delay-Tolerant Networking (DTN) Node ID Validation Extension
     <abstract>
       <t>
 This document specifies an extension to the Automated Certificate Management Environment (ACME) protocol which allows an ACME server to validate the Delay-Tolerant Networking (DTN) Node ID for an ACME client.
+A DTN Node ID is an identifier used in the Bundle Protocol (BP) to name a "singleton endpoint", one which is registered on a single BP node.
 The DTN Node ID is encoded as a certificate Subject Alternative Name (SAN) of type otherName with a name form of <tt>BundleEID</tt> and as an ACME Identifier type "bundleEID".
       </t>
     </abstract>
@@ -40,9 +41,10 @@ The DTN Node ID is encoded as a certificate Subject Alternative Name (SAN) of ty
 Although the original purpose of the Automatic Certificate Management Environment (ACME) <xref target="RFC8555"/> was to allow Public Key Infrastructure Using X.509 (PKIX) Certification Authorities (CAs) to validate network domain names of clients, the same mechanism can be used to validate any of the subject claims supported by the PKIX profile <xref target="RFC5280"/>.
       </t>
       <t>
-In the case of this specification, the claim being validated is a Subject Alternative Name (SAN) of type otherName with a name form of <tt>BundleEID</tt>, which used to represent an Endpoint ID (EID) for a Delay-Tolerant Networking (DTN) bundle.
-Currently the URI schemes "dtn" and "ipn" as defined in <xref target="RFC9171"/> are valid for an Endpoint ID.
-A DTN Node ID is an Endpoint ID with scheme-specific restrictions to identify it as such; currently the "dtn" scheme uses an empty demux part and the "ipn" scheme uses service number zero.
+In the case of this specification, the claim being validated is a Subject Alternative Name (SAN) of type otherName with a name form of <tt>BundleEID</tt>, which used to represent a Bundle Protocol (BP) Endpoint ID (EID) in a Delay-Tolerant Networking (DTN) overlay network.
+A DTN Node ID is any EID which can uniquely identify a BP node, as defined in <xref section="4.2.5.2" target="RFC9171"/>, which is equivalent to the EID being usable as a singleton endpoint.
+One common EID used as a Node ID is the Administrative EID, which is guaranteed to exist on any BP node.
+Currently the URI schemes "dtn" and "ipn" as defined in <xref target="RFC9171"/> are valid for a singleton endpoint and thus a Node ID.
       </t>
       <t>
 Because the <tt>BundleEID</tt> claim is new to ACME, a new ACME Identifier type "bundleEID" is needed to manage this claim within ACME messaging.
@@ -51,7 +53,7 @@ A "bundleEID" claim can be part of a pre-authorization or as one of the authoriz
       <t>
 Once an ACME server validates a Node ID, either as a pre-authorization of the "bundleEID" or as one of the authorizations of an order containing a "bundleEID", the client can finalize the order using an associated certificate signing request (CSR).
 Because a single order can contain multiple identifiers of multiple types, there can be operational issues for a client attempting to, and possibly failing to, validate those multiple identifiers as described in <xref target="sec-multiple-claims"/>.
-Once a certificate is issued for a Node ID, how the ACME client configures the Bundle Protocol (BP) agent with the new certificate is an implementation matter.
+Once a certificate is issued for a Node ID, how the ACME client configures the BP Agent with the new certificate is an implementation matter.
       </t>
       <aside><t>
 The emergent properties of DTN naming and BP security are still being developed and explored, especially between different organizational and administrative domains, so the "experimental" status of this document is related more to the practical utility of this kind of Node ID validation than to the validation method itself.
@@ -785,7 +787,7 @@ This is functionally similar to DKIM signing of <xref target="RFC6376"/> and pro
         </t>
         <t>
 Another way to mitigate single-path on-path attacks is to attempt validation of the same Node ID from multiple sources or via multiple bundle routing paths, as defined in <xref target="sec-multi-perspective"/>.
-It is not a trivial task to guarantee bundle routing though, so more advanced techniques such as onion routing (using bundle-in-bundle encapsulation <xref target="I-D.ietf-dtn-bibect"/>) could be employed.
+It is not a trivial task to guarantee bundle routing though, so more advanced techniques such as onion routing (using bundle-in-bundle encapsulation) could be employed.
         </t>
       </section>
       <section anchor="sec-security-replay">
@@ -993,7 +995,6 @@ Within the "Bundle Protocol" registry <xref target="IANA-BP"/>, the following en
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8738.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8823.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.9174.xml"/>
-        <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml-ids/reference.I-D.ietf-dtn-bibect.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml-ids/reference.I-D.ietf-dtn-bpv7-admin-iana.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml-ids/reference.I-D.ietf-dtn-bpsec-cose.xml"/>
         <reference anchor="github-dtn-demo-agent" target="https://github.com/BrianSipos/dtn-demo-agent/">
