@@ -211,7 +211,7 @@ Because this is an ACME document, the following DTN Bundle Protocol terms are de
           <dt>Endpoint ID:</dt>
           <dd>
 An Endpoint ID is an identifier for the ultimate destination of a bundle, independent of any intermediate forwarding needed to reach that destination.
-An endpoint can be a singleton or not so an Endpoint ID can also represent a single entity or a set of entities.
+An endpoint can be a singleton or not, so an Endpoint ID can also represent a single entity or a set of entities.
 This is formally defined in <xref section="4.2.5.1" target="RFC9171"/>.
           </dd>
           <dt>Node ID:</dt>
@@ -233,8 +233,8 @@ These is formally defined under <xref section="4.2.5.1" target="RFC9171"/>.
     <section anchor="sec-acme-uri">
       <name>Bundle Endpoint ID ACME Identifier</name>
       <t>
-This specification is the first to make use of an Bundle Endpoint ID to identify a claim for a certificate request in ACME.
-In this document, the only purpose for which an Bundle Endpoint ID ACME identifier is validated is as a DTN Node ID (see <xref target="sec-validate-nodeid"/>), but other specifications can define challenge types for other Endpoint ID uses.
+This specification is the first to make use of a Bundle Endpoint ID to identify a claim for a certificate request in ACME.
+In this document, the only purpose for which a Bundle Endpoint ID ACME identifier is validated is as a DTN Node ID (see <xref target="sec-validate-nodeid"/>), but other specifications can define challenge types for other Endpoint ID uses.
       </t>
       <t>
 Identifiers of type "bundleEID" in certificate requests <bcp14>SHALL</bcp14> appear in an extensionRequest attribute <xref target="RFC2985"/> containing a subjectAltName extension of type otherName with a name form of <tt>BundleEID</tt>, identified by <tt>id-on-bundleEID</tt> of <xref target="IANA-SMI"/>, consistent with the requirements of <xref section="4.4.2.1" target="RFC9174"/>.
@@ -248,7 +248,7 @@ Any "bundleEID" identifier request which uses a scheme not handled by the ACME s
       <t>
 When an ACME server needs to request proof that a client controls a <tt>BundleEID</tt>, it <bcp14>SHALL</bcp14> create an authorization with the identifier type "bundleEID".
 The ACME server <bcp14>SHALL NOT</bcp14> attempt to dereference the EID value on its own.
-It is the responsibility of a validation method to ensure the EID ownership via scheme-specific means authorized by the ACME client.
+It is the responsibility of an ACME validation method to ensure the EID ownership using a method authorized by the ACME client.
       </t>
       <t keepWithNext="true">
 An identifier for the Node ID of "dtn://example/" would be formatted as:
