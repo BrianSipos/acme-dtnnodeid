@@ -16,7 +16,7 @@ The DTN Node ID is encoded as a certificate Subject Alternative Name (SAN) of ty
 <meta content="xml2rfc 3.12.2" name="generator">
 <meta content="ACME" name="keyword">
 <meta content="DTN" name="keyword">
-<meta content="draft-ietf-acme-dtnnodeid-12" name="ietf.draft">
+<meta content="draft-ietf-acme-dtnnodeid-13" name="ietf.draft">
 <!-- Generator version information:
   xml2rfc 3.12.2
     Python 3.10.12
@@ -1177,11 +1177,11 @@ li > p:last-of-type {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">ACME DTN Node ID</td>
-<td class="right">January 2024</td>
+<td class="right">March 2024</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Sipos</td>
-<td class="center">Expires 14 July 2024</td>
+<td class="center">Expires 22 September 2024</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1191,15 +1191,15 @@ li > p:last-of-type {
 <dt class="label-workgroup">Workgroup:</dt>
 <dd class="workgroup">Automated Certificate Management Environment</dd>
 <dt class="label-internet-draft">Internet-Draft:</dt>
-<dd class="internet-draft">draft-ietf-acme-dtnnodeid-12</dd>
+<dd class="internet-draft">draft-ietf-acme-dtnnodeid-13</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2024-01-11" class="published">11 January 2024</time>
+<time datetime="2024-03-21" class="published">21 March 2024</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Experimental</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2024-07-14">14 July 2024</time></dd>
+<dd class="expires"><time datetime="2024-09-22">22 September 2024</time></dd>
 <dt class="label-authors">Author:</dt>
 <dd class="authors">
 <div class="author">
@@ -1236,7 +1236,7 @@ The DTN Node ID is encoded as a certificate Subject Alternative Name (SAN) of ty
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 14 July 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 22 September 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1596,7 +1596,7 @@ Because this is an ACME document, the following DTN Bundle Protocol terms are de
           <dt id="section-1.4-6.1">Endpoint ID:</dt>
           <dd style="margin-left: 1.5em" id="section-1.4-6.2">
 An Endpoint ID is an identifier for the ultimate destination of a bundle, independent of any intermediate forwarding needed to reach that destination.
-An endpoint can be a singleton or not so an Endpoint ID can also represent a single entity or a set of entities.
+An endpoint can be a singleton or not, so an Endpoint ID can also represent a single entity or a set of entities.
 This is formally defined in <span><a href="https://rfc-editor.org/rfc/rfc9171#section-4.2.5.1" class="relref">Section 4.2.5.1</a> of [<a href="#RFC9171" class="xref">RFC9171</a>]</span>.<a href="#section-1.4-6.2" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
@@ -1626,8 +1626,8 @@ These is formally defined under <span><a href="https://rfc-editor.org/rfc/rfc917
 <a href="#section-2" class="section-number selfRef">2. </a><a href="#name-bundle-endpoint-id-acme-ide" class="section-name selfRef">Bundle Endpoint ID ACME Identifier</a>
       </h2>
 <p id="section-2-1">
-This specification is the first to make use of an Bundle Endpoint ID to identify a claim for a certificate request in ACME.
-In this document, the only purpose for which an Bundle Endpoint ID ACME identifier is validated is as a DTN Node ID (see <a href="#sec-validate-nodeid" class="xref">Section 3</a>), but other specifications can define challenge types for other Endpoint ID uses.<a href="#section-2-1" class="pilcrow">¶</a></p>
+This specification is the first to make use of a Bundle Endpoint ID to identify a claim for a certificate request in ACME.
+In this document, the only purpose for which a Bundle Endpoint ID ACME identifier is validated is as a DTN Node ID (see <a href="#sec-validate-nodeid" class="xref">Section 3</a>), but other specifications can define challenge types for other Endpoint ID uses.<a href="#section-2-1" class="pilcrow">¶</a></p>
 <p id="section-2-2">
 Identifiers of type "bundleEID" in certificate requests <span class="bcp14">SHALL</span> appear in an extensionRequest attribute <span>[<a href="#RFC2985" class="xref">RFC2985</a>]</span> containing a subjectAltName extension of type otherName with a name form of <code>BundleEID</code>, identified by <code>id-on-bundleEID</code> of <span>[<a href="#IANA-SMI" class="xref">IANA-SMI</a>]</span>, consistent with the requirements of <span><a href="https://rfc-editor.org/rfc/rfc9174#section-4.4.2.1" class="relref">Section 4.4.2.1</a> of [<a href="#RFC9174" class="xref">RFC9174</a>]</span>.
 Because the <code>BundleEID</code> is encoded as an IA5String it <span class="bcp14">SHALL</span> be treated as being in the percent-encoded form of <span><a href="https://rfc-editor.org/rfc/rfc3986#section-2.1" class="relref">Section 2.1</a> of [<a href="#RFC3986" class="xref">RFC3986</a>]</span>.
@@ -1638,7 +1638,7 @@ Any "bundleEID" identifier request which uses a scheme not handled by the ACME s
 <p id="section-2-4">
 When an ACME server needs to request proof that a client controls a <code>BundleEID</code>, it <span class="bcp14">SHALL</span> create an authorization with the identifier type "bundleEID".
 The ACME server <span class="bcp14">SHALL NOT</span> attempt to dereference the EID value on its own.
-It is the responsibility of a validation method to ensure the EID ownership via scheme-specific means authorized by the ACME client.<a href="#section-2-4" class="pilcrow">¶</a></p>
+It is the responsibility of an ACME validation method to ensure the EID ownership using a method authorized by the ACME client.<a href="#section-2-4" class="pilcrow">¶</a></p>
 <p id="section-2-5" class="keepWithNext">
 An identifier for the Node ID of "dtn://example/" would be formatted as:<a href="#section-2-5" class="pilcrow">¶</a></p>
 <div id="section-2-6">
