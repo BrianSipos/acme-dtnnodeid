@@ -779,7 +779,7 @@ It is possible for intermediate BP nodes to encapsulate-and-encrypt Challenge an
       <section anchor="sec-security-impersonate">
         <name>Threat: BP Node Impersonation</name>
         <t>
-As described in <xref section="8.1" target="RFC8555"/>, it is possible for an active attacker to alter data on both ACME client channel and the DTN validation channel.
+As described in <xref section="10.1" target="RFC8555"/>, it is possible for an active attacker to alter data on both ACME client channel and the DTN validation channel.
         </t>
         <t>
 The primary mitigation is to delegate bundle integrity sourcing to a trusted routing node near, in the sense of bundle routing topology, to the bundle source node as defined in <xref target="sec-bib-gateway"/>.
