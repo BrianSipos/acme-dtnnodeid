@@ -4,13 +4,13 @@
 
 Automated Certificate Management Environment                    B. Sipos
 Internet-Draft                                           RKF Engineering
-Intended status: Experimental                              21 March 2024
-Expires: 22 September 2024
+Intended status: Experimental                              25 March 2024
+Expires: 26 September 2024
 
 
    Automated Certificate Management Environment (ACME) Delay-Tolerant
              Networking (DTN) Node ID Validation Extension
-                      draft-ietf-acme-dtnnodeid-13
+                      draft-ietf-acme-dtnnodeid-14
 
 Abstract
 
@@ -38,7 +38,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 22 September 2024.
+   This Internet-Draft will expire on 26 September 2024.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Sipos                   Expires 22 September 2024               [Page 1]
+Sipos                   Expires 26 September 2024               [Page 1]
 
 Internet-Draft              ACME DTN Node ID                  March 2024
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Sipos                   Expires 22 September 2024               [Page 2]
+Sipos                   Expires 26 September 2024               [Page 2]
 
 Internet-Draft              ACME DTN Node ID                  March 2024
 
@@ -165,7 +165,7 @@ Internet-Draft              ACME DTN Node ID                  March 2024
 
 
 
-Sipos                   Expires 22 September 2024               [Page 3]
+Sipos                   Expires 26 September 2024               [Page 3]
 
 Internet-Draft              ACME DTN Node ID                  March 2024
 
@@ -221,7 +221,7 @@ Internet-Draft              ACME DTN Node ID                  March 2024
 
 
 
-Sipos                   Expires 22 September 2024               [Page 4]
+Sipos                   Expires 26 September 2024               [Page 4]
 
 Internet-Draft              ACME DTN Node ID                  March 2024
 
@@ -277,7 +277,7 @@ Internet-Draft              ACME DTN Node ID                  March 2024
 
 
 
-Sipos                   Expires 22 September 2024               [Page 5]
+Sipos                   Expires 26 September 2024               [Page 5]
 
 Internet-Draft              ACME DTN Node ID                  March 2024
 
@@ -333,7 +333,7 @@ Internet-Draft              ACME DTN Node ID                  March 2024
 
 
 
-Sipos                   Expires 22 September 2024               [Page 6]
+Sipos                   Expires 26 September 2024               [Page 6]
 
 Internet-Draft              ACME DTN Node ID                  March 2024
 
@@ -389,7 +389,7 @@ Internet-Draft              ACME DTN Node ID                  March 2024
 
 
 
-Sipos                   Expires 22 September 2024               [Page 7]
+Sipos                   Expires 26 September 2024               [Page 7]
 
 Internet-Draft              ACME DTN Node ID                  March 2024
 
@@ -445,7 +445,7 @@ Internet-Draft              ACME DTN Node ID                  March 2024
 
 
 
-Sipos                   Expires 22 September 2024               [Page 8]
+Sipos                   Expires 26 September 2024               [Page 8]
 
 Internet-Draft              ACME DTN Node ID                  March 2024
 
@@ -501,7 +501,7 @@ Internet-Draft              ACME DTN Node ID                  March 2024
 
 
 
-Sipos                   Expires 22 September 2024               [Page 9]
+Sipos                   Expires 26 September 2024               [Page 9]
 
 Internet-Draft              ACME DTN Node ID                  March 2024
 
@@ -557,7 +557,7 @@ Internet-Draft              ACME DTN Node ID                  March 2024
 
 
 
-Sipos                   Expires 22 September 2024              [Page 10]
+Sipos                   Expires 26 September 2024              [Page 10]
 
 Internet-Draft              ACME DTN Node ID                  March 2024
 
@@ -613,7 +613,7 @@ Internet-Draft              ACME DTN Node ID                  March 2024
 
 
 
-Sipos                   Expires 22 September 2024              [Page 11]
+Sipos                   Expires 26 September 2024              [Page 11]
 
 Internet-Draft              ACME DTN Node ID                  March 2024
 
@@ -669,7 +669,7 @@ Internet-Draft              ACME DTN Node ID                  March 2024
 
 
 
-Sipos                   Expires 22 September 2024              [Page 12]
+Sipos                   Expires 26 September 2024              [Page 12]
 
 Internet-Draft              ACME DTN Node ID                  March 2024
 
@@ -725,7 +725,7 @@ Internet-Draft              ACME DTN Node ID                  March 2024
 
 
 
-Sipos                   Expires 22 September 2024              [Page 13]
+Sipos                   Expires 26 September 2024              [Page 13]
 
 Internet-Draft              ACME DTN Node ID                  March 2024
 
@@ -781,7 +781,7 @@ Internet-Draft              ACME DTN Node ID                  March 2024
 
 
 
-Sipos                   Expires 22 September 2024              [Page 14]
+Sipos                   Expires 26 September 2024              [Page 14]
 
 Internet-Draft              ACME DTN Node ID                  March 2024
 
@@ -837,7 +837,7 @@ Internet-Draft              ACME DTN Node ID                  March 2024
 
 
 
-Sipos                   Expires 22 September 2024              [Page 15]
+Sipos                   Expires 26 September 2024              [Page 15]
 
 Internet-Draft              ACME DTN Node ID                  March 2024
 
@@ -893,7 +893,7 @@ Internet-Draft              ACME DTN Node ID                  March 2024
 
 
 
-Sipos                   Expires 22 September 2024              [Page 16]
+Sipos                   Expires 26 September 2024              [Page 16]
 
 Internet-Draft              ACME DTN Node ID                  March 2024
 
@@ -949,7 +949,7 @@ Internet-Draft              ACME DTN Node ID                  March 2024
 
 
 
-Sipos                   Expires 22 September 2024              [Page 17]
+Sipos                   Expires 26 September 2024              [Page 17]
 
 Internet-Draft              ACME DTN Node ID                  March 2024
 
@@ -1005,7 +1005,7 @@ Internet-Draft              ACME DTN Node ID                  March 2024
 
 
 
-Sipos                   Expires 22 September 2024              [Page 18]
+Sipos                   Expires 26 September 2024              [Page 18]
 
 Internet-Draft              ACME DTN Node ID                  March 2024
 
@@ -1061,7 +1061,7 @@ Internet-Draft              ACME DTN Node ID                  March 2024
 
 
 
-Sipos                   Expires 22 September 2024              [Page 19]
+Sipos                   Expires 26 September 2024              [Page 19]
 
 Internet-Draft              ACME DTN Node ID                  March 2024
 
@@ -1117,7 +1117,7 @@ Internet-Draft              ACME DTN Node ID                  March 2024
 
 
 
-Sipos                   Expires 22 September 2024              [Page 20]
+Sipos                   Expires 26 September 2024              [Page 20]
 
 Internet-Draft              ACME DTN Node ID                  March 2024
 
@@ -1173,7 +1173,7 @@ Internet-Draft              ACME DTN Node ID                  March 2024
 
 
 
-Sipos                   Expires 22 September 2024              [Page 21]
+Sipos                   Expires 26 September 2024              [Page 21]
 
 Internet-Draft              ACME DTN Node ID                  March 2024
 
@@ -1196,7 +1196,7 @@ Internet-Draft              ACME DTN Node ID                  March 2024
 
 7.2.  Threat: BP Node Impersonation
 
-   As described in Section 8.1 of [RFC8555], it is possible for an
+   As described in Section 10.1 of [RFC8555], it is possible for an
    active attacker to alter data on both ACME client channel and the DTN
    validation channel.
 
@@ -1229,7 +1229,7 @@ Internet-Draft              ACME DTN Node ID                  March 2024
 
 
 
-Sipos                   Expires 22 September 2024              [Page 22]
+Sipos                   Expires 26 September 2024              [Page 22]
 
 Internet-Draft              ACME DTN Node ID                  March 2024
 
@@ -1285,7 +1285,7 @@ Internet-Draft              ACME DTN Node ID                  March 2024
 
 
 
-Sipos                   Expires 22 September 2024              [Page 23]
+Sipos                   Expires 26 September 2024              [Page 23]
 
 Internet-Draft              ACME DTN Node ID                  March 2024
 
@@ -1341,7 +1341,7 @@ Internet-Draft              ACME DTN Node ID                  March 2024
 
 
 
-Sipos                   Expires 22 September 2024              [Page 24]
+Sipos                   Expires 26 September 2024              [Page 24]
 
 Internet-Draft              ACME DTN Node ID                  March 2024
 
@@ -1397,7 +1397,7 @@ Internet-Draft              ACME DTN Node ID                  March 2024
 
 
 
-Sipos                   Expires 22 September 2024              [Page 25]
+Sipos                   Expires 26 September 2024              [Page 25]
 
 Internet-Draft              ACME DTN Node ID                  March 2024
 
@@ -1453,7 +1453,7 @@ Internet-Draft              ACME DTN Node ID                  March 2024
 
 
 
-Sipos                   Expires 22 September 2024              [Page 26]
+Sipos                   Expires 26 September 2024              [Page 26]
 
 Internet-Draft              ACME DTN Node ID                  March 2024
 
@@ -1509,7 +1509,7 @@ Internet-Draft              ACME DTN Node ID                  March 2024
 
 
 
-Sipos                   Expires 22 September 2024              [Page 27]
+Sipos                   Expires 26 September 2024              [Page 27]
 
 Internet-Draft              ACME DTN Node ID                  March 2024
 
@@ -1565,7 +1565,7 @@ Appendix A.  Administrative Record Types CDDL
 
 
 
-Sipos                   Expires 22 September 2024              [Page 28]
+Sipos                   Expires 26 September 2024              [Page 28]
 
 Internet-Draft              ACME DTN Node ID                  March 2024
 
@@ -1621,7 +1621,7 @@ B.1.  Challenge Bundle
 
 
 
-Sipos                   Expires 22 September 2024              [Page 29]
+Sipos                   Expires 26 September 2024              [Page 29]
 
 Internet-Draft              ACME DTN Node ID                  March 2024
 
@@ -1677,7 +1677,7 @@ B.2.  Response Bundle
 
 
 
-Sipos                   Expires 22 September 2024              [Page 30]
+Sipos                   Expires 26 September 2024              [Page 30]
 
 Internet-Draft              ACME DTN Node ID                  March 2024
 
@@ -1733,4 +1733,4 @@ Author's Address
 
 
 
-Sipos                   Expires 22 September 2024              [Page 31]
+Sipos                   Expires 26 September 2024              [Page 31]
