@@ -10,7 +10,7 @@ Expires: 26 September 2024
 
    Automated Certificate Management Environment (ACME) Delay-Tolerant
              Networking (DTN) Node ID Validation Extension
-                      draft-ietf-acme-dtnnodeid-14
+                      draft-ietf-acme-dtnnodeid-13
 
 Abstract
 
