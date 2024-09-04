@@ -19,7 +19,7 @@ jobs:
         cmake -S . -B build -DCMAKE_INSTALL_DOCDIR=$PWD/build/install
         cmake --build build -v
         cmake --install build
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
         name: spec
         path: build/install
