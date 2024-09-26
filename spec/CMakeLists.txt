@@ -111,39 +111,44 @@ else()
     )
 endif()
 
+
 # Process all CDDL concatenated together
+set(EXTRACTED_CDDL "extracted.cddl")
+set(COMBINED_CDDL "combined.cddl")
+add_custom_command(
+    OUTPUT "${EXTRACTED_CDDL}"
+    DEPENDS "${DRAFT_NAME_XML}"
+    COMMAND ${XMLSTARLET} sel --text -t -v '//sourcecode[@type="cddl"]' "${DRAFT_NAME_XML}" >"${EXTRACTED_CDDL}"
+    COMMAND sed -i "'s/[[:space:]]*$$//'" "${EXTRACTED_CDDL}"
+)
+add_custom_command(
+    OUTPUT "${COMBINED_CDDL}"
+    DEPENDS "${EXTRACTED_CDDL}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/../bpv7.cddl"
+    COMMAND cat
+        "${EXTRACTED_CDDL}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/../bpv7.cddl"
+        >"${COMBINED_CDDL}"
+)
+add_custom_target(
+    cddl ALL
+    DEPENDS "${COMBINED_CDDL}"
+)
+install(
+    FILES
+        "${CMAKE_CURRENT_BINARY_DIR}/${EXTRACTED_CDDL}"
+        "${CMAKE_CURRENT_BINARY_DIR}/${COMBINED_CDDL}"
+    TYPE DOC
+)
 find_program(CDDLTOOL cddl)
 if(NOT CDDLTOOL)
     message(WARNING "No `cddl` found")
 else()
-    set(EXTRACTED_CDDL "extracted.cddl")
-    set(COMBINED_CDDL "combined.cddl")
-    add_custom_command(
-        OUTPUT "${EXTRACTED_CDDL}"
-        DEPENDS "${DRAFT_NAME_XML}"
-        COMMAND ${XMLSTARLET} sel --text -t -v '//sourcecode[@type="cddl"]' "${DRAFT_NAME_XML}" >"${EXTRACTED_CDDL}"
-    )
-    add_custom_command(
-        OUTPUT "${COMBINED_CDDL}"
-        DEPENDS "${EXTRACTED_CDDL}"
-            "${CMAKE_CURRENT_SOURCE_DIR}/../bpv7.cddl"
-        COMMAND cat
-                "${EXTRACTED_CDDL}"
-                "${CMAKE_CURRENT_SOURCE_DIR}/../bpv7.cddl"
-                >"${COMBINED_CDDL}"
-    )
-    install(
-        FILES
-            "${CMAKE_CURRENT_BINARY_DIR}/${EXTRACTED_CDDL}"
-            "${CMAKE_CURRENT_BINARY_DIR}/${COMBINED_CDDL}"
-        TYPE DOC
-    )
-
     set(CDDLERRORS_TXT "cddlerrors.txt")
     add_custom_command(
         OUTPUT "${CDDLERRORS_TXT}"
         DEPENDS "${COMBINED_CDDL}"
-        COMMAND ${CDDLTOOL} "${COMBINED_CDDL}" generate 2>"${CDDLERRORS_TXT}" 1>&2 || true
+        COMMAND ${CDDLTOOL} compile-cddl --cddl "${COMBINED_CDDL}" 2>"${CDDLERRORS_TXT}" 1>&2 || true
     )
     add_custom_target(
         cddlerrors ALL
@@ -158,13 +163,13 @@ else()
     find_program(DIAG2CBOR diag2cbor.rb)
     if(NOT DIAG2CBOR)
         message(WARNING "No `diag2cbor.rb` found")
-    else()
+    elseif(VALIDATE_CBOR)
         set(CBORVALIDERRORS_TXT "cborvaliderrors.txt")
         set(CHECK_CBOR "${CMAKE_CURRENT_SOURCE_DIR}/check_cbor.sh")
         add_custom_command(
             OUTPUT "${CBORVALIDERRORS_TXT}"
             DEPENDS "${DRAFT_NAME_XML}" "${SPLIT_ARTWORK}" "${CHECK_CBOR}" "${COMBINED_CDDL}"
-            COMMAND ${PYTHON} "${SPLIT_ARTWORK}" "${DRAFT_NAME_XML}" '//sourcecode[@type="cbor"]' bash "${CHECK_CBOR}" "${COMBINED_CDDL}" 2>"${CBORVALIDERRORS_TXT}" 1>&2 || true
+            COMMAND ${PYTHON} "${SPLIT_ARTWORK}" "${DRAFT_NAME_XML}" '//sourcecode[@type="cbor"]' "${CHECK_CBOR}" "${COMBINED_CDDL}" 2>"${CBORVALIDERRORS_TXT}" 1>&2 || true
         )
         add_custom_target(
             cborvalid ALL

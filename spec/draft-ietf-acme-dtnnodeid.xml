@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?rfc toc="yes"?>
-<rfc xmlns:xi="http://www.w3.org/2001/XInclude" category="exp" docName="draft-ietf-acme-dtnnodeid-14" ipr="trust200902" submissionType="IETF" tocInclude="true" version="3">
+<rfc xmlns:xi="http://www.w3.org/2001/XInclude" category="exp" docName="draft-ietf-acme-dtnnodeid-15" ipr="trust200902" submissionType="IETF" tocInclude="true" version="3">
   <front>
     <title abbrev="ACME DTN Node ID">
 Automated Certificate Management Environment (ACME)
 Delay-Tolerant Networking (DTN) Node ID Validation Extension
     </title>
-    <seriesInfo name="Internet-Draft" value="draft-ietf-acme-dtnnodeid-14"/>
+    <seriesInfo name="Internet-Draft" value="draft-ietf-acme-dtnnodeid-15"/>
     <author fullname="Brian Sipos" initials="B." surname="Sipos">
       <organization abbrev="RKF Engineering">RKF Engineering Solutions, LLC</organization>
       <address>
@@ -855,12 +855,12 @@ Avoiding this transmission would require a full round-trip between BP agent and 
     <section anchor="sec-iana">
       <name>IANA Considerations</name>
       <t>
-This specification adds to the ACME registry and BP registry for this behavior.
+This specification adds to the ACME registry group and BP registry group for this behavior.
       </t>
       <section anchor="sec-iana-acme-identifier">
         <name>ACME Identifier Types</name>
         <t>
-Within the "Automated Certificate Management Environment (ACME) Protocol" registry <xref target="IANA-ACME"/>, the following entry has been added to the "ACME Identifier Types" sub-registry.
+Within the "Automated Certificate Management Environment (ACME) Protocol" registry group <xref target="IANA-ACME"/>, the following entry has been added to the "ACME Identifier Types" registry.
         </t>
         <table>
           <thead>
@@ -880,7 +880,7 @@ Within the "Automated Certificate Management Environment (ACME) Protocol" regist
       <section anchor="sec-iana-acme-method">
         <name>ACME Validation Methods</name>
         <t>
-Within the "Automated Certificate Management Environment (ACME) Protocol" registry <xref target="IANA-ACME"/>, the following entry has been added to the "ACME Validation Methods" sub-registry.
+Within the "Automated Certificate Management Environment (ACME) Protocol" registry group <xref target="IANA-ACME"/>, the following entry has been added to the "ACME Validation Methods" registry.
         </t>
         <table>
           <thead>
@@ -904,7 +904,7 @@ Within the "Automated Certificate Management Environment (ACME) Protocol" regist
       <section anchor="sec-iana-bp-admin-type">
         <name>Bundle Administrative Record Types</name>
         <t>
-Within the "Bundle Protocol" registry <xref target="IANA-BP"/>, the following entries have been added to the "Bundle Administrative Record Types" sub-registry.
+Within the "Bundle Protocol" registry group <xref target="IANA-BP"/>, the following entries have been added to the "Bundle Administrative Record Types" registry.
         </t>
         <t>
 [NOTE to the RFC Editor: For <xref target="RFC5050"/> compatibility the AR-TBD value needs to be no larger than 15, but such compatibility is not needed. For BPbis the AR-TBD value needs to be no larger than 65535 as defined by <xref target="I-D.ietf-dtn-bpv7-admin-iana"/>.]
