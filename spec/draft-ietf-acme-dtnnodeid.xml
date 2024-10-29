@@ -112,7 +112,7 @@ A Node ID can also be used as an endpoint for administrative bundles.
 More detailed descriptions of the rationale and capabilities of these networks can be found in "Delay-Tolerant Network Architecture" <xref target="RFC4838"/>.
         </t>
         <t>
-When an ACME client requests a pre-authorization or an order with a "bundleEID" identifier type having a value consistent with a Node ID (see <xref section="4.2.5" target="RFC9171"/>), the ACME server offers a "dtn-nodeid-01" challenge type to validate that Node ID.
+When an ACME client requests a pre-authorization or an order with a "bundleEID" identifier type having a value consistent with a Node ID (see <xref section="4.2.5" target="RFC9171"/>), the ACME server offers a "bp-nodeid-00" challenge type to validate that Node ID.
 If the ACME client attempts the authorization challenge to validate a Node ID, the ACME server sends an ACME Node ID Validation Challenge Bundle with a destination of the Node ID being validated.
 The BP agent on that node receives the Challenge Bundle, generates an ACME key authorization digest, and sends an ACME Node ID Validation Response Bundle in reply.
 An Integrity Gateway on the client side of the DTN can be used to attest to the source of the Response Bundle.
@@ -186,12 +186,12 @@ These terms are:
           <dt>Challenge Request:</dt>
           <dd>
 This is a shortened form of the full "DTN Node ID Challenge Request Object".
-It is a JSON object created by the ACME server for challenge type "dtn-nodeid-01".
+It is a JSON object created by the ACME server for challenge type "bp-nodeid-00".
           </dd>
           <dt>Challenge Response:</dt>
           <dd>
 This is a shortened form of the full "DTN Node ID Challenge Response Object".
-It is a JSON object created by the ACME client to authorize a challenge type "dtn-nodeid-01".
+It is a JSON object created by the ACME client to authorize a challenge type "bp-nodeid-00".
           </dd>
           <dt>Challenge Bundle:</dt>
           <dd>
@@ -360,7 +360,7 @@ The ACME server verifies the client's control over a Node ID by performing the f
 The ACME server receives a newOrder or newAuthz request including the identifier of type "bundleEID", where the URI value is a Node ID.
         </li>
         <li>
-The ACME server generates an authorization for the Node ID with challenge type "dtn-nodeid-01" in accordance with <xref target="sec-nodeid-challenge-request"/>.
+The ACME server generates an authorization for the Node ID with challenge type "bp-nodeid-00" in accordance with <xref target="sec-nodeid-challenge-request"/>.
         </li>
         <li anchor="step-server-authorize">
 The ACME server receives a POST to the challenge URL indicated from the authorization object.
@@ -397,7 +397,7 @@ The DTN Node ID Challenge request object has the following content:
         <dl newline="false" spacing="normal">
           <dt>type (required, string):</dt>
           <dd>
-The string "dtn-nodeid-01".
+The string "bp-nodeid-00".
           </dd>
           <dt>id-chal (required, string):</dt>
           <dd>
@@ -419,7 +419,7 @@ See <xref target="RFC4086"/> for additional information on randomness requiremen
         </dl>
         <sourcecode type="json">
 {
-  "type": "dtn-nodeid-01",
+  "type": "bp-nodeid-00",
   "url": "https://example.com/acme/chall/prV_B7yEyA4",
   "id-chal": "dDtaviYTPUWFS3NK37YWfQ",
   "token-chal": "tPUZNY4ONIk6LxErRFEjVw"
@@ -893,7 +893,7 @@ Within the "Automated Certificate Management Environment (ACME) Protocol" regist
           </thead>
           <tbody>
             <tr>
-              <td>dtn-nodeid-01</td>
+              <td>bp-nodeid-00</td>
               <td>bundleEID</td>
               <td>Y</td>
               <td>This specification</td>
