@@ -530,7 +530,7 @@ This structure is part of the extension CDDL in <xref target="sec-cddl"/>.
 An example full Challenge Bundle is included in <xref target="sec-example-bundle-challenge"/>
         </t>
         <t>
-For interoperability, entities which use this validation method <bcp14>SHALL</bcp14> support the hash algorithm "SHA-256" of <xref target="RFC9054"/>, but can use other hash algorithms.
+For interoperability, entities which use this validation method <bcp14>SHALL</bcp14> support the hash algorithm "SHA-256" (-16) of <xref target="RFC9054"/>, but can use other hash algorithms.
 This requirement allows for different implementations to be configured to use an interoperable algorithm, but does not preclude the use of other algorithms.
         </t>
         <t>
@@ -1054,17 +1054,18 @@ $admin-record /= [0xFFFF, acme-record]
 acme-record = {
   id-chal,
   token-bundle,
+  ; One of the following is always present
   ? key-auth-digest ; present in Response Bundles
   ? alg-list ; present in Challenge Bundles
 }
-id-chal = (1 =&gt; bstr)
-token-bundle = (2 =&gt; bstr)
-key-auth-digest = (3 =&gt; [
+id-chal = (1: bstr)
+token-bundle = (2: bstr)
+key-auth-digest = (3: [
     alg: alg-id,
     value: bstr
 ])
-alg-list = (4 =&gt; [+ alg-id])
-; From the IANA registry, only hash algorithms allowed
+alg-list = (4: [+ alg-id])
+; From the IANA COSE registry, only hash algorithms allowed
 alg-id: tstr / int
 </sourcecode>
     </section>
