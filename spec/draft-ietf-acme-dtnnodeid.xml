@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE rfc [
+  <!ENTITY nbsp    "&#160;">
+  <!ENTITY zwsp   "&#8203;">
+  <!ENTITY nbhy   "&#8209;">
+  <!ENTITY wj     "&#8288;">
+]>
 <?rfc toc="yes"?>
 <rfc xmlns:xi="http://www.w3.org/2001/XInclude" category="exp" docName="draft-ietf-acme-dtnnodeid-18" ipr="trust200902" submissionType="IETF" tocInclude="true" version="3">
   <front>
@@ -41,7 +47,7 @@ The DTN Node ID is encoded as a certificate Subject Alternative Name (SAN) of ty
 Although the original purpose of the Automatic Certificate Management Environment (ACME) <xref target="RFC8555"/> was to allow Public Key Infrastructure Using X.509 (PKIX) Certification Authorities (CAs) to validate network domain names of clients, the same mechanism can be used to validate any of the subject claims supported by the PKIX profile <xref target="RFC5280"/>.
       </t>
       <t>
-In the case of this specification, the claim being validated is a Subject Alternative Name (SAN) of type otherName with a name form of <tt>BundleEID</tt>, which used to represent a Bundle Protocol (BP) Endpoint ID (EID) in a Delay-Tolerant Networking (DTN) overlay network.
+In the case of this specification, the claim being validated is a Subject Alternative Name (SAN) of type <tt>otherName</tt> with a name form of <tt>BundleEID</tt>, which used to represent a Bundle Protocol (BP) Endpoint ID (EID) in a Delay-Tolerant Networking (DTN) overlay network.
 A DTN Node ID is any EID which can uniquely identify a BP node, as defined in <xref section="4.2.5.2" target="RFC9171"/>, which is equivalent to the EID being usable as a singleton endpoint.
 One common EID used as a Node ID is the Administrative EID, which is guaranteed to exist on any BP node.
 Currently the URI schemes "dtn" and "ipn" as defined in <xref target="RFC9171"/> are valid for a singleton endpoint and thus a Node ID.
@@ -255,17 +261,6 @@ An identifier for the Node ID of "dtn://example/" would be formatted as:
   "value": "dtn://example/"
 }
 </sourcecode>
-    <section>
-      <name>Sources of Bundle Endpoint ID</name>
-      <t>
-Identifiers of type "bundleEID" can be present in an ACME new order or in a pre-authorization in accordance with <xref section="7.4" target="RFC8555"/>.
-A "bundleEID" identifier can be mixed with any other identifier types.
-      </t>
-      <t>
-These identifiers can also originate from certificate requests within in an <tt>extensionRequest</tt> attribute (see <xref target="RFC2985"/>) containing a <tt>subjectAltName</tt> extension of type <tt>otherName</tt> with a name form of <tt>BundleEID</tt>, identified by <tt>id-on-bundleEID</tt> of <xref target="IANA-SMI"/>.
-Because the <tt>BundleEID</tt> name form is encoded as an IA5String it <bcp14>SHALL</bcp14> be treated as being in the percent-encoded form of <xref section="2.1" target="RFC3986"/>.
-      </t>
-    </section>
     <section anchor="sec-eid-uses">
       <name>Subsets of Bundle Endpoint ID</name>
         <t>
@@ -356,7 +351,7 @@ The ACME client waits for the authorization to be finalized on the ACME server i
         </li>
         <li>
 Once the challenge is completed (successfully or not), the ACME client indicates to the BP agent that the <tt>id-chal</tt> is no longer usable.
-If the authorization fails, the ACME client <bcp14>MAY</bcp14> retry the challenge from Step <xref format="counter" target="step-client-authorize"/>.
+If the authorization fails, the ACME client <bcp14>MAY</bcp14> retry the challenge from Step&nbsp;<xref format="counter" target="step-client-authorize"/>.
         </li>
       </ol>
       <t>
@@ -385,7 +380,7 @@ Responses are encoded in accordance with <xref target="sec-bundle-response"/>.
         <li>
 Once received and decoded, the ACME server checks the contents of each Response Bundle in accordance with <xref target="sec-response-check"/>.
 After all Challenge Bundles have either been responded to or timed-out, the ACME server policy (see <xref target="sec-multi-perspective"/>) determines whether the validation is successful.
-If validation is not successful, a client may retry the challenge which starts in Step <xref format="counter" target="step-server-authorize"/>.
+If validation is not successful, a client may retry the challenge which starts in Step&nbsp;<xref format="counter" target="step-server-authorize"/>.
         </li>
       </ol>
       <t>
@@ -725,18 +720,29 @@ The ultimate purpose of this ACME validation is to allow a CA to issue certifica
 These purposes are referred to here as bundle security certificates.
       </t>
       <t>
+Identifiers of type "bundleEID" correlate to certificate requests within in an <tt>extensionRequest</tt> attribute (see <xref target="RFC2985"/>) containing a <tt>subjectAltName</tt> extension of type <tt>otherName</tt> with a name form of <tt>BundleEID</tt>, identified by <tt>id-on-bundleEID</tt> of <xref target="IANA-SMI"/>.
+This form is referred to as a "NODE-ID" as defined in <xref section="4.4.1" target="RFC9174"/>.
+Because the <tt>BundleEID</tt> name form is encoded as an IA5String it <bcp14>SHALL</bcp14> be treated as being in the percent-encoded form of <xref section="2.1" target="RFC3986"/>.
+      </t>
+      <t>
 One defining aspect of bundle security certificates is the Extended Key Usage key purpose <tt>id-kp-bundleSecurity</tt> of <xref target="IANA-SMI"/>, as defined in <xref section="4.4.2.1" target="RFC9174"/>.
-When requesting a certificate which includes a Node ID SAN, the CSR <bcp14>SHOULD</bcp14> include an Extended Key Usage of <tt>id-kp-bundleSecurity</tt>.
-When a bundle security certificate is issued based on a validated Node ID SAN, the certificate <bcp14>SHALL</bcp14> include an Extended Key Usage of <tt>id-kp-bundleSecurity</tt>.
+When requesting a certificate which includes a NODE-ID, the CSR <bcp14>SHOULD</bcp14> include an Extended Key Usage of <tt>id-kp-bundleSecurity</tt>.
+When a bundle security certificate is issued based on a validated NODE-ID, the certificate <bcp14>SHALL</bcp14> include an Extended Key Usage of <tt>id-kp-bundleSecurity</tt>.
       </t>
       <section anchor="sec-multiple-claims">
         <name>Multiple Identity Claims</name>
         <t>
-A single bundle security CSR <bcp14>MAY</bcp14> contain a mixed set of SAN claims, including combinations of "ip", "dns", and "bundleEID" claims.
-There is no restriction on how a certificate combines these claims, but each claim <bcp14>SHALL</bcp14> be validated by an ACME server to issue such a certificate as part of an associated ACME order.
+A single bundle security CSR <bcp14>MAY</bcp14> contain a mixed set of SAN identifiers, including combinations of IP-ID, DNS-ID <xref target="RFC9525"/> and NODE-ID <xref target="RFC9174"/> types.
+These correspond with ACME identifier types "ip", "dns", and "bundleEID" respectively.
+        </t>
+        <t>
+There is no restriction on how a certificate combines these claims, but each identifier <bcp14>SHALL</bcp14> be validated by an ACME server to issue such a certificate as part of an associated ACME order.
 This is no different than the existing behavior of <xref target="RFC8555"/> but is mentioned here to make sure that CA policy handles such situations; especially related to validation failure of an identifier in the presence of multiple identifiers.
 The initial "ip" validations are defined in <xref target="RFC8738"/> and initial "dns" validations are defined in <xref target="RFC8555"/> and <xref target="RFC8737"/>.
-The specific use case of <xref target="RFC9174"/> allows, and for some network policies requires, that a certificate authenticate both the DNS name of an entity as well as the Node ID of the entity.
+        </t>
+        <t>
+The specific use case of TLS-based security in <xref target="RFC9174"/> allows, and for some network policies requires, that a certificate authenticate both the DNS name of an entity as well as the Node ID of the entity.
+These authentications apply to each identifier type, used for different network layers, at different points during secure session establishment.
         </t>
       </section>
       <section>
@@ -1002,6 +1008,8 @@ Within the "Bundle Protocol" registry group <xref target="IANA-BP"/>, the follow
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.9054.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.9171.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.9172.xml"/>
+        <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.9174.xml"/>
+        <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.9525.xml"/>
       </references>
       <references>
         <name>Informative References</name>
@@ -1010,7 +1018,6 @@ Within the "Bundle Protocol" registry group <xref target="IANA-BP"/>, the follow
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8737.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8738.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8823.xml"/>
-        <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.9174.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.9713.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml-ids/reference.I-D.ietf-dtn-bpsec-cose.xml"/>
         <reference anchor="github-dtn-demo-agent" target="https://github.com/BrianSipos/dtn-demo-agent/">
