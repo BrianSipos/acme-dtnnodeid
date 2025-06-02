@@ -248,7 +248,7 @@ The ACME server <bcp14>SHALL</bcp14> decode and normalize (based on scheme-speci
 Any "bundleEID" identifier request which uses a scheme not handled by the ACME server or for which the EID does not match the scheme-specific syntax <bcp14>SHALL</bcp14> be rejected with an ACME error type of "rejectedIdentifier".
       </t>
       <t>
-When an ACME server needs to request proof that a client controls a <tt>BundleEID</tt>, it <bcp14>SHALL</bcp14> create an authorization with the identifier type "bundleEID".
+When an ACME server needs to request proof that a client controls a Bundle EID, it <bcp14>SHALL</bcp14> create an authorization with the identifier type "bundleEID".
 The ACME server <bcp14>SHALL NOT</bcp14> attempt to dereference the EID value on its own.
 It is the responsibility of an ACME validation method to ensure the EID ownership using a method authorized by the ACME client.
       </t>
@@ -374,7 +374,7 @@ Each challenge bundle <bcp14>SHALL</bcp14> contain a distinct <tt>token-bundle</
 Computing an expected Key Authorization digest is not necessary until a response is received with a chosen hash algorithm.
         </li>
         <li>
-The ACME server waits for Response Bundle(s) for a limited interval of time (based on the challenge response object of <xref target="sec-nodeid-response-obj"/>).
+The ACME server waits for Response Bundle(s) for a limited interval of time (based on the response object of <xref target="sec-nodeid-response-obj"/>).
 Responses are encoded in accordance with <xref target="sec-bundle-response"/>.
         </li>
         <li>
@@ -389,12 +389,12 @@ A BP agent <bcp14>SHALL</bcp14> respond to ACME challenges only within the inter
 A BP agent <bcp14>SHALL</bcp14> respond to multiple Challenge Bundles with the same ACME parameters but different bundle identities (source Node ID and timestamp); these correspond with the ACME server validating via multiple routing paths.
       </t>
       <section anchor="sec-nodeid-challenge-obj">
-        <name>DTN Node ID Challenge Request Object</name>
+        <name>DTN Node ID Challenge Object</name>
         <t>
-The DTN Node ID Challenge request object is defined by the ACME server when it supports validating Node IDs.
+The DTN Node ID Challenge object is included by the ACME server when it supports validating Node IDs.
         </t>
         <t>
-The DTN Node ID Challenge request object has the following content:
+The DTN Node ID Challenge object has the following content:
         </t>
         <dl newline="false" spacing="normal">
           <dt>type (required, string):</dt>
@@ -432,13 +432,13 @@ The <tt>token-chal</tt> value included in this object applies to the entire chal
         </t>
       </section>
       <section anchor="sec-nodeid-response-obj">
-        <name>DTN Node ID Challenge Response Object</name>
+        <name>DTN Node ID Response Object</name>
         <t>
-The DTN Node ID Challenge response object is defined by the ACME client when it authorizes validation of a Node ID.
+The DTN Node ID response object is sent by the ACME client when it authorizes validation of a Node ID.
 Because a DTN has the potential for significantly longer delays than a non-DTN network, the ACME client is able to inform the ACME server if a particular validation round-trip is expected to take longer than normal network delays (on the order of seconds).
         </t>
         <t>
-The DTN Node ID Challenge response object has the following content:
+The DTN Node ID response object has the following content:
         </t>
         <dl newline="false" spacing="normal">
           <dt>rtt (optional, number):</dt>
@@ -738,7 +738,7 @@ These correspond with ACME identifier types "ip", "dns", and "bundleEID" respect
         <t>
 There is no restriction on how a certificate combines these claims, but each identifier <bcp14>SHALL</bcp14> be validated by an ACME server to issue such a certificate as part of an associated ACME order.
 This is no different than the existing behavior of <xref target="RFC8555"/> but is mentioned here to make sure that CA policy handles such situations; especially related to validation failure of an identifier in the presence of multiple identifiers.
-The initial "ip" validations are defined in <xref target="RFC8738"/> and initial "dns" validations are defined in <xref target="RFC8555"/> and <xref target="RFC8737"/>.
+The initial "ip" validations are defined in <xref target="RFC8738"/> and initial "dns" validations are defined in <xref target="RFC8555"/>.
         </t>
         <t>
 The specific use case of TLS-based security in <xref target="RFC9174"/> allows, and for some network policies requires, that a certificate authenticate both the DNS name of an entity as well as the Node ID of the entity.
@@ -761,26 +761,6 @@ In order to request encryption only bundle security certificate, the CSR <bcp14>
 Presence of both of the above sets of key usage bits in the CSR, as well as absence of key usage extension in the CSR, signals to ACME server to issue a bundle security certificate suitable for both signing and encryption.
         </t>
       </section>
-    </section>
-    <section removeInRFC="true">
-      <name>Implementation Status</name>
-      <t>
-[NOTE to the RFC Editor: please remove this section before publication, as well as the reference to <xref target="RFC7942"/> and <xref target="github-dtn-demo-agent"/> and <xref target="github-dtn-wireshark"/>.]
-      </t>
-      <t>
-This section records the status of known implementations of the protocol defined by this specification at the time of posting of this Internet-Draft, and is based on a proposal described in <xref target="RFC7942"/>.
-The description of implementations in this section is intended to assist the IETF in its decision processes in progressing drafts to RFCs.
-Please note that the listing of any individual implementation here does not imply endorsement by the IETF.
-Furthermore, no effort has been spent to verify the information presented here that was supplied by IETF contributors.
-This is not intended as, and must not be construed to be, a catalog of available implementations or their features.
-Readers are advised to note that other implementations can exist.
-      </t>
-      <t>
-An example implementation of the this draft of ACME Node ID Validation has been created as a GitHub project <xref target="github-dtn-demo-agent"/> and is intended to use as a proof-of-concept and as a possible source of interoperability testing.
-      </t>
-      <t>
-A Wireshark dissector for of the this draft of ACME Node ID Validation has been created as a GitHub project <xref target="github-dtn-wireshark"/> and is intended to be used to inspect and troubleshoot implementations.
-      </t>
     </section>
     <section anchor="sec-security">
       <name>Security Considerations</name>
@@ -1015,7 +995,6 @@ Within the "Bundle Protocol" registry group <xref target="IANA-BP"/>, the follow
         <name>Informative References</name>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.5050.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6376.xml"/>
-        <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8737.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8738.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8823.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.9713.xml"/>
@@ -1053,7 +1032,7 @@ Within the "Bundle Protocol" registry group <xref target="IANA-BP"/>, the follow
 [NOTE to the RFC Editor: The "0xFFFF" in this CDDL is replaced by the "ACME Node ID Validation" administrative record type code.]
       </t>
       <t keepWithNext="true">
-The normative CDDL extension of BP <xref target="RFC9171"/> for the ACME bundles is:
+The extension of BPv7 from <xref section="B" target="RFC9171"/> for the ACME bundles in <xref target="sec-bundle-challenge"/> and <xref target="sec-bundle-response"/> is the following CDDL.
       </t>
       <sourcecode type="cddl">
 ; All ACME records have the same structure
@@ -1196,6 +1175,26 @@ This specification is based on DTN use cases related to PKIX certificate issuanc
       </t>
       <t>
 The workflow and terminology of this validation method was originally copied from the work of Alexey Melnikov in <xref target="RFC8823"/>.
+      </t>
+    </section>
+    <section numbered="false" removeInRFC="true">
+      <name>Implementation Status</name>
+      <t>
+[NOTE to the RFC Editor: please remove this section before publication, as well as the reference to <xref target="RFC7942"/> and <xref target="github-dtn-demo-agent"/> and <xref target="github-dtn-wireshark"/>.]
+      </t>
+      <t>
+This section records the status of known implementations of the protocol defined by this specification at the time of posting of this Internet-Draft, and is based on a proposal described in <xref target="RFC7942"/>.
+The description of implementations in this section is intended to assist the IETF in its decision processes in progressing drafts to RFCs.
+Please note that the listing of any individual implementation here does not imply endorsement by the IETF.
+Furthermore, no effort has been spent to verify the information presented here that was supplied by IETF contributors.
+This is not intended as, and must not be construed to be, a catalog of available implementations or their features.
+Readers are advised to note that other implementations can exist.
+      </t>
+      <t>
+An example implementation of the this draft of ACME Node ID Validation has been created as a GitHub project <xref target="github-dtn-demo-agent"/> and is intended to use as a proof-of-concept and as a possible source of interoperability testing.
+      </t>
+      <t>
+A Wireshark dissector for of the this draft of ACME Node ID Validation has been created as a GitHub project <xref target="github-dtn-wireshark"/> and is intended to be used to inspect and troubleshoot implementations.
       </t>
     </section>
   </back>

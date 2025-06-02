@@ -105,7 +105,8 @@ block-type-specific-data = bstr / #6.24(bstr)
 embedded-cbor<Item> = (bstr .cbor Item) / #6.24(bstr .cbor Item) / bstr
 
 ; Extension block type, which does not specialize other than the code/number
-extension-block = $extension-block .within canonical-block-structure
+extension-block =
+  $extension-block .within canonical-block-structure
 ; Generic shared structure of all non-primary blocks
 extension-block-use<CodeValue, BlockData> = [
   block-type-code: CodeValue,
