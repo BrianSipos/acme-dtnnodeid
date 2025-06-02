@@ -241,15 +241,16 @@ In this document, the only purpose for which a Bundle Endpoint ID ACME identifie
       </t>
       <t>
 Every identifier of type "bundleEID" <bcp14>SHALL</bcp14> have a value containing a text URI consistent with the requirements of <xref section="4.2.5.1" target="RFC9171"/> using one of the schemes available from the "Bundle Protocol URI Scheme Types" registry of <xref target="IANA-BP"/>.
-Any "bundleEID" identifier which fails to properly percent-decode <bcp14>SHALL</bcp14> be rejected with an ACME error type of "malformed".
+Any "bundleEID" value which fails to properly percent-decode <bcp14>SHALL</bcp14> be rejected with an ACME error type of "malformed".
       </t>
       <t>
-The ACME server <bcp14>SHALL</bcp14> decode and normalize (based on scheme-specific syntax) all received identifiers of type "bundleEID".
-Any "bundleEID" identifier request which uses a scheme not handled by the ACME server or for which the EID does not match the scheme-specific syntax <bcp14>SHALL</bcp14> be rejected with an ACME error type of "rejectedIdentifier".
+An ACME server supporting identifiers of type "bundleEID" <bcp14>SHALL</bcp14> decode and normalize (based on scheme-specific syntax) all such received identifiers.
+Any "bundleEID" value for which the scheme-specific part does not match the scheme-specific syntax <bcp14>SHALL</bcp14> be rejected with an ACME error type of "malformed".
+Any "bundleEID" value which uses a scheme not handled by the ACME server <bcp14>SHALL</bcp14> be rejected with an ACME error type of "rejectedIdentifier".
       </t>
       <t>
 When an ACME server needs to request proof that a client controls a Bundle EID, it <bcp14>SHALL</bcp14> create an authorization with the identifier type "bundleEID".
-The ACME server <bcp14>SHALL NOT</bcp14> attempt to dereference the EID value on its own.
+An ACME server <bcp14>SHALL NOT</bcp14> attempt to dereference a Bundle EID value on its own.
 It is the responsibility of an ACME validation method to ensure the EID ownership using a method authorized by the ACME client.
       </t>
       <t keepWithNext="true">
@@ -455,7 +456,7 @@ There is no special significance to zero-value RTT, it simply indicates the resp
 }
 </sourcecode>
         <t>
-A challenge response is not sent until the BP agent has been configured to properly respond to the challenge, so the RTT value is meant to indicate any node-specific path delays expected to encountered from the ACME server.
+A challenge response is not sent until the BP agent has been configured to properly respond to the challenge, so the RTT value is meant to indicate any node-specific path delays expected to be encountered from the ACME server.
 Because there is no requirement on the path (or paths) which bundles may traverse between the ACME server and the BP agent, and the ACME server can attempt some path diversity, the RTT value <bcp14>SHOULD</bcp14> be pessimistic.
         </t>
         <t>
@@ -716,7 +717,7 @@ The Security Source of this BIB <bcp14>SHALL</bcp14> be either the bundle source
     <section>
       <name>Certificate Request Profile</name>
       <t>
-The ultimate purpose of this ACME validation is to allow a CA to issue certificates following the profiles of <xref section="4.4.2" target="RFC9174"/>, and <xref section="4" target="I-D.ietf-dtn-bpsec-cose"/>.
+The ultimate purpose of this ACME validation is to allow a CA to issue certificates following the profiles of <xref section="4.4.2" target="RFC9174"/> and <xref section="4" target="I-D.ietf-dtn-bpsec-cose"/>.
 These purposes are referred to here as bundle security certificates.
       </t>
       <t>
@@ -981,7 +982,6 @@ Within the "Bundle Protocol" registry group <xref target="IANA-BP"/>, the follow
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.4648.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.4838.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.5280.xml"/>
-        <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7942.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8174.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8555.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8610.xml"/>
@@ -995,6 +995,7 @@ Within the "Bundle Protocol" registry group <xref target="IANA-BP"/>, the follow
         <name>Informative References</name>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.5050.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6376.xml"/>
+        <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7942.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8738.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8823.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.9713.xml"/>
