@@ -61,7 +61,9 @@ Once a certificate is issued for a Node ID, how the ACME client configures the B
       <section>
         <name>Scope</name>
         <t>
-This document describes the ACME messages, Bundle Protocol version 7 (BPv7) payloads, and Bundle protocol Security (BPSec) requirements needed to validate Node ID ownership.
+This document describes the ACME message contents <xref target="RFC8555"/>, Bundle Protocol version 7 (BPv7) payloads <xref target="RFC9171"/>, and Bundle protocol Security (BPSec) operations <xref target="RFC9172"/> needed to validate claims of Node ID ownership.
+        </t>
+        <t>
 This document does not address:
         </t>
         <ul spacing="normal">
