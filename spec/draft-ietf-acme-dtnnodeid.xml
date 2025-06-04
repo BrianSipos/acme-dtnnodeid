@@ -254,7 +254,7 @@ The transit network can refuse to route traffic that is not traceable to a valid
         </t>
         <t>
 A valuable result from any experiment, even unsuccessful, would be feedback about this method to improve later versions.
-That feedback could include improvements to token structure, object or message strcture, random vs. deterministic nonces, client or server procedures, or naming more generally.
+That feedback could include improvements to object or message structure, random vs. deterministic token values, client or server procedures, or naming more generally.
         </t>
       </section>
     </section>
@@ -1014,6 +1014,7 @@ Within the "Bundle Protocol" registry group <xref target="IANA-BP"/>, the follow
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6376.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7942.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8738.xml"/>
+        <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8792.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8823.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.9713.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml-ids/reference.I-D.ietf-dtn-bpsec-cose.xml"/>
@@ -1147,11 +1148,13 @@ This challenge requires that the ACME client respond within a 60 second time win
       <section anchor="sec-example-bundle-response">
         <name>Response Bundle</name>
         <t>
-When the tokens are combined with the key thumbprint, the full Key Authorization value (a single string split across lines for readability) is:
-      </t>
+When the tokens are combined with the key thumbprint, the full Key Authorization value is the following, folded across lines for readability using the "single backslash" strategy of <xref section="7" target="RFC8792"/>.
+        </t>
         <sourcecode type="cbor">
-"p3yRYFU4KxwQaHQjJ2RdiQtPUZNY4ONIk6LxErRFEjVw."
-"LPJNul-wow4m6DsqxbninhsWHlwfp0JecwQzYpOLmCQ"
+/ NOTE: '\' line wrapping per RFC 8792 /
+
+"p3yRYFU4KxwQaHQjJ2RdiQtPUZNY4ONIk6LxErRFEjVw.\
+LPJNul-wow4m6DsqxbninhsWHlwfp0JecwQzYpOLmCQ"
 </sourcecode>
         <t>
 The minimal-but-valid Response Bundle is shown in <xref target="fig-example-bundle-response"/>.

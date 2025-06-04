@@ -5,4 +5,7 @@ SELFDIR=$(readlink -f $(dirname "${BASH_SOURCE[0]}"))
 
 COMBINED_CDDL=$1
 
-cat | diag2cbor.rb | cddl "${COMBINED_CDDL}" validate -
+TMPFILE=$(mktemp)
+cat | diag2cbor.rb >${TMPFILE}
+cddl validate --cddl "${COMBINED_CDDL}" --cbor ${TMPFILE}
+rm ${TMPFILE}
