@@ -1049,13 +1049,19 @@ The extension of BPv7 from <xref section="B" target="RFC9171"/> for the ACME bun
       <sourcecode type="cddl">
 ; All ACME records have the same structure
 $admin-record /= [0xFFFF, acme-record]
-acme-record = {
+; Challenge bundle fields
+acme-record /= {
   id-chal,
   token-bundle,
-  ; One of the following is always present
-  ? key-auth-digest ; present in Response Bundles
-  ? alg-list ; present in Challenge Bundles
+  alg-list
 }
+; Response bundle fields
+acme-record /= {
+  id-chal,
+  token-bundle,
+  key-auth-digest
+}
+
 id-chal = (1: bstr)
 token-bundle = (2: bstr)
 key-auth-digest = (3: [
@@ -1064,7 +1070,7 @@ key-auth-digest = (3: [
 ])
 alg-list = (4: [+ alg-id])
 ; From the IANA COSE registry, only hash algorithms allowed
-alg-id: tstr / int
+alg-id = tstr / int
 </sourcecode>
     </section>
     <section>
