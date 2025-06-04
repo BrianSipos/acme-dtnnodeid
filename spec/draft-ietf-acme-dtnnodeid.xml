@@ -252,6 +252,10 @@ A successful experiment of this validation method would involve using the ACME p
 One possible scenario for this would be an issuing CA and an ACME server on the edge of a BP transit network operated by one agency, which is accessed via edge routers operated by a second agency, used by edge nodes known to and trusted by the second agency but not the first.
 The transit network can refuse to route traffic that is not traceable to a valid identity certificate, which the edge nodes can obtain via the ACME server.
         </t>
+        <t>
+A valuable result from any experiment, even unsuccessful, would be feedback about this method to improve later versions.
+That feedback could include improvements to token structure, object or message strcture, random vs. deterministic nonces, client or server procedures, or naming more generally.
+        </t>
       </section>
     </section>
     <section anchor="sec-acme-uri">
@@ -1051,14 +1055,13 @@ The extension of BPv7 from <xref section="B" target="RFC9171"/> for the ACME bun
       <sourcecode type="cddl">
 ; All ACME records have the same structure
 $admin-record /= [0xFFFF, acme-record]
-; Challenge bundle fields
-acme-record /= {
+acme-record = acme-challenge-record / acme-response-record
+acme-challenge-record = {
   id-chal,
   token-bundle,
   alg-list
 }
-; Response bundle fields
-acme-record /= {
+acme-response-record = {
   id-chal,
   token-bundle,
   key-auth-digest
