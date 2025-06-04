@@ -58,15 +58,10 @@ Once an ACME server validates a Node ID, either as a pre-authorization of the "b
 Because a single order can contain multiple identifiers of multiple types, there can be operational issues for a client attempting to, and possibly failing to, validate those multiple identifiers as described in <xref target="sec-multiple-claims"/>.
 Once a certificate is issued for a Node ID, how the ACME client configures the BP Agent with the new certificate is an implementation matter.
       </t>
-      <aside><t>
-The emergent properties of DTN naming and BP security are still being developed and explored, especially between different organizational and administrative domains, so the "experimental" status of this document is related more to the practical utility of this kind of Node ID validation than to the validation method itself.
-The original use case is in large or cross-organizational networks where a BP node can be trusted to be allocated and added to a network, but the method of certificate validation and issuance is desired to be in-band on the network rather than configured solely through a side channel using bespoke or manual protocols.
-Because this mechanism is so similar to other validation methods, specifically <xref target="RFC8823"/>, it is expected to have few implementation difficulties or interoperability issues.
-      </t></aside>
       <section>
         <name>Scope</name>
         <t>
-This document describes the ACME messages, BPv7 payloads, and BPSec requirements needed to validate Node ID ownership.
+This document describes the ACME messages, Bundle Protocol version 7 (BPv7) payloads, and Bundle protocol Security (BPSec) requirements needed to validate Node ID ownership.
 This document does not address:
         </t>
         <ul spacing="normal">
@@ -150,11 +145,11 @@ This workflow is shown in the diagram of <xref target="fig-entity-relations"/>.
         </figure>
         <t>
 Because the DTN Node ID is used both for routing bundles between BP agents and for multiplexing administrative services within a BP agent, there is no possibility to separate the ACME validation of a Node ID from normal bundle handling for that same Node ID.
-This leaves administrative record types as a way to leave the Node ID unchanged while disambiguating from other service data bundles.
+This leaves administrative record types as a way to keep the Node ID unchanged while disambiguating from other service data bundles.
         </t>
         <t>
 There is nothing in this protocol which requires network-topological co-location of either the ACME client or ACME server with their associated BP agent.
-While ACME requires a low-enough latency network to perform HTTPS exchanges between ACME client and server, the client's BP agent (the one being validated) could be on the far side of a long-delay or multi-hop DTN network.
+While ACME requires a low-enough latency network to perform HTTPS exchanges between ACME client and server, the client's BP agent (the one being validated) could be on the far side of a long-delay or multi-hop BP network.
 The means by which the ACME client or server communicates with its associated BP agent is an implementation matter.
         </t>
       </section>
@@ -231,6 +226,30 @@ For the "dtn" scheme this is the empty demux part and for the "ipn" scheme this 
 These is formally defined under <xref section="4.2.5.1" target="RFC9171"/>.
           </dd>
         </dl>
+      </section>
+      <section anchor="sec-experiment">
+        <name>Experiment Scope</name>
+        <t>
+The emergent properties of DTN naming and BP security are still being developed and explored, especially between different organizational and administrative domains, so the "experimental" status of this document is related more to the practical utility of this kind of Node ID validation than to the validation method itself.
+The original use case is in large or cross-organizational networks where a BP node can be trusted to be allocated and added to a network, but the method of certificate validation and issuance is desired to be in-band on the network rather than configured solely through a side channel using bespoke or manual protocols.
+Because this mechanism is so similar to other validation methods, specifically <xref target="RFC8823"/>, it is expected to have few implementation difficulties or interoperability issues.
+        </t>
+        <t>
+Part of the experimental nature of the validation method defined in <xref target="sec-validate-nodeid"/>, and BP more generally, is understanding its vulnerability to different kinds of on-path attacks.
+Some attacks could be based on the topology of the BP overlay network, while others could be based on the underlying (internet protocol) network topology.
+Because not all of the attack surfaces of this validation method are known or fully understood the usefulness of the multi-perspective technique described in <xref target="sec-multi-perspective"/> is also not assured.
+The point of those multi-perspective requirements is so that both the ACME client and server have consistent logic for handling the technique.
+        </t>
+        <t>
+The usefulness of the integrity gateway defined in <xref target="sec-bib-gateway"/> to this validation method is experimental because it is not a settled matter how naming authority in a DTN is either allocated, delegated, or enforced.
+It is also not defined how the organization running the CA (and its ACME server) can delegate some level of trust to a different organization running a connected DTN with a security gateway.
+The organization running the integrity gateway would need to apply some minimal amount of policy to nodes running behind it, such as patterns to their Node IDs, which would behave conceptually similar to delegation of sub-domains in the domain name system (DNS) but without the online interaction of DNS.
+        </t>
+        <t>
+A successful experiment of this validation method would involve using the ACME protocol along with this Node ID validation to allow issuing of identity certificates across administrative domains.
+One possible scenario for this would be an issuing CA and an ACME server on the edge of a BP transit network operated by one agency, which is accessed via edge routers operated by a second agency, used by edge nodes known to and trusted by the second agency but not the first.
+The transit network can refuse to route traffic that is not traceable to a valid identity certificate, which the edge nodes can obtain via the ACME server.
+        </t>
       </section>
     </section>
     <section anchor="sec-acme-uri">
@@ -392,7 +411,7 @@ A BP agent <bcp14>SHALL</bcp14> respond to multiple Challenge Bundles with the s
       <section anchor="sec-nodeid-challenge-obj">
         <name>DTN Node ID Challenge Object</name>
         <t>
-The DTN Node ID Challenge object is included by the ACME server when it supports validating Node IDs.
+The DTN Node ID Challenge object is included by the ACME server as defined in <xref section="7.5" target="RFC8555"/> when it supports validating Node IDs.
         </t>
         <t>
 The DTN Node ID Challenge object has the following content:
@@ -404,7 +423,7 @@ The string "bp-nodeid-00".
           </dd>
           <dt>id-chal (required, string):</dt>
           <dd>
-This is a random value associated with a challenge which allows a client to filter valid Challenge Bundles.
+This is a random value associated with a challenge which allows a client to filter valid <xref target="sec-bundle-challenge">Challenge Bundles</xref>.
 The same value is used for all Challenge Bundles associated with an ACME challenge, including multi-perspective validation using multiple sources as described in <xref target="sec-multi-perspective"/>.
 This value <bcp14>SHALL</bcp14> have at least 128 bits of entropy.
 It <bcp14>SHALL NOT</bcp14> contain any characters outside the base64url alphabet as described in <xref section="5" target="RFC4648"/>.
@@ -435,8 +454,8 @@ The <tt>token-chal</tt> value included in this object applies to the entire chal
       <section anchor="sec-nodeid-response-obj">
         <name>DTN Node ID Response Object</name>
         <t>
-The DTN Node ID response object is sent by the ACME client when it authorizes validation of a Node ID.
-Because a DTN has the potential for significantly longer delays than a non-DTN network, the ACME client is able to inform the ACME server if a particular validation round-trip is expected to take longer than normal network delays (on the order of seconds).
+The DTN Node ID response object is sent by the ACME client when it authorizes validation of a Node ID as defined in <xref section="7.5.1" target="RFC8555"/>.
+Because a DTN has the potential for significantly longer (but roughly predictable) delays than a non-DTN network, the ACME client is able to inform the ACME server if a particular validation round-trip is expected to take longer than non-DTN network delays (on the order of seconds).
         </t>
         <t>
 The DTN Node ID response object has the following content:
@@ -668,15 +687,10 @@ The lack of a response within the expected response interval, as defined in <xre
         <t>
 To avoid on-path attacks in certain networks, an ACME server can perform a single validation using multiple challenge bundle sources or via multiple routing paths.
 This technique is called multi-perspective validation as recommended in <xref section="10.2" target="RFC8555"/> and an implementation used by Let's Encrypt is described in <xref target="LE-multi-perspective"/>.
+The utility of a multi-perspective validation is part of the <xref target="sec-experiment">experimental nature</xref> of this specification.
         </t>
-        <aside><t>
-Part of the experimental nature of this validation method, and the bundle protocol more generally, is understanding its vulnerability to different kinds of on-path attacks.
-Some attacks could be based on the topology of the BP overlay network, while others could be based on the underlying (internet protocol) network topology.
-Because not all of the attack surfaces of this validation method are known or fully understood the usefulness of the technique described in this section is also not assured.
-The point of these requirements is so that both the ACME client and server have consistent logic for handling this technique.
-        </t></aside>
         <t>
-When required by policy, an ACME server <bcp14>SHALL</bcp14> send multiple challenge bundles from different sources in the DTN network.
+When required by policy, an ACME server <bcp14>SHALL</bcp14> send multiple challenge bundles from different sources in the BP network.
 When multiple Challenge Bundles are sent for a single validation, it is a matter of ACME server policy to determine whether or not the validation as a whole is successful.
 The result of each single-source validation is defined as success or failure in <xref target="sec-response-check"/>.
         </t>
@@ -697,12 +711,8 @@ This section defines a BIB use which closely resembles the function of DKIM emai
 In this mechanism a routing node in a DTN sub-network attests to the origination of a bundle by adding a BIB before forwarding it.
 The bundle receiver then need not trust the source of the bundle, but only trust this security source node.
 The receiver needs policy configuration to know which security sources are permitted to attest for which bundle sources.
+The utility of an integrity gateway is part of the <xref target="sec-experiment">experimental nature</xref> of this specification.
       </t>
-      <aside><t>
-The usefulness of the integrity gateway to this validation method is experimental because it is not a settled matter how naming authority in a DTN is either allocated, delegated, or enforced.
-It is also not defined how the organization running the CA (and its ACME server) can delegate some level of trust to a different organization running a connected DTN with a security gateway.
-The organization running the integrity gateway would need to apply some minimal amount of policy to nodes running behind it, such as patterns to their Node IDs, which would behave conceptually similar to delegation of sub-domains in the domain name system (DNS) but without the online interaction of DNS.
-      </t></aside>
       <t>
 An integrity gateway <bcp14>SHALL</bcp14> validate the Source Node ID of a bundle, using local-network-specific means, before adding a BIB to the bundle.
 The exact means by which an integrity gateway validates a bundle's source is network-specific, but could use physical-layer, network-layer or BP-convergence-layer authentication.

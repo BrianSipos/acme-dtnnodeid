@@ -73,6 +73,7 @@ subjectAltName
 subproblem
 subproblems
 TBD
+TLS
 unicast
 unicode
 uniformResourceIdentifier
