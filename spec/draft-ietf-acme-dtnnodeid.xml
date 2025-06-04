@@ -732,7 +732,7 @@ The ultimate purpose of this ACME validation is to allow a CA to issue certifica
 These purposes are referred to here as bundle security certificates.
       </t>
       <t>
-Identifiers of type "bundleEID" correlate to certificate requests within in an <tt>extensionRequest</tt> attribute (see <xref target="RFC2985"/>) containing a <tt>subjectAltName</tt> extension of type <tt>otherName</tt> with a name form of <tt>BundleEID</tt>, identified by <tt>id-on-bundleEID</tt> of <xref target="IANA-SMI"/>.
+ACME identifiers of type "bundleEID" correlate to certificate requests within in an <tt>extensionRequest</tt> attribute (see <xref target="RFC2985"/>) containing a <tt>subjectAltName</tt> extension of type <tt>otherName</tt> with a name form of <tt>BundleEID</tt>, identified by <tt>id-on-bundleEID</tt> of <xref target="IANA-SMI"/>.
 This form is referred to as a "NODE-ID" as defined in <xref section="4.4.1" target="RFC9174"/>.
 Because the <tt>BundleEID</tt> name form is encoded as an IA5String it <bcp14>SHALL</bcp14> be treated as being in the percent-encoded form of <xref section="2.1" target="RFC3986"/>.
       </t>
