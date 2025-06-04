@@ -334,7 +334,7 @@ Because multiple Challenge Bundles can be sent to validate the same Node ID, the
       </t>
       <t>
 The DTN Node ID Challenge <bcp14>SHALL</bcp14> only be allowed for an EID usable as a DTN Node ID, which is defined per-scheme in <xref section="4.2.5.1" target="RFC9171"/>.
-When an ACME server supports Node ID validation, the ACME server <bcp14>SHALL</bcp14> define a challenge object in accordance with <xref target="sec-nodeid-challenge-obj"/>.
+When an ACME server supports Node ID validation, the ACME server <bcp14>SHALL</bcp14> provide a challenge object in accordance with <xref target="sec-nodeid-challenge-obj"/>.
 Once this challenge object is defined, the ACME client may begin the validation.
       </t>
       <t>
@@ -347,14 +347,14 @@ From either of these entry points an authorization for the "bundleEID" type is i
 See <xref section="7.4" target="RFC8555"/> for more details.
         </li>
         <li>
-The ACME client obtains the <tt>id-chal</tt> and <tt>token-chal</tt> from the challenge object in accordance with <xref target="sec-nodeid-challenge-obj"/>.
+The ACME client obtains the <tt>id-chal</tt> and <tt>token-chal</tt> from the <xref target="sec-nodeid-challenge-obj">challenge object</xref> contained in an authorization object associated with the order in accordance with <xref section="7.1.4" target="RFC8555"/>.
         </li>
         <li anchor="step-client-authorize">
 The ACME client indicates to the administrative element of its BP agent the <tt>id-chal</tt> which is authorized for use along with the associated <tt>token-chal</tt> and client account key thumbprint.
-The ACME client <bcp14>SHALL</bcp14> wait, if necessary, until the agent is configured before proceeding to the next step.
+The ACME client waits, if necessary, until the agent is configured before proceeding to the next step.
         </li>
         <li>
-The ACME client POSTs a challenge response to the challenge URL on the ACME server accordance with <xref section="7.5.1" target="RFC8555"/>.
+The ACME client POSTs a <xref target="sec-nodeid-response-obj">response object</xref> to the challenge URL on the ACME server accordance with <xref section="7.5.1" target="RFC8555"/>.
 The payload object is constructed in accordance with <xref target="sec-nodeid-response-obj"/>.
         </li>
         <li>
@@ -390,7 +390,7 @@ The payload is handled in accordance with <xref target="sec-nodeid-response-obj"
         </li>
         <li>
 The ACME server sends, via the administrative element of its BP agent, one or more Challenge Bundles in accordance with <xref target="sec-bundle-challenge"/>.
-Each challenge bundle <bcp14>SHALL</bcp14> contain a distinct <tt>token-bundle</tt> to be able to correlate with a response bundle.
+Each challenge bundle contains a distinct, random <tt>token-bundle</tt> to be able to correlate with a response bundle.
 Computing an expected Key Authorization digest is not necessary until a response is received with a chosen hash algorithm.
         </li>
         <li>
@@ -475,7 +475,8 @@ There is no special significance to zero-value RTT, it simply indicates the resp
 }
 </sourcecode>
         <t>
-A challenge response is not sent until the BP agent has been configured to properly respond to the challenge, so the RTT value is meant to indicate any node-specific path delays expected to be encountered from the ACME server.
+A response object <bcp14>SHALL NOT</bcp14> be sent until the BP agent has been configured to properly respond to the challenge.
+The RTT value is meant to indicate any node-specific path delays expected to be encountered from the ACME server.
 Because there is no requirement on the path (or paths) which bundles may traverse between the ACME server and the BP agent, and the ACME server can attempt some path diversity, the RTT value <bcp14>SHOULD</bcp14> be pessimistic.
         </t>
         <t>
