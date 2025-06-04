@@ -921,7 +921,7 @@ Within the "Automated Certificate Management Environment (ACME) Protocol" regist
 Within the "Bundle Protocol" registry group <xref target="IANA-BP"/>, the following entries have been added to the "Bundle Administrative Record Types" registry.
         </t>
         <t>
-[NOTE to the RFC Editor: For <xref target="RFC5050"/> compatibility the AR-TBD value needs to be no larger than 15, but such compatibility is not needed. For BPbis the AR-TBD value needs to be no larger than 65535 as defined by <xref target="RFC9713"/>.]
+[NOTE to IANA: For <xref target="RFC5050"/> compatibility the AR-TBD value needs to be no larger than 15, but such compatibility is not needed. For BPbis the AR-TBD value needs to be no larger than 65535 as defined by <xref target="RFC9713"/>.]
         </t>
         <table>
           <thead>
