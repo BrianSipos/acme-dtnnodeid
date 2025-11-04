@@ -48,7 +48,7 @@ The DTN Node ID is encoded both as a certificate Subject Alternative Name (SAN) 
     <section anchor="sec-intro">
       <name>Introduction</name>
       <t>
-Although the original purpose of the Automatic Certificate Management Environment (ACME) <xref target="RFC8555"/> was to allow Public Key Infrastructure using X.509 (PKIX) Certification Authorities (CAs) to validate network domain names of clients, the same mechanism can be used to validate any of the subject claims supported by the PKIX profile <xref target="RFC5280"/>.
+Although the original purpose of the Automatic Certificate Management Environment (ACME) <xref target="RFC8555"/> was to allow Public Key Infrastructure using X.509 (PKIX) Certification Authorities (CAs) to validate network domain names of clients, the same mechanism can be used to validate any of the subject identity claims supported by the PKIX profile <xref target="RFC5280"/>.
       </t>
       <t>
 In this specification, the claim being validated is a Subject Alternative Name (SAN) identity of type <tt>otherName</tt> with an Other Name form of <tt>BundleEID</tt>, which is used to represent a Bundle Protocol (BP) Endpoint ID (EID) in a Delay-Tolerant Networking (DTN) overlay network.
@@ -196,7 +196,7 @@ The means by which the ACME client or server communicates with its associated BP
       <section>
         <name>Use of CDDL</name>
         <t>
-This document defines Concise Binary Object Representation (CBOR) structure using the Concise Data Definition Language (CDDL) of <xref target="RFC8610"/>.
+This document defines Concise Binary Object Representation (CBOR) structure using the Concise Data Definition Language (CDDL) <xref target="RFC8610"/>.
 The entire CDDL structure can be extracted from the XML version of this document using the XPath expression:
         </t>
         <sourcecode><![CDATA['//sourcecode[@type="cddl"]']]></sourcecode>
@@ -299,7 +299,7 @@ These are formally defined under <xref section="4.2.5.1" target="RFC9171"/>.
         <t>
 The emergent properties of DTN naming and BP security are still being developed and explored, especially between different organizational and administrative domains.  Thus, the Experimental status of this document is related more to the practical utility of this kind of Node ID validation than to the validation method itself.
 The original use case is in large or cross-organizational networks where a BP node can be trusted to be allocated and added to a network, but the method of certificate validation and issuance is desired to be in-band on the network rather than configured solely through a side channel using bespoke or manual protocols.
-Because this mechanism is so similar to other validation methods, specifically <xref target="RFC8823"/>, it is expected to have few implementation difficulties or interoperability issues.
+Because this mechanism is so similar to other validation methods, specifically email address validation <xref target="RFC8823"/>, it is expected to have few implementation difficulties or interoperability issues.
         </t>
         <t>
 Part of the experimental nature of the validation method defined in <xref target="sec-validate-nodeid"/>, and BP more generally, is understanding its vulnerability to different kinds of on-path attacks.
@@ -353,7 +353,7 @@ This specification is the first to make use of a Bundle Endpoint ID to identify 
 In this document, the only purpose for which a Bundle Endpoint ID ACME identifier is validated is as a DTN Node ID (see <xref target="sec-validate-nodeid"/>), but other specifications can define challenge types for other Endpoint ID uses.
       </t>
       <t>
-Every ACME identifier type "bundleEID" <bcp14>SHALL</bcp14> have a value containing a text URI consistent with the requirements of <xref section="4.2.5.1" target="RFC9171"/> using one of the schemes available from the "Bundle Protocol URI Scheme Types" registry of <xref target="IANA-BP"/>.
+Every ACME identifier type "bundleEID" <bcp14>SHALL</bcp14> have a value containing a text URI consistent with the requirements of <xref section="4.2.5.1" target="RFC9171"/> using one of the schemes available from the "Bundle Protocol URI Scheme Types" registry <xref target="IANA-BP"/>.
 Any identifier type "bundleEID" value that fails to properly percent-decode <bcp14>SHALL</bcp14> be rejected with an ACME error type of "malformed".
       </t>
       <t>
@@ -432,8 +432,8 @@ The DTN Node ID validation method proves control over a Node ID by requiring the
 The ACME server validates control of the Node ID by verifying that received Response Bundles correspond with the BP Node and client account key being validated.
       </t>
       <t>
-Similar to the ACME use case for validating email address ownership <xref target="RFC8823"/>, this challenge splits the token into several parts, each part being transported by a different channel, and the Key Authorization result requires combining all parts of the token.
-A separate challenge identifier is used as a filter by BP agents similar to the challenge "from" email address of <xref target="RFC8823"/>.
+Similar to the ACME use case for email address validation <xref target="RFC8823"/>, this challenge splits the token into several parts, each part being transported by a different channel, and the Key Authorization result requires combining all parts of the token.
+A separate challenge identifier is used as a filter by BP agents similar to the challenge "from" email validation in <xref section="3" target="RFC8823"/>.
       </t>
       <t>
 The token parts are as follows:
@@ -558,7 +558,7 @@ The same value is used for all Challenge Bundles associated with an ACME challen
 This value <bcp14>SHALL</bcp14> have at least 128 bits of entropy.
 It <bcp14>SHALL NOT</bcp14> contain any characters outside the base64url alphabet as described in <xref section="5" target="RFC4648"/>.
 Trailing '=' padding characters <bcp14>SHALL</bcp14> be stripped.
-See <xref target="RFC4086"/> for additional information on randomness requirements.
+See BCP 106 <xref target="RFC4086"/> for additional information on randomness requirements.
           </dd>
           <dt>token-chal (required, string):</dt>
           <dd>
@@ -566,7 +566,7 @@ This is a random value, used as part of the Key Authorization algorithm, which i
 This value <bcp14>SHALL</bcp14> have at least 128 bits of entropy.
 It <bcp14>SHALL NOT</bcp14> contain any characters outside the base64url alphabet as described in <xref section="5" target="RFC4648"/>.
 Trailing '=' padding characters <bcp14>SHALL</bcp14> be stripped.
-See <xref target="RFC4086"/> for additional information on randomness requirements.
+See BCP 106 <xref target="RFC4086"/> for additional information on randomness requirements.
           </dd>
         </dl>
         <sourcecode type="json"><![CDATA[
@@ -617,7 +617,7 @@ The upper limit on response interval is network specific, but it <bcp14>SHOULD N
       <section anchor="sec-bundle-challenge">
         <name>ACME Node ID Validation Challenge Bundle</name>
         <t>
-Each ACME Node ID Validation Challenge Bundle <bcp14>SHALL</bcp14> be structured and encoded in accordance with <xref target="RFC9171"/>.
+Each ACME Node ID Validation Challenge Bundle <bcp14>SHALL</bcp14> be structured and encoded in accordance with BPv7 <xref target="RFC9171"/>.
         </t>
         <t>
 Each Challenge Bundle has parameters as listed here:
@@ -658,13 +658,13 @@ One pair <bcp14>SHALL</bcp14> consist of key 1 with a value of ACME challenge <t
 One pair <bcp14>SHALL</bcp14> consist of key 2 with a value of ACME challenge <tt>token-bundle</tt>, represented as a CBOR byte string.
 The <tt>token-bundle</tt> is a random value that uniquely identifies the challenge bundle.
 This value <bcp14>SHALL</bcp14> have at least 128 bits of entropy.
-See <xref target="RFC4086"/> for additional information on randomness requirements.
+See BCP 106 <xref target="RFC4086"/> for additional information on randomness requirements.
               </li>
               <li>
 One pair <bcp14>SHALL</bcp14> consist of key 4 with a value of an array containing acceptable hash algorithm identifiers.
 The array <bcp14>SHALL</bcp14> be ordered in descending preference, with the first item being the most preferred.
 The array <bcp14>SHALL</bcp14> contain at least one item.
-Each algorithm identifier <bcp14>SHALL</bcp14> correspond to the Value column (integer or text string) of the algorithm registered in the "COSE Algorithms" registry of <xref target="IANA-COSE"/>.
+Each algorithm identifier <bcp14>SHALL</bcp14> correspond to the Value column (integer or text string) of the algorithm registered in the "COSE Algorithms" registry <xref target="IANA-COSE"/>.
               </li>
             </ul>
           </dd>
@@ -674,11 +674,11 @@ This structure is part of the extension CDDL in <xref target="sec-cddl"/>.
 An example full Challenge Bundle is included in <xref target="sec-example-bundle-challenge"/>.
         </t>
         <t>
-For interoperability, entities that use this validation method <bcp14>SHALL</bcp14> support the hash algorithm "SHA-256" (-16) of <xref target="RFC9054"/>, but can use other hash algorithms.
-This requirement allows for different implementations to be configured to use an interoperable algorithm, but does not preclude the use of other algorithms.
+For interoperability, entities that use this validation method <bcp14>SHALL</bcp14> support the hash algorithm "SHA-256" (value -16) <xref target="RFC9054"/>.
+This requirement allows for different implementations to be configured to use an interoperable algorithm, but does not preclude the use of other algorithms with either higher or lower priority.
         </t>
         <t>
-If the BP agent generating a Challenge Bundle does not have a well-synchronized clock or the agent responding to the challenge is expected to not have a well-synchronized clock, the bundle <bcp14>SHALL</bcp14> include a Bundle Age extension block.
+If the BP agent generating a Challenge Bundle does not have a well-synchronized clock or the agent responding to the challenge is expected to not have a well-synchronized clock, the bundle <bcp14>SHALL</bcp14> include a Bundle Age extension block in accordance with <xref section="4.4.2" target="RFC9171"/>.
         </t>
         <t>
 Challenge Bundles <bcp14>SHALL</bcp14> include a Block Integrity Block (BIB) in accordance with <xref target="sec-bib-gateway"/> or with a Security Source identical to the bundle Source Node.
@@ -732,7 +732,7 @@ It is an implementation matter of how to react to such failures, which could inc
       <section anchor="sec-bundle-response">
         <name>ACME Node ID Validation Response Bundles</name>
         <t>
-Each ACME Node ID Validation Response Bundle <bcp14>SHALL</bcp14> be structured and encoded in accordance with <xref target="RFC9171"/>.
+Each ACME Node ID Validation Response Bundle <bcp14>SHALL</bcp14> be structured and encoded in accordance with BPv7 <xref target="RFC9171"/>.
         </t>
         <t>
 Each Response Bundle has parameters as listed here:
@@ -774,7 +774,7 @@ One pair <bcp14>SHALL</bcp14> consist of key 2 with value of ACME challenge <tt>
               </li>
               <li>
 One pair <bcp14>SHALL</bcp14> consist of key 3 with value of a two-element array containing the pair of a hash algorithm identifier and the hash byte string.
-The algorithm identifier <bcp14>SHALL</bcp14> correspond to the Value column (integer or text string) of the algorithm registered in the "COSE Algorithms" registry of <xref target="IANA-COSE"/>.
+The algorithm identifier <bcp14>SHALL</bcp14> correspond to the Value column (integer or text string) of the algorithm registered in the "COSE Algorithms" registry <xref target="IANA-COSE"/>.
               </li>
             </ul>
           </dd>
@@ -830,8 +830,8 @@ The lack of a response within the expected response interval, as defined in <xre
         <name>Multi-Perspective Validation</name>
         <t>
 To avoid on-path attacks in certain networks, an ACME server can perform a single validation using multiple challenge bundle sources or via multiple routing paths.
-This technique is called "multi-perspective validation" as recommended in <xref section="10.2" target="RFC8555"/> and an implementation used by Let's Encrypt is described in <xref target="LE-multi-perspective"/>.
-The utility of a multi-perspective validation is part of the experimental nature (<xref target="sec-experiment"></xref>) of this specification.
+This technique is called "multi-perspective validation" as recommended in <xref section="10.2" target="RFC8555"/> and an implementation is used by the Let's Encrypt service in its operational deployment <xref target="LE-multi-perspective"/>.
+The utility of a multi-perspective validation is part of the experimental nature (see <xref target="sec-experiment"></xref>) of this specification.
         </t>
         <t>
 When required by policy, an ACME server <bcp14>SHALL</bcp14> send multiple challenge bundles from different sources in the BP network.
@@ -863,7 +863,7 @@ The exact means by which an integrity gateway validates a bundle's source is net
 The bundle source could also add its own BIB with a local-network-specific security context or local-network-specific key material (i.e., a group key shared within the local network).
       </t>
       <t>
-When an integrity gateway adds a BIB, it <bcp14>SHALL</bcp14> be in accordance with <xref target="RFC9172"/>.
+When an integrity gateway adds a BIB, it <bcp14>SHALL</bcp14> be in accordance with BPSec <xref target="RFC9172"/> requirements.
 The BIB targets <bcp14>SHALL</bcp14> cover both the payload block and the primary block (either directly as a target or as additional authenticated data for the payload block MAC/signature).
 The Security Source of this BIB <bcp14>SHALL</bcp14> be either the bundle source Node ID itself or a routing node trusted by the destination node (see <xref target="sec-security-impersonate"/>).
       </t>
@@ -876,11 +876,11 @@ These purposes are referred to here as "bundle security certificates".
       </t>
       <t>
 The ACME identifier type "bundleEID" correlates to the PKIX certificate and certificate request "NODE-ID" as defined in <xref section="4.4.1" target="RFC9174"/>.
-This NODE-ID is present in certificate requests with an <tt>extensionRequest</tt> attribute (see <xref target="RFC2985"/>) containing a Subject Alternative Name extension with identities of type <tt>otherName</tt> having an Other Name form of <tt>BundleEID</tt>, identified by <tt>id-on-bundleEID</tt> from the "SMI Security for PKIX Other Name Forms" registry at <xref target="IANA-SMI"/>.
+This NODE-ID is present in certificate requests with an <tt>extensionRequest</tt> attribute (see <xref target="RFC2985"/>) containing a Subject Alternative Name extension with identities of type <tt>otherName</tt> having an Other Name form of <tt>BundleEID</tt>, identified by <tt>id-on-bundleEID</tt> from the "SMI Security for PKIX Other Name Forms" registry <xref target="IANA-SMI"/>.
 Because the <tt>BundleEID</tt> Other Name form is encoded as an IA5String, it <bcp14>SHALL</bcp14> be treated as being in the percent-encoded form of <xref section="2.1" target="RFC3986"/>.
       </t>
       <t>
-One defining aspect of bundle security certificates is the Extended Key Usage key purpose <tt>id-kp-bundleSecurity</tt> of <xref target="IANA-SMI"/>, as defined in <xref section="4.4.2.1" target="RFC9174"/>.
+One defining aspect of bundle security certificates is the Extended Key Usage key purpose <tt>id-kp-bundleSecurity</tt> <xref target="IANA-SMI"/>, as defined in <xref section="4.4.2.1" target="RFC9174"/>.
 When requesting a certificate that includes a NODE-ID, the CSR <bcp14>SHOULD</bcp14> include an Extended Key Usage of <tt>id-kp-bundleSecurity</tt>.
 When a bundle security certificate is issued based on a validated NODE-ID, the certificate <bcp14>SHALL</bcp14> include an Extended Key Usage of <tt>id-kp-bundleSecurity</tt>.
       </t>
@@ -904,11 +904,11 @@ These correspond with ACME identifier types "ip", "dns", and "bundleEID", respec
         </t>
         <t>
 There is no restriction on how a certificate combines these claims, but each identifier <bcp14>SHALL</bcp14> be validated by an ACME server to issue such a certificate as part of an associated ACME order.
-This is no different than the existing behavior of <xref target="RFC8555"/> but is mentioned here to make sure that CA policy handles such situations, especially related to validation failure of an identifier in the presence of multiple identifiers.
-The initial "ip" validations are defined in <xref target="RFC8738"/> and initial "dns" validations are defined in <xref target="RFC8555"/>.
+This is no different than the existing behavior of ACME <xref target="RFC8555"/> but is mentioned here to make sure that CA policy handles such situations, especially related to validation failure of an identifier in the presence of multiple identifiers.
+Existing validation mechanisms are defined for identifier types "ip" <xref target="RFC8738"/> and "dns" <xref target="RFC8555"/> among others <xref target="IANA-ACME"/>.
         </t>
         <t>
-The specific use case of TLS-based security in <xref target="RFC9174"/> allows, and for some network policies requires, that a certificate authenticate both the DNS name of an entity as well as the Node ID of the entity.
+The specific use case of TLS-based security for BPv7 CL transport in <xref section="4.4" target="RFC9174"/> allows, and for some network policies requires, that a certificate authenticate both the DNS name of an entity as well as the Node ID of the entity.
 These authentications apply to each identifier type, used for different network layers, at different points during secure session establishment.
         </t>
       </section>
@@ -953,7 +953,7 @@ As described in <xref section="10.1" target="RFC8555"/>, it is possible for an a
         </t>
         <t>
 The primary mitigation is to delegate bundle integrity sourcing to a trusted routing node near, in the sense of bundle routing topology, the bundle source node as defined in <xref target="sec-bib-gateway"/>.
-This is functionally similar to the DKIM signing described in <xref target="RFC6376"/> and provides some level of bundle origination.
+This is functionally similar to the DKIM signing <xref target="RFC6376"/> and provides some level of secure bundle origination.
         </t>
         <t>
 <!--[rfced] Is there a way to reduce the redundancy of "path" in this
@@ -1030,10 +1030,10 @@ For this reason, any ACME server can rate-limit validation activities for indivi
       <section>
         <name>Inherited Security Considerations</name>
         <t>
-Because this protocol relies on ACME for part of its operation, the security considerations of <xref target="RFC8555"/> apply to all ACME client-server exchanges during Node ID validation.
+Because this protocol relies on ACME for part of its operation, the security considerations of ACME <xref target="RFC8555"/> apply to all ACME client-server exchanges during Node ID validation.
         </t>
         <t>
-Because this protocol relies on BPv7 for part of its operation, the security considerations of <xref target="RFC9171"/> and <xref target="RFC9172"/> apply to all BP messaging during Node ID validation.
+Because this protocol relies on BPv7 for part of its operation, the security considerations of BPv7 <xref target="RFC9171"/> and BPSec <xref target="RFC9172"/> apply to all BP messaging during Node ID validation.
         </t>
       </section>
       <section>
@@ -1061,7 +1061,7 @@ This specification adds to the "Automated Certificate Management Environment (AC
       <section anchor="sec-iana-acme-identifier">
         <name>ACME Identifier Types</name>
         <t>
-Within the "Automated Certificate Management Environment (ACME) Protocol" registry group at <xref target="IANA-ACME"/>, the following entry has been added to the "ACME Identifier Types" registry.
+Within the "Automated Certificate Management Environment (ACME) Protocol" registry group <xref target="IANA-ACME"/>, the following entry has been added to the "ACME Identifier Types" registry.
         </t>
         <table>
           <thead>
@@ -1081,7 +1081,7 @@ Within the "Automated Certificate Management Environment (ACME) Protocol" regist
       <section anchor="sec-iana-acme-method">
         <name>ACME Validation Methods</name>
         <t>
-Within the "Automated Certificate Management Environment (ACME) Protocol" registry group at <xref target="IANA-ACME"/>, the following entry has been added to the "ACME Validation Methods" registry.
+Within the "Automated Certificate Management Environment (ACME) Protocol" registry group <xref target="IANA-ACME"/>, the following entry has been added to the "ACME Validation Methods" registry.
         </t>
         <table>
           <thead>
@@ -1105,7 +1105,7 @@ Within the "Automated Certificate Management Environment (ACME) Protocol" regist
       <section anchor="sec-iana-bp-admin-type">
         <name>Bundle Administrative Record Types</name>
         <t>
-Within the "Bundle Protocol" registry group at <xref target="IANA-BP"/>, the following entry has been added to the "Bundle Administrative Record Types" registry.
+Within the "Bundle Protocol" registry group <xref target="IANA-BP"/>, the following entry has been added to the "Bundle Administrative Record Types" registry.
         </t>
         <table>
           <thead>
