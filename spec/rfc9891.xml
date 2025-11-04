@@ -433,7 +433,7 @@ The ACME server validates control of the Node ID by verifying that received Resp
       </t>
       <t>
 Similar to the ACME use case for email address validation <xref target="RFC8823"/>, this challenge splits the token into several parts, each part being transported by a different channel, and the Key Authorization result requires combining all parts of the token.
-A separate challenge identifier is used as a filter by BP agents similar to the challenge "from" email validation in <xref section="3" target="RFC8823"/>.
+A separate challenge identifier is used as a filter by BP agents similar to the challenge "from" used by email validation in <xref section="3" target="RFC8823"/>.
       </t>
       <t>
 The token parts are as follows:
@@ -1357,7 +1357,7 @@ This response indicates that there are 30 seconds remaining in the response time
 This specification is based on DTN use cases related to PKIX certificate issuance.
       </t>
       <t>
-The workflow and terminology of this validation method were originally copied from the work of <contact fullname="Alexey Melnikov"/> in <xref target="RFC8823"/>.
+The workflow and terminology of this validation method were originally copied from the work of <contact fullname="Alexey Melnikov"/> for email validation <xref target="RFC8823"/>.
       </t>
     </section>
     
