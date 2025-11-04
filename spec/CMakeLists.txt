@@ -1,5 +1,5 @@
 # Inherit variables from top-level project
-set(DRAFT_NAME "${PROJECT_NAME}")
+set(DRAFT_NAME "rfc9891")
 set(DOC_INCLUDES )
 
 find_program(XML2RFC xml2rfc)
