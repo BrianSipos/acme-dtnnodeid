@@ -1,5 +1,6 @@
 ack
 acknowledgement
+Acknowledgements
 Alexey
 anycast
 auth
@@ -51,6 +52,7 @@ keyEncipherment
 kp
 LLC
 Melnikov
+MIB
 MitM
 multicast
 newAuthz
@@ -71,9 +73,11 @@ SHA
 SHS
 SMI
 subjectAltName
+subnetwork
 subproblem
 subproblems
 TBD
+TCP
 TLS
 unicast
 unicode
@@ -83,6 +87,7 @@ uri
 URI
 URIs
 url
+WG
 Wireshark
 xFFFF
 XPath

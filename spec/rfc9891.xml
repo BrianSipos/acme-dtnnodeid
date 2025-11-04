@@ -40,7 +40,7 @@ BS: Alphabetized is good
       <t>
 This document specifies an extension to the Automated Certificate Management Environment (ACME) protocol that allows an ACME server to validate the Delay-Tolerant Networking (DTN) Node ID for an ACME client.
 A DTN Node ID is an identifier used in the Bundle Protocol (BP) to name a "singleton endpoint": an endpoint that is registered on a single BP node.
-The DTN Node ID is encoded both as a certificate Subject Alternative Name (SAN) of type otherName with a name form of <tt>BundleEID</tt> and as an ACME Identifier type "bundleEID".
+The DTN Node ID is encoded both as a certificate Subject Alternative Name (SAN) identity of type otherName with an Other Name form of <tt>BundleEID</tt> and as an ACME Identifier type "bundleEID".
       </t>
     </abstract>
   </front>
@@ -51,14 +51,14 @@ The DTN Node ID is encoded both as a certificate Subject Alternative Name (SAN) 
 Although the original purpose of the Automatic Certificate Management Environment (ACME) <xref target="RFC8555"/> was to allow Public Key Infrastructure using X.509 (PKIX) Certification Authorities (CAs) to validate network domain names of clients, the same mechanism can be used to validate any of the subject claims supported by the PKIX profile <xref target="RFC5280"/>.
       </t>
       <t>
-In this specification, the claim being validated is a Subject Alternative Name (SAN) of type <tt>otherName</tt> with a name form of <tt>BundleEID</tt>, which used to represent a Bundle Protocol (BP) Endpoint ID (EID) in a Delay-Tolerant Networking (DTN) overlay network.
+In this specification, the claim being validated is a Subject Alternative Name (SAN) identity of type <tt>otherName</tt> with an Other Name form of <tt>BundleEID</tt>, which is used to represent a Bundle Protocol (BP) Endpoint ID (EID) in a Delay-Tolerant Networking (DTN) overlay network.
 A DTN Node ID is any EID that can uniquely identify a BP node, as defined in <xref section="4.2.5.2" target="RFC9171"/>, which is equivalent to the EID being usable as a singleton endpoint.
 One common EID used as a Node ID is the Administrative EID, which is guaranteed to exist on any BP node.
-At the time of writing, the URI schemes "dtn" and "ipn" as defined in <xref target="RFC9171"/> are valid for a singleton endpoint and, thus, a Node ID.
+At the time of writing, the URI schemes "dtn" and "ipn" as defined in <xref section="4.2.5.1" target="RFC9171"/> are valid for a singleton endpoint and, thus, a Node ID.
 Because the <tt>BundleEID</tt> claim is new to ACME, a new ACME Identifier type "bundleEID" is needed to manage this claim within ACME messaging.
       </t>
       <t>
-Once an ACME server validates a Node ID, either as a pre-authorization of the "bundleEID" or as one of the authorizations of an order containing a "bundleEID", the client can finalize the order using an associated Certificate Signing Request (CSR).
+Once an ACME server validates a Node ID, either as a pre-authorization of a identifier type "bundleEID" as one of the authorizations of an order containing an identifier type "bundleEID", the client can finalize the order using an associated Certificate Signing Request (CSR).
 Because a single order can contain multiple identifiers of multiple types, there can be operational issues for a client attempting to, and possibly failing to, validate those multiple identifiers as described in <xref target="sec-multiple-claims"/>.
 Once a certificate is issued for a Node ID, how the ACME client configures the BP Agent with the new certificate is an implementation matter.
       </t>
@@ -84,11 +84,12 @@ Original:
       exchanges between ACME client-server pairs and between their BP
       agents.
 
+BS: I updated both sentences below to clarify and reference the entity diagram.
 -->
 	  
           <li>
-Mechanisms for communication between an ACME client or ACME server and their associated BP agent(s).
-This document only describes exchanges between ACME client-server pairs and between their BP agents.
+Mechanisms for communication between an ACME client or ACME server and their associated BP agent(s), depicted as steps 1, 2, 5, and 6 of <xref target="fig-entity-relations"/>.
+This document only describes exchanges between ACME client-server pairs and between their respective associated BP agents.
           </li>
           <li>
 Specific BP extension blocks or BPSec contexts necessary to fulfill the security requirements of this protocol.
@@ -128,10 +129,10 @@ The basic unit of data exchange in a DTN is a Bundle <xref target="RFC9171"/>, w
 An Endpoint ID is used as the destination of a Bundle and can indicate both a singleton or a group destination.
 A Node ID is used to identify the source of a Bundle and is used for routing through intermediate nodes, including the final node(s) used to deliver a Bundle to its destination endpoint.
 A Node ID can also be used as an endpoint for administrative bundles.
-More detailed descriptions of the rationale and capabilities of these networks can be found in "<xref target="RFC4838" format="title"/>" <xref target="RFC4838"/>.
+More detailed descriptions of the rationale and capabilities of these networks can be found in the <xref target="RFC4838" format="title"/> <xref target="RFC4838"/>.
         </t>
         <t>
-When an ACME client requests a pre-authorization or an order with a "bundleEID" identifier type (<xref target="sec-acme-uri"/>), the ACME server offers a "bp-nodeid-00" challenge type (<xref target="sec-validate-nodeid"/>) to validate that Node ID.
+When an ACME client requests a pre-authorization or an order with an identifier type "bundleEID" (<xref target="sec-acme-uri"/>), the ACME server offers a "bp-nodeid-00" challenge type (<xref target="sec-validate-nodeid"/>) to validate that Node ID.
 If the ACME client attempts the authorization challenge to validate a Node ID, the ACME server sends an ACME Node ID Validation Challenge Bundle with a destination of the Node ID being validated.
 The BP agent on that node receives the Challenge Bundle, generates an ACME key authorization digest, and sends an ACME Node ID Validation Response Bundle in reply.
 An Integrity Gateway on the client side of the DTN can be used to attest to the source of the Response Bundle.
@@ -182,10 +183,12 @@ Perhaps:
    There is nothing in this protocol that requires network-topological
    co-location of either the ACME client or ACME server with their
    respective associated BP agents.  
+
+BS: Yes, I have added that word below per your suggestion.
 -->
 	
         <t>
-There is nothing in this protocol that requires network-topological co-location of either the ACME client or ACME server with their associated BP agent.
+There is nothing in this protocol that requires network-topological co-location of either the ACME client or ACME server with their respective associated BP agent.
 While ACME requires a low-enough latency network to perform HTTPS exchanges between the ACME client and server, the client's BP agent (the one being validated) could be on the far side of a long-delay or multi-hop BP network.
 The means by which the ACME client or server communicates with its associated BP agent is an implementation matter.
         </t>
@@ -201,7 +204,8 @@ The entire CDDL structure can be extracted from the XML version of this document
 The following initial fragment defines the top-level symbols of this document's CDDL, which includes the example CBOR content.
         </t>
         <sourcecode type="cddl"><![CDATA[
-start = acme-record / bundle / tstr]]></sourcecode>
+start = acme-record / bundle / tstr
+]]></sourcecode>
       </section>
       <section anchor="sec-terminology">
         <name>Terminology</name>
@@ -262,10 +266,11 @@ Because this is a document produced by the ACME WG, the following DTN
 Bundle Protocol terms are defined here to clarify how they are used by
 this ACME identifier type and validation mechanism.
 
+BS: I like your suggestion B and have updated the text below.
 -->
 	
         <t>
-Because this is an ACME document, the following DTN Bundle Protocol terms are defined here to clarify how they are used by this ACME identifier type and validation mechanism.
+Because this is a document produced by the ACME WG, the following DTN Bundle Protocol terms are defined here to clarify how they are used by this ACME identifier type and validation mechanism.
         </t>
         <dl spacing="normal" newline="false">
           <dt anchor="term-endpoint-id">Endpoint ID:</dt>
@@ -325,12 +330,15 @@ This agency is accessed via edge routers operated by a second agency.
 The second agency is used by edge nodes it knows and trusts, but that
 are not known or trusted by the first agency.
 
+BS: I have adapted your suggestion to be more clear with this meaning.
 -->
 	
         <t>
 A successful experiment of this validation method would involve using the ACME protocol along with this Node ID validation to allow issuing of identity certificates across administrative domains.
-One possible scenario for this would be an issuing CA and an ACME server on the edge of a BP transit network operated by one agency, which is accessed via edge routers operated by a second agency, used by edge nodes known to and trusted by the second agency but not the first.
-The transit network can refuse to route traffic that is not traceable to a valid identity certificate, which the edge nodes can obtain via the ACME server.
+One possible scenario for this would be an issuing CA and an ACME server on the edge of a BP transit network operated by some agency.
+This transit network is used by edge nodes and accessed via edge routers of a peer network operated by a second agency.
+The nodes of the peer network are trusted by the second agency but not the first.
+The transit network can refuse to route traffic from the peer network that is not traceable to a valid identity certificate, which the edge nodes can obtain via the ACME server.
         </t>
         <t>
 A valuable result from any experiment, even an unsuccessful one, would be feedback about this method to improve later versions.
@@ -345,17 +353,17 @@ This specification is the first to make use of a Bundle Endpoint ID to identify 
 In this document, the only purpose for which a Bundle Endpoint ID ACME identifier is validated is as a DTN Node ID (see <xref target="sec-validate-nodeid"/>), but other specifications can define challenge types for other Endpoint ID uses.
       </t>
       <t>
-Every identifier of type "bundleEID" <bcp14>SHALL</bcp14> have a value containing a text URI consistent with the requirements of <xref section="4.2.5.1" target="RFC9171"/> using one of the schemes available from the "Bundle Protocol URI Scheme Types" registry of <xref target="IANA-BP"/>.
-Any "bundleEID" value that fails to properly percent-decode <bcp14>SHALL</bcp14> be rejected with an ACME error type of "malformed".
+Every ACME identifier type "bundleEID" <bcp14>SHALL</bcp14> have a value containing a text URI consistent with the requirements of <xref section="4.2.5.1" target="RFC9171"/> using one of the schemes available from the "Bundle Protocol URI Scheme Types" registry of <xref target="IANA-BP"/>.
+Any identifier type "bundleEID" value that fails to properly percent-decode <bcp14>SHALL</bcp14> be rejected with an ACME error type of "malformed".
       </t>
       <t>
-An ACME server supporting identifiers of type "bundleEID" <bcp14>SHALL</bcp14> decode and normalize (based on scheme-specific syntax) all such received identifiers.
-Any "bundleEID" value for which the scheme-specific part does not match the scheme-specific syntax <bcp14>SHALL</bcp14> be rejected with an ACME error type of "malformed".
-Any "bundleEID" value that uses a scheme not handled by the ACME server <bcp14>SHALL</bcp14> be rejected with an ACME error type of "rejectedIdentifier".
+An ACME server supporting identifier type "bundleEID" <bcp14>SHALL</bcp14> decode and normalize (based on scheme-specific syntax) all such received identifier values.
+Any identifier type "bundleEID" value for which the scheme-specific part does not match the scheme-specific syntax <bcp14>SHALL</bcp14> be rejected with an ACME error type of "malformed".
+Any identifier type "bundleEID" value that uses a scheme not handled by the ACME server <bcp14>SHALL</bcp14> be rejected with an ACME error type of "rejectedIdentifier".
       </t>
       <t>
-When an ACME server needs to request proof that a client controls a Bundle EID, it <bcp14>SHALL</bcp14> create an authorization with the identifier type "bundleEID".
-An ACME server <bcp14>SHALL NOT</bcp14> attempt to dereference a Bundle EID value on its own.
+When an ACME server needs to request proof that a client controls a Bundle Endpoint ID, it <bcp14>SHALL</bcp14> create an authorization with the identifier type "bundleEID".
+An ACME server <bcp14>SHALL NOT</bcp14> attempt to dereference a Bundle Endpoint ID value on its own.
 It is the responsibility of an ACME validation method to ensure the EID ownership using a method authorized by the ACME client.
       </t>
       <t>
@@ -379,12 +387,14 @@ Original:
    this ACME validation method in Section 3 requires that the value hold
    a Node ID (Section 1.4).
 
+BS: I attempted to be more clear hear using proper nouns for PKIX SAN and ON.
 -->
 
 
       
         <t>
-While the PKIX other name form of <tt>BundleEID</tt> can hold any Endpoint ID value, the certificate profile used by <xref target="RFC9174"/> and supported by the ACME validation method in <xref target="sec-validate-nodeid"/> requires that the value hold a Node ID (<xref target="term-node-id"></xref>).
+A PKIX certificate Subject Alternative Name identity containing an Other Name form of <tt>BundleEID</tt> can hold any Endpoint ID value (as a text URI).
+But the certificate profile used by the TCP Convergence Layer <xref target="RFC9174"/> and supported by the ACME validation method in <xref target="sec-validate-nodeid"/> requires that the value hold a Node ID (<xref target="term-node-id"></xref>).
         </t>
 
 <!--[rfced] Does the following correctly capture your intent?
@@ -402,10 +412,13 @@ prohibited from receiving administrative records for, or sending
 records from, other Node IDs in order to support this validation
 method.
 
+BS: I updated the text from your suggestion.
 -->
 	
         <t>
-In addition to the narrowing of that certificate profile, this validation method requires that the client's BP agent respond to administrative records sent to the Node ID being validated.  Typically, this is limited to an Administrative Endpoint ID (<xref target="term-admin-eid"></xref>), but there is no prohibition on the administrative element of a BP node from receiving administrative records for, and sending records from, other Node IDs in order to support this validation method.
+In addition to the narrowing of that certificate profile, this validation method requires that the client's BP agent respond to administrative records sent to the Node ID being validated.
+Typically, this is limited to an Administrative Endpoint ID (<xref target="term-admin-eid"></xref>) destination.
+However, the administrative element of a BP node is not prohibited from receiving administrative records for, or sending records from, other Node IDs in order to support this validation method.
         </t>
         <t>
 Neither that certificate profile nor this validation method support operating on non-singleton Endpoint IDs, but other validation methods could be defined to do so in order to support other certificate profiles.
@@ -459,8 +472,8 @@ To initiate a Node ID validation, the ACME client performs the following steps:
       </t>
       <ol type="1">
         <li>
-The ACME client POSTs a newOrder or newAuthz request including the identifier of type "bundleEID" for the desired Node ID.
-From either of these entry points, an authorization for the "bundleEID" type is indicated by the ACME server.
+The ACME client POSTs a newOrder or newAuthz request including the identifier type "bundleEID" for the desired Node ID.
+From either of these entry points, an authorization for the identifier type "bundleEID" is indicated by the ACME server.
 See <xref section="7.4" target="RFC8555"/> for more details.
         </li>
         <li>
@@ -496,7 +509,7 @@ The ACME server verifies the client's control over a Node ID by performing the f
       </t>
       <ol type="1">
         <li>
-The ACME server receives a newOrder or newAuthz request including the identifier of type "bundleEID", where the URI value is a Node ID.
+The ACME server receives a newOrder or newAuthz request including the identifier type "bundleEID", where the URI value is a Node ID.
         </li>
         <li>
 The ACME server generates an authorization for the Node ID with challenge type "bp-nodeid-00" in accordance with <xref target="sec-nodeid-challenge-obj"/>.
@@ -700,10 +713,11 @@ Perhaps:
    * The challenge payload contains a token-bundle matching the
    definition in Section 3.3.
 
+BS: Yes, have corrected this.
 	    -->
 	    
             <li>
-The challenge payload contains a <tt>token-bundle</tt> meeting the definition in <xref target="sec-bundle-challenge"/>.
+The challenge payload contains a <tt>token-bundle</tt> matching the definition in <xref target="sec-bundle-challenge"/>.
             </li>
             <li>
 The challenge payload contains at least one hash algorithm identifier acceptable to the client.
@@ -861,9 +875,9 @@ The ultimate purpose of this ACME validation is to allow a CA to issue certifica
 These purposes are referred to here as "bundle security certificates".
       </t>
       <t>
-ACME identifiers of type "bundleEID" correlate to certificate requests within in an <tt>extensionRequest</tt> attribute (see <xref target="RFC2985"/>) containing a <tt>subjectAltName</tt> extension of type <tt>otherName</tt> with a name form of <tt>BundleEID</tt>, identified by <tt>id-on-bundleEID</tt> from the "SMI Security for PKIX Other Name Forms" registry at <xref target="IANA-SMI"/>.
-This form is referred to as a "NODE-ID" as defined in <xref section="4.4.1" target="RFC9174"/>.
-Because the <tt>BundleEID</tt> name form is encoded as an IA5String, it <bcp14>SHALL</bcp14> be treated as being in the percent-encoded form of <xref section="2.1" target="RFC3986"/>.
+The ACME identifier type "bundleEID" correlates to the PKIX certificate and certificate request "NODE-ID" as defined in <xref section="4.4.1" target="RFC9174"/>.
+This NODE-ID is present in certificate requests with an <tt>extensionRequest</tt> attribute (see <xref target="RFC2985"/>) containing a Subject Alternative Name extension with identities of type <tt>otherName</tt> having an Other Name form of <tt>BundleEID</tt>, identified by <tt>id-on-bundleEID</tt> from the "SMI Security for PKIX Other Name Forms" registry at <xref target="IANA-SMI"/>.
+Because the <tt>BundleEID</tt> Other Name form is encoded as an IA5String, it <bcp14>SHALL</bcp14> be treated as being in the percent-encoded form of <xref section="2.1" target="RFC3986"/>.
       </t>
       <t>
 One defining aspect of bundle security certificates is the Extended Key Usage key purpose <tt>id-kp-bundleSecurity</tt> of <xref target="IANA-SMI"/>, as defined in <xref section="4.4.2.1" target="RFC9174"/>.
@@ -880,10 +894,12 @@ Original:
    A single bundle security CSR MAY contain a mixed set of SAN
    identifiers, including combinations of IP-ID, DNS-ID [RFC9525] and
    NODE-ID [RFC9174] types.
+
+BS: RFC 9525 defines both of those, but to be clear the reference can be duplicated
 -->
 	
         <t>
-A single bundle security CSR <bcp14>MAY</bcp14> contain a mixed set of SAN identifiers, including combinations of IP-ID, DNS-ID <xref target="RFC9525"/>, and NODE-ID <xref target="RFC9174"/> types.
+A single bundle security CSR <bcp14>MAY</bcp14> contain a mixed set of SAN identifiers, including combinations of IP-ID <xref target="RFC9525"/>, DNS-ID <xref target="RFC9525"/>, and NODE-ID <xref target="RFC9174"/> types.
 These correspond with ACME identifier types "ip", "dns", and "bundleEID", respectively.
         </t>
         <t>
@@ -948,10 +964,11 @@ Another way to mitigate single-path on-path attacks is to attempt
 validation of the same Node ID from multiple sources or via multiple
 bundle routing paths, as defined in Section 3.5
 
+BS: I removed the "single-path" as it isn't really needed.
 -->
 
 	  
-Another way to mitigate single-path on-path attacks is to attempt validation of the same Node ID from multiple sources or via multiple bundle routing paths, as defined in <xref target="sec-multi-perspective"/>.
+Another way to mitigate on-path attacks is to attempt validation of the same Node ID from multiple sources, hopefully via multiple bundle routing paths, as defined in <xref target="sec-multi-perspective"/>.
 It is not a trivial task to guarantee bundle routing though, so more advanced techniques such as onion routing (using bundle-in-bundle encapsulation) could be employed.
         </t>
       </section>
@@ -976,10 +993,12 @@ Ultimately, the point of the ACME bundle exchange is to derive a Key
 Authorization and its cryptographic digest and communicate them back to
 the ACME server for validation, so the uniqueness of the Key
 Authorization directly determines the scope of replay validity.
+
+BS: I edited to clarify that what is communicated is "that digest".
 -->
 	
         <t>
-Ultimately, the point of the ACME bundle exchange is to derive a Key Authorization and its cryptographic digest and communicate it back to the ACME server for validation, so the uniqueness of the Key Authorization directly determines the scope of replay validity.
+Ultimately, the point of the ACME bundle exchange is to derive a Key Authorization value and its cryptographic digest, and to communicate that digest back to the ACME server for validation, so the uniqueness of the Key Authorization directly determines the scope of replay validity.
 The uniqueness of each <tt>token-bundle</tt> to each challenge bundle ensures that the Key Authorization is unique to the challenge bundle.
 The uniqueness of each <tt>token-chal</tt> to the ACME challenge ensures that the Key Authorization is unique to that ACME challenge and not based solely on values visible to on-path eavesdroppers.
         </t>
@@ -1222,7 +1241,8 @@ key-auth-digest = (3: [
 ])
 alg-list = (4: [+ alg-id])
 ; From the IANA COSE registry, only hash algorithms allowed
-alg-id = tstr / int]]></sourcecode>
+alg-id = tstr / int
+]]></sourcecode>
     </section>
     <section>
       <name>Example Authorization</name>
@@ -1355,6 +1375,8 @@ following.
 
 BP
 EID
+
+BS: Thank you!
 -->
 
 <!--[rfced] We had the following questions related to terminology use
@@ -1373,16 +1395,20 @@ Security Source vs. security source
 Lifetime vs. lifetime
 Key Authorization vs. key authorization
 
+BS: These should all be capitalized as proper nouns.
+
 b) We see the following similar terms.  Please let us know if/how they
 may be made consistent:
 
 BundleEID vs. Bundle EID vs. Bundle Endpoint ID
 
+BS: The first one is a technical definition from ASN.1 and needs to be kept within <tt>.
+The other two should use "Endpoint ID" probably exclusively and I have corrected the cases that I found.
+
 ACME Identifier type "bundleEID" vs. identifiers of type "bundleEID"
 vs. "bundleEID" identifier type vs. identifier type "bundleEID"
 
-
-
+BS: I think it should be: identifier type "bundleEID" and have corrected all cases that I found.
 
 -->
     
@@ -1397,6 +1423,7 @@ vs. "bundleEID" identifier type vs. identifier type "bundleEID"
 Note that our script did not flag any words in particular, but this
 should still be reviewed as a best practice.
 
+BS: I think this document is good here.
 -->
 
 <!-- [rfced] The terms enclosed in <tt> in this document are listed
@@ -1411,9 +1438,10 @@ Let us know if any updates are needed.
 <tt>id-kp-bundleSecurity</tt>
 <tt>id-on-bundleEID</tt>
 <tt>otherName</tt>
-<tt>subjectAltName</tt>
 <tt>token-bundle</tt>
 <tt>token-chal</tt>
+
+BS: Yes I think these are all correct.
 -->
 
 <!--[rfced] Please review the use of citation tags throughout the
