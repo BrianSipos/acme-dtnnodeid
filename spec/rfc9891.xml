@@ -383,7 +383,7 @@ The ACME client indicates to the administrative element of its BP Agent the <tt>
 The ACME client waits, if necessary, until the Agent is configured before proceeding to the next step.
         </li>
         <li>
-The ACME client POSTs a response object (<xref target="sec-nodeid-response-obj"></xref>) to the challenge URL on the ACME server in accordance with <xref section="7.5.1" target="RFC8555"/>.
+The ACME client POSTs a Response Object (<xref target="sec-nodeid-response-obj"></xref>) to the challenge URL on the ACME server in accordance with <xref section="7.5.1" target="RFC8555"/>.
 The payload object is constructed in accordance with <xref target="sec-nodeid-response-obj"/>.
         </li>
         <li>
@@ -423,7 +423,7 @@ Each Challenge Bundle contains a distinct, random <tt>token-bundle</tt> to be ab
 Computing an expected Key Authorization digest is not necessary until a response is received with a chosen hash algorithm.
         </li>
         <li>
-The ACME server waits for a Response Bundle(s) for a limited interval of time (based on the response object of <xref target="sec-nodeid-response-obj"/>).
+The ACME server waits for a Response Bundle(s) for a limited interval of time (based on the Response Object of <xref target="sec-nodeid-response-obj"/>).
 Responses are encoded in accordance with <xref target="sec-bundle-response"/>.
         </li>
         <li>
@@ -482,11 +482,11 @@ The <tt>token-chal</tt> value included in this object applies to the entire chal
       <section anchor="sec-nodeid-response-obj">
         <name>DTN Node ID Response Object</name>
         <t>
-The DTN Node ID response object is sent by the ACME client when it authorizes validation of a Node ID as defined in <xref section="7.5.1" target="RFC8555"/>.
+The DTN Node ID Response Object is sent by the ACME client when it authorizes validation of a Node ID as defined in <xref section="7.5.1" target="RFC8555"/>.
 Because a DTN has the potential for significantly longer (but roughly predictable) delays than a non-DTN network, the ACME client is able to inform the ACME server if a particular validation round-trip is expected to take longer than non-DTN network delays (on the order of seconds).
         </t>
         <t>
-The DTN Node ID response object has the following content:
+The DTN Node ID Response Object has the following content:
         </t>
         <dl newline="false" spacing="normal">
           <dt>rtt (optional, number):</dt>
@@ -502,7 +502,7 @@ There is no special significance to zero-value RTT, it simply indicates the resp
   "rtt": 300.0
 }]]></sourcecode>
         <t>
-A response object <bcp14>SHALL NOT</bcp14> be sent until the BP Agent has been configured to properly respond to the challenge.
+A Response Object <bcp14>SHALL NOT</bcp14> be sent until the BP Agent has been configured to properly respond to the challenge.
 The RTT value is meant to indicate any node-specific path delays expected to be encountered from the ACME server.
 Because there is no requirement on the path (or paths) regarding which Bundles may traverse between the ACME server and the BP Agent, and the ACME server can attempt some path diversity, the RTT value <bcp14>SHOULD</bcp14> be pessimistic.
         </t>
