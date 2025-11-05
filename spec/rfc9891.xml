@@ -110,7 +110,7 @@ This specification is focused only on single-use DTN-specific PKIX profiles.
 The basic unit of data exchange in a DTN is a Bundle <xref target="RFC9171"/>, which consists of a data payload with accompanying metadata.
 An EID is used as the destination of a Bundle and can indicate either a singleton or a group destination.
 A Node ID is used to identify the source of a Bundle and is used for routing through intermediate nodes, including the final node(s) used to deliver a Bundle to its destination endpoint.
-A Node ID can also be used as an endpoint for BP administrative records as explained in <xref section="6" target="RFC9171"/>.
+A Node ID can also be used as an endpoint for Bundles conveying administrative records as explained in <xref section="6" target="RFC9171"/>.
 More detailed descriptions of the rationale and capabilities of these networks can be found in the "<xref target="RFC4838" format="title"/>" <xref target="RFC4838"/>.
         </t>
         <t>
