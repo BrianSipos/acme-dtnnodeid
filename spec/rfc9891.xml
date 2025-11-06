@@ -53,7 +53,7 @@ At the time of writing, the URI schemes "dtn" and "ipn" as defined in <xref sect
 Because the <tt>BundleEID</tt> claim is new to ACME, a new ACME Identifier type "bundleEID" is needed to manage this claim within ACME messaging.
       </t>
       <t>
-Once an ACME server validates a Node ID, either as a pre-authorization of an identifier type "bundleEID" as one of the authorizations of an order containing an identifier type "bundleEID", the client can finalize the order using an associated Certificate Signing Request (CSR).
+Once an ACME server validates a Node ID, either as a pre-authorization of an identifier type "bundleEID" or as one of the authorizations of an order containing an identifier type "bundleEID", the client can finalize the order using an associated Certificate Signing Request (CSR).
 Because a single order can contain multiple identifiers of multiple types, there can be operational issues for a client attempting to, and possibly failing to, validate those multiple identifiers as described in <xref target="sec-multiple-claims"/>.
 Once a certificate is issued for a Node ID, how the ACME client configures the BP Agent with the new certificate is an implementation matter.
       </t>
@@ -310,7 +310,7 @@ An identifier for the Node ID of "dtn://example/" would be formatted as:
       
         <t>
 A PKIX certificate SAN identity containing an Other Name form of <tt>BundleEID</tt> can hold any EID value (as a text URI).
-But the certificate profile used by the TCP Convergence Layer <xref target="RFC9174"/> and supported by the ACME validation method in <xref target="sec-validate-nodeid"/> requires that the value hold a Node ID (<xref target="term-node-id"></xref>).
+But the certificate profile used by the TCP CL in <xref section="4.4" target="RFC9174"/> and supported by the ACME validation method in <xref target="sec-validate-nodeid"/> requires that the value hold a Node ID (<xref target="term-node-id"></xref>).
         </t>
 
 	
@@ -750,7 +750,7 @@ The Bundle source could also add its own BIB with a local-network-specific secur
       </t>
       <t>
 When an integrity gateway adds a BIB, it <bcp14>SHALL</bcp14> be in accordance with BPSec <xref target="RFC9172"/> requirements.
-The BIB targets <bcp14>SHALL</bcp14> cover both the payload block and the primary block (either directly as a target or as additional authenticated data for the payload block MAC/signature).
+The BIB integrity <bcp14>SHALL</bcp14> cover both the payload block and the primary block, either directly as a target or as additional authenticated data for the payload block MAC/signature.
 The Security Source of this BIB <bcp14>SHALL</bcp14> be either the Bundle source Node ID itself or a routing node trusted by the destination node (see <xref target="sec-security-impersonate"/>).
       </t>
     </section>
@@ -776,15 +776,15 @@ When a Bundle security certificate is issued based on a validated NODE-ID, the c
 	
         <t>
 A single Bundle security CSR <bcp14>MAY</bcp14> contain a mixed set of SAN identifiers, including combinations of IP-ID <xref target="RFC9525"/>, DNS-ID <xref target="RFC9525"/>, and NODE-ID <xref target="RFC9174"/> types.
-These correspond with ACME identifier types "ip", "dns", and "bundleEID", respectively.
+These correspond with ACME identifier type "ip", "dns", and "bundleEID", respectively.
         </t>
         <t>
 There is no restriction on how a certificate combines these claims, but each identifier <bcp14>SHALL</bcp14> be validated by an ACME server to issue such a certificate as part of an associated ACME order.
 This is no different than the existing behavior of ACME <xref target="RFC8555"/> but is mentioned here to make sure that CA policy handles such situations, especially related to validation failure of an identifier in the presence of multiple identifiers.
-Existing validation mechanisms are defined for identifier types "ip" <xref target="RFC8738"/> and "dns" <xref target="RFC8555"/> among others <xref target="IANA-ACME"/>.
+Existing validation mechanisms are defined for identifier type "ip" <xref target="RFC8738"/> and "dns" <xref target="RFC8555"/> among others <xref target="IANA-ACME"/>.
         </t>
         <t>
-The specific use case of TLS-based security for BPv7 CL transport in <xref section="4.4" target="RFC9174"/> allows, and for some network policies requires, that a certificate authenticate both the DNS name of an entity as well as the Node ID of the entity.
+The specific use case of TLS-based security for the TCP CL in <xref section="4.4" target="RFC9174"/> allows, and for some network policies requires, that a certificate authenticate both the DNS name of an entity as well as the Node ID of the entity.
 These authentications apply to each identifier type, used for different network layers, at different points during secure session establishment.
         </t>
       </section>
